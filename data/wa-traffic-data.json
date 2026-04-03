@@ -1,0 +1,293 @@
+{
+  "datasetYear": 2024,
+  "state": "Washington",
+  "statewide": {
+    "countyAttributedDeaths": 730,
+    "wtscReportedDeaths": 731,
+    "seriousInjuries": 3290,
+    "fatalOrSeriousVictims": 4020,
+    "safetyEffect": 0.82,
+    "defaultAutomatedShare": 0.05,
+    "safetyEffectLabel": "Waymo injury-causing crash reduction versus human benchmarks",
+    "notes": [
+      "County-attributed deaths come from 2024 NHTSA FARS accident.csv and sum to 730.",
+      "WTSC Brief No. 11 reports 731 Washington traffic fatalities and 3,290 serious injuries for 2024; those figures were preliminary as of May 2025.",
+      "Fatal-or-serious victim total is calculated as 730 county-attributed deaths plus 3,290 serious injuries."
+    ]
+  },
+  "counties": [
+    {
+      "countyFips": "53001",
+      "countyCode": 1,
+      "county": "Adams",
+      "trafficDeaths2024": 6,
+      "shareOfStateDeaths": 0.008219
+    },
+    {
+      "countyFips": "53003",
+      "countyCode": 3,
+      "county": "Asotin",
+      "trafficDeaths2024": 1,
+      "shareOfStateDeaths": 0.00137
+    },
+    {
+      "countyFips": "53005",
+      "countyCode": 5,
+      "county": "Benton",
+      "trafficDeaths2024": 17,
+      "shareOfStateDeaths": 0.023288
+    },
+    {
+      "countyFips": "53007",
+      "countyCode": 7,
+      "county": "Chelan",
+      "trafficDeaths2024": 7,
+      "shareOfStateDeaths": 0.009589
+    },
+    {
+      "countyFips": "53009",
+      "countyCode": 9,
+      "county": "Clallam",
+      "trafficDeaths2024": 5,
+      "shareOfStateDeaths": 0.006849
+    },
+    {
+      "countyFips": "53011",
+      "countyCode": 11,
+      "county": "Clark",
+      "trafficDeaths2024": 41,
+      "shareOfStateDeaths": 0.056164
+    },
+    {
+      "countyFips": "53013",
+      "countyCode": 13,
+      "county": "Columbia",
+      "trafficDeaths2024": 0,
+      "shareOfStateDeaths": 0.0
+    },
+    {
+      "countyFips": "53015",
+      "countyCode": 15,
+      "county": "Cowlitz",
+      "trafficDeaths2024": 23,
+      "shareOfStateDeaths": 0.031507
+    },
+    {
+      "countyFips": "53017",
+      "countyCode": 17,
+      "county": "Douglas",
+      "trafficDeaths2024": 4,
+      "shareOfStateDeaths": 0.005479
+    },
+    {
+      "countyFips": "53019",
+      "countyCode": 19,
+      "county": "Ferry",
+      "trafficDeaths2024": 1,
+      "shareOfStateDeaths": 0.00137
+    },
+    {
+      "countyFips": "53021",
+      "countyCode": 21,
+      "county": "Franklin",
+      "trafficDeaths2024": 11,
+      "shareOfStateDeaths": 0.015068
+    },
+    {
+      "countyFips": "53023",
+      "countyCode": 23,
+      "county": "Garfield",
+      "trafficDeaths2024": 0,
+      "shareOfStateDeaths": 0.0
+    },
+    {
+      "countyFips": "53025",
+      "countyCode": 25,
+      "county": "Grant",
+      "trafficDeaths2024": 26,
+      "shareOfStateDeaths": 0.035616
+    },
+    {
+      "countyFips": "53027",
+      "countyCode": 27,
+      "county": "Grays Harbor",
+      "trafficDeaths2024": 10,
+      "shareOfStateDeaths": 0.013699
+    },
+    {
+      "countyFips": "53029",
+      "countyCode": 29,
+      "county": "Island",
+      "trafficDeaths2024": 14,
+      "shareOfStateDeaths": 0.019178
+    },
+    {
+      "countyFips": "53031",
+      "countyCode": 31,
+      "county": "Jefferson",
+      "trafficDeaths2024": 5,
+      "shareOfStateDeaths": 0.006849
+    },
+    {
+      "countyFips": "53033",
+      "countyCode": 33,
+      "county": "King",
+      "trafficDeaths2024": 152,
+      "shareOfStateDeaths": 0.208219
+    },
+    {
+      "countyFips": "53035",
+      "countyCode": 35,
+      "county": "Kitsap",
+      "trafficDeaths2024": 18,
+      "shareOfStateDeaths": 0.024658
+    },
+    {
+      "countyFips": "53037",
+      "countyCode": 37,
+      "county": "Kittitas",
+      "trafficDeaths2024": 9,
+      "shareOfStateDeaths": 0.012329
+    },
+    {
+      "countyFips": "53039",
+      "countyCode": 39,
+      "county": "Klickitat",
+      "trafficDeaths2024": 1,
+      "shareOfStateDeaths": 0.00137
+    },
+    {
+      "countyFips": "53041",
+      "countyCode": 41,
+      "county": "Lewis",
+      "trafficDeaths2024": 8,
+      "shareOfStateDeaths": 0.010959
+    },
+    {
+      "countyFips": "53043",
+      "countyCode": 43,
+      "county": "Lincoln",
+      "trafficDeaths2024": 7,
+      "shareOfStateDeaths": 0.009589
+    },
+    {
+      "countyFips": "53045",
+      "countyCode": 45,
+      "county": "Mason",
+      "trafficDeaths2024": 15,
+      "shareOfStateDeaths": 0.020548
+    },
+    {
+      "countyFips": "53047",
+      "countyCode": 47,
+      "county": "Okanogan",
+      "trafficDeaths2024": 11,
+      "shareOfStateDeaths": 0.015068
+    },
+    {
+      "countyFips": "53049",
+      "countyCode": 49,
+      "county": "Pacific",
+      "trafficDeaths2024": 2,
+      "shareOfStateDeaths": 0.00274
+    },
+    {
+      "countyFips": "53051",
+      "countyCode": 51,
+      "county": "Pend Oreille",
+      "trafficDeaths2024": 1,
+      "shareOfStateDeaths": 0.00137
+    },
+    {
+      "countyFips": "53053",
+      "countyCode": 53,
+      "county": "Pierce",
+      "trafficDeaths2024": 102,
+      "shareOfStateDeaths": 0.139726
+    },
+    {
+      "countyFips": "53055",
+      "countyCode": 55,
+      "county": "San Juan",
+      "trafficDeaths2024": 1,
+      "shareOfStateDeaths": 0.00137
+    },
+    {
+      "countyFips": "53057",
+      "countyCode": 57,
+      "county": "Skagit",
+      "trafficDeaths2024": 17,
+      "shareOfStateDeaths": 0.023288
+    },
+    {
+      "countyFips": "53059",
+      "countyCode": 59,
+      "county": "Skamania",
+      "trafficDeaths2024": 2,
+      "shareOfStateDeaths": 0.00274
+    },
+    {
+      "countyFips": "53061",
+      "countyCode": 61,
+      "county": "Snohomish",
+      "trafficDeaths2024": 64,
+      "shareOfStateDeaths": 0.087671
+    },
+    {
+      "countyFips": "53063",
+      "countyCode": 63,
+      "county": "Spokane",
+      "trafficDeaths2024": 55,
+      "shareOfStateDeaths": 0.075342
+    },
+    {
+      "countyFips": "53065",
+      "countyCode": 65,
+      "county": "Stevens",
+      "trafficDeaths2024": 9,
+      "shareOfStateDeaths": 0.012329
+    },
+    {
+      "countyFips": "53067",
+      "countyCode": 67,
+      "county": "Thurston",
+      "trafficDeaths2024": 26,
+      "shareOfStateDeaths": 0.035616
+    },
+    {
+      "countyFips": "53069",
+      "countyCode": 69,
+      "county": "Wahkiakum",
+      "trafficDeaths2024": 1,
+      "shareOfStateDeaths": 0.00137
+    },
+    {
+      "countyFips": "53071",
+      "countyCode": 71,
+      "county": "Walla Walla",
+      "trafficDeaths2024": 6,
+      "shareOfStateDeaths": 0.008219
+    },
+    {
+      "countyFips": "53073",
+      "countyCode": 73,
+      "county": "Whatcom",
+      "trafficDeaths2024": 12,
+      "shareOfStateDeaths": 0.016438
+    },
+    {
+      "countyFips": "53075",
+      "countyCode": 75,
+      "county": "Whitman",
+      "trafficDeaths2024": 5,
+      "shareOfStateDeaths": 0.006849
+    },
+    {
+      "countyFips": "53077",
+      "countyCode": 77,
+      "county": "Yakima",
+      "trafficDeaths2024": 35,
+      "shareOfStateDeaths": 0.047945
+    }
+  ]
+}
