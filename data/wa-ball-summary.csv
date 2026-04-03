@@ -1,8 +1,8 @@
-category,unit,annual_baseline_2024,estimated_100_day_baseline,safety_effect_used,estimated_100_day_if_50_percent_automated,source
-No injury crashes,crashes,71304,19481.97,0.88,10909.90,WSDOT Crash Data Portal statewide 2024 Total Crashes report
-Possible injury crashes,crashes,14676,4009.84,0.92,2165.31,WSDOT Crash Data Portal statewide 2024 Total Crashes report
-Suspected minor injury crashes,crashes,11835,3233.61,0.92,1746.15,WSDOT Crash Data Portal statewide 2024 Total Crashes report
-Suspected serious injury crashes,crashes,2826,772.13,0.92,416.95,WSDOT Crash Data Portal statewide 2024 Total Crashes report
-Traffic deaths,deaths,731,199.73,0.92,107.85,WTSC Brief No. 11 State of the State October 2025
-Serious injuries people,people,3290,898.91,0.92,485.41,WTSC Brief No. 11 State of the State October 2025
-Unknown severity crashes excluded,crashes,2971,811.75,0.00,811.75,WSDOT Crash Data Portal statewide 2024 Total Crashes report
+category,unit,annual_baseline_2024,estimated_30_day_baseline,safety_effect_used,estimated_30_day_if_50_percent_automated,source
+No injury crashes,crashes,71304,5844.59,0.88,3272.97,WSDOT Crash Data Portal statewide 2024 Total Crashes report
+Possible injury crashes,crashes,14676,1202.95,0.92,649.59,WSDOT Crash Data Portal statewide 2024 Total Crashes report
+Suspected minor injury crashes,crashes,11835,970.08,0.92,523.84,WSDOT Crash Data Portal statewide 2024 Total Crashes report
+Suspected serious injury crashes,crashes,2826,231.64,0.92,125.09,WSDOT Crash Data Portal statewide 2024 Total Crashes report
+Traffic deaths,deaths,731,59.92,0.92,32.36,WTSC Brief No. 11 State of the State October 2025
+Serious injuries people,people,3290,269.67,0.92,145.62,WTSC Brief No. 11 State of the State October 2025
+Unknown severity crashes excluded,crashes,2971,243.52,0.00,243.52,WSDOT Crash Data Portal statewide 2024 Total Crashes report

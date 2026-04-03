@@ -4,6 +4,11 @@ const formatterInt = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 0,
 });
 
+const formatterOneDecimal = new Intl.NumberFormat("en-US", {
+  minimumFractionDigits: 1,
+  maximumFractionDigits: 1,
+});
+
 const formatterPct = new Intl.NumberFormat("en-US", {
   style: "percent",
   minimumFractionDigits: 0,
@@ -35,6 +40,7 @@ const state = {
   data: null,
   share: 0.5,
   restartAt: performance.now(),
+  lastFrameAt: performance.now(),
   currentPanel: null,
   scenarioPanel: null,
   animationFrame: null,
@@ -63,32 +69,8 @@ function formatInt(value) {
   return formatterInt.format(Math.round(value));
 }
 
-function allocateBallCounts(items, accessor, scale) {
-  const rawItems = items.map((item) => {
-    const raw = accessor(item) / scale;
-    const whole = Math.floor(raw);
-    return {
-      item,
-      raw,
-      whole,
-      remainder: raw - whole,
-    };
-  });
-
-  const targetTotal = Math.round(
-    rawItems.reduce((sum, entry) => sum + entry.raw, 0)
-  );
-  let assigned = rawItems.reduce((sum, entry) => sum + entry.whole, 0);
-
-  rawItems
-    .sort((left, right) => right.remainder - left.remainder)
-    .forEach((entry) => {
-      if (assigned >= targetTotal) return;
-      entry.whole += 1;
-      assigned += 1;
-    });
-
-  return new Map(rawItems.map((entry) => [entry.item.id, entry.whole]));
+function formatDecimal(value) {
+  return formatterOneDecimal.format(value);
 }
 
 function loadData() {
@@ -105,9 +87,10 @@ function computeSummary(share) {
   const windowFactor = data.windowDays / data.daysInBaselineYear;
   const annualDeaths = data.summary.annualTrafficDeaths;
   const annualSeriousInjuries = data.summary.annualSeriousInjuries;
-  const deathAvoided =
+
+  const avoidedDeaths =
     annualDeaths * windowFactor * share * data.summary.injuryAndDeathReduction;
-  const seriousAvoided =
+  const avoidedSerious =
     annualSeriousInjuries *
     windowFactor *
     share *
@@ -118,20 +101,46 @@ function computeSummary(share) {
     const scenario = base * (1 - share * category.reduction);
     return {
       ...category,
-      base100: base,
-      scenario100: scenario,
+      baseWindow: base,
+      scenarioWindow: scenario,
     };
   });
 
   return {
     windowDeaths: annualDeaths * windowFactor,
     windowSeriousInjuries: annualSeriousInjuries * windowFactor,
-    avoidedDeaths: deathAvoided,
-    avoidedSerious: seriousAvoided,
-    currentTotal: categories.reduce((sum, category) => sum + category.base100, 0),
-    scenarioTotal: categories.reduce((sum, category) => sum + category.scenario100, 0),
+    avoidedDeaths,
+    avoidedSerious,
+    currentTotal: categories.reduce((sum, category) => sum + category.baseWindow, 0),
+    scenarioTotal: categories.reduce((sum, category) => sum + category.scenarioWindow, 0),
     categories,
   };
+}
+
+function allocateBallCounts(items, accessor, scale) {
+  const allocations = items.map((item) => {
+    const raw = accessor(item) / scale;
+    const count = Math.floor(raw);
+    return {
+      item,
+      raw,
+      count,
+      remainder: raw - count,
+    };
+  });
+
+  const target = Math.round(allocations.reduce((sum, item) => sum + item.raw, 0));
+  let assigned = allocations.reduce((sum, item) => sum + item.count, 0);
+
+  allocations
+    .sort((left, right) => right.remainder - left.remainder)
+    .forEach((entry) => {
+      if (assigned >= target) return;
+      entry.count += 1;
+      assigned += 1;
+    });
+
+  return new Map(allocations.map((entry) => [entry.item.id, entry.count]));
 }
 
 function createBallSprite(radius, color, icon) {
@@ -142,18 +151,17 @@ function createBallSprite(radius, color, icon) {
   const ctx = canvas.getContext("2d");
   const center = size / 2;
 
-  const gradient = ctx.createRadialGradient(
-    center - radius * 0.35,
+  const outer = ctx.createRadialGradient(
     center - radius * 0.45,
-    radius * 0.3,
+    center - radius * 0.55,
+    radius * 0.28,
     center,
     center,
-    radius * 1.1
+    radius * 1.15
   );
-
-  gradient.addColorStop(0, "#ffffff");
-  gradient.addColorStop(0.15, color);
-  gradient.addColorStop(1, "#10151d");
+  outer.addColorStop(0, "rgba(255,255,255,0.95)");
+  outer.addColorStop(0.12, color);
+  outer.addColorStop(1, "#09111a");
 
   ctx.beginPath();
   ctx.arc(center, center, radius, 0, Math.PI * 2);
@@ -162,23 +170,23 @@ function createBallSprite(radius, color, icon) {
 
   ctx.beginPath();
   ctx.arc(center, center, radius, 0, Math.PI * 2);
-  ctx.fillStyle = gradient;
+  ctx.fillStyle = outer;
   ctx.fill();
 
   ctx.beginPath();
-  ctx.arc(center - radius * 0.35, center - radius * 0.4, radius * 0.24, 0, Math.PI * 2);
-  ctx.fillStyle = "rgba(255,255,255,0.46)";
+  ctx.arc(center - radius * 0.34, center - radius * 0.44, radius * 0.22, 0, Math.PI * 2);
+  ctx.fillStyle = "rgba(255,255,255,0.44)";
   ctx.fill();
 
   ctx.beginPath();
-  ctx.arc(center, center, radius - 0.5, 0, Math.PI * 2);
-  ctx.strokeStyle = "rgba(255,255,255,0.22)";
-  ctx.lineWidth = 1;
+  ctx.arc(center, center, radius - 0.7, 0, Math.PI * 2);
+  ctx.strokeStyle = "rgba(255,255,255,0.2)";
+  ctx.lineWidth = 1.1;
   ctx.stroke();
 
   if (icon) {
-    ctx.fillStyle = "rgba(255,255,255,0.92)";
-    ctx.font = `${Math.round(radius * 1.05)}px Sora`;
+    ctx.fillStyle = "rgba(255,255,255,0.94)";
+    ctx.font = `${Math.round(radius * 0.98)}px Sora`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText(icon, center, center + 0.2);
@@ -187,74 +195,30 @@ function createBallSprite(radius, color, icon) {
   return canvas;
 }
 
-function buildPositions(width, height, neededCount) {
-  const padding = width < 500 ? 18 : 22;
-  const availableWidth = width - padding * 2;
-  const availableHeight = height - padding * 2;
-  let radius = Math.min(8, Math.max(4.4, Math.sqrt((availableWidth * availableHeight) / (neededCount * 15))));
-  let positions = [];
-
-  while (radius >= 3.2) {
-    const stepX = radius * 2.15;
-    const stepY = radius * 1.85;
-    positions = [];
-    let rowIndex = 0;
-    for (let y = height - padding - radius; y >= padding + radius; y -= stepY) {
-      const offset = rowIndex % 2 === 0 ? 0 : radius * 1.08;
-      const row = [];
-      for (let x = padding + radius + offset; x <= width - padding - radius; x += stepX) {
-        row.push({
-          x,
-          y,
-        });
-      }
-      const rng = mulberry32(hashString(`row-${rowIndex}-${width}-${height}`));
-      for (let index = row.length - 1; index > 0; index -= 1) {
-        const swapIndex = Math.floor(rng() * (index + 1));
-        [row[index], row[swapIndex]] = [row[swapIndex], row[index]];
-      }
-      positions.push(...row);
-      rowIndex += 1;
-    }
-
-    if (positions.length >= neededCount) {
-      return {
-        radius,
-        positions,
-      };
-    }
-    radius -= 0.25;
-  }
-
-  return {
-    radius,
-    positions,
-  };
-}
-
-function createPanelConfig(kind, visibleSummary) {
-  const width = refs.currentCanvas.clientWidth;
-  const height = refs.currentCanvas.clientHeight;
-  const neededCount = Math.max(
-    Math.round(visibleSummary.currentTotal / state.data.ballScale) + 40,
-    Math.round(visibleSummary.scenarioTotal / state.data.ballScale) + 40
-  );
-
+function buildPanel(kind, summary) {
   const canvas = kind === "current" ? refs.currentCanvas : refs.scenarioCanvas;
+  const width = canvas.clientWidth;
+  const height = canvas.clientHeight;
   const dpr = window.devicePixelRatio || 1;
   canvas.width = Math.round(width * dpr);
   canvas.height = Math.round(height * dpr);
   const ctx = canvas.getContext("2d");
-  ctx.scale(dpr, dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-  const positionSet = buildPositions(width, height, neededCount);
+  const expectedBalls = Math.max(
+    Math.round(summary.currentTotal / state.data.ballScale),
+    Math.round(summary.scenarioTotal / state.data.ballScale)
+  );
+  const innerWidth = width - 48;
+  const innerHeight = height - 44;
+  const radius = Math.max(
+    8,
+    Math.min(16, Math.sqrt((innerWidth * innerHeight) / (Math.max(expectedBalls, 1) * 4.6)))
+  );
+
   const sprites = {};
   state.data.categories.forEach((category) => {
-    sprites[category.id] = createBallSprite(
-      positionSet.radius,
-      category.color,
-      category.icon === "skull" ? "☠" : ""
-    );
+    sprites[category.id] = createBallSprite(radius, category.color, category.icon ? "☠" : "");
   });
 
   return {
@@ -263,11 +227,18 @@ function createPanelConfig(kind, visibleSummary) {
     ctx,
     width,
     height,
-    radius: positionSet.radius,
-    positions: positionSet.positions,
-    sprites,
+    radius,
+    padding: 18,
+    floorY: height - 18,
+    leftWall: 18,
+    rightWall: width - 18,
+    balls: [],
+    activeQueue: [],
+    tokenIndex: 0,
     tokens: [],
     fullBallCount: 0,
+    sprites,
+    spawnRng: mulberry32(hashString(`${kind}-${Math.round(state.share * 1000)}`)),
   };
 }
 
@@ -275,35 +246,32 @@ function buildTimeline(kind, categories) {
   const scale = state.data.ballScale;
   const windowMs = state.data.windowDays * DAY_MS;
   const futureMs = state.data.futureHorizonDays * DAY_MS;
-  const targetKey = kind === "current" ? "base100" : "scenario100";
-  const ballMap = allocateBallCounts(categories, (category) => category[targetKey], scale);
+  const key = kind === "current" ? "baseWindow" : "scenarioWindow";
+  const ballCounts = allocateBallCounts(categories, (category) => category[key], scale);
   const tokens = [];
 
   categories.forEach((category) => {
-    const historicalBallCount = ballMap.get(category.id) || 0;
-    if (historicalBallCount <= 0) return;
+    const historicalCount = ballCounts.get(category.id) || 0;
+    if (historicalCount <= 0) return;
 
-    const historyRng = mulberry32(
-      hashString(`${kind}-${category.id}-${Math.round(state.share * 100)}`)
-    );
-
-    for (let index = 0; index < historicalBallCount; index += 1) {
-      const time =
-        -windowMs + ((index + historyRng()) / historicalBallCount) * windowMs;
+    const rng = mulberry32(hashString(`${kind}-${category.id}-${Math.round(state.share * 100)}`));
+    for (let index = 0; index < historicalCount; index += 1) {
+      const time = -windowMs + ((index + rng()) / historicalCount) * windowMs;
       tokens.push({
-        time,
+        id: `${kind}-${category.id}-h-${index}`,
         categoryId: category.id,
+        time,
       });
     }
 
-    const interval = windowMs / historicalBallCount;
-    const futureBallCount = Math.ceil(futureMs / interval) + 2;
-    let nextTime = historyRng() * interval;
-
-    for (let index = 0; index < futureBallCount; index += 1) {
+    const interval = windowMs / historicalCount;
+    const futureCount = Math.ceil(futureMs / interval) + 2;
+    let nextTime = rng() * interval;
+    for (let index = 0; index < futureCount; index += 1) {
       tokens.push({
-        time: nextTime,
+        id: `${kind}-${category.id}-f-${index}`,
         categoryId: category.id,
+        time: nextTime,
       });
       nextTime += interval;
     }
@@ -312,14 +280,16 @@ function buildTimeline(kind, categories) {
   tokens.sort((left, right) => left.time - right.time);
   return {
     tokens,
-    fullBallCount: tokens.filter((token) => token.time <= 0 && token.time > -windowMs).length,
+    fullBallCount: tokens.filter(
+      (token) => token.time <= 0 && token.time > -windowMs
+    ).length,
   };
 }
 
 function rebuildPanels() {
   const summary = computeSummary(state.share);
-  state.currentPanel = createPanelConfig("current", summary);
-  state.scenarioPanel = createPanelConfig("scenario", summary);
+  state.currentPanel = buildPanel("current", summary);
+  state.scenarioPanel = buildPanel("scenario", summary);
 
   const currentTimeline = buildTimeline("current", summary.categories);
   state.currentPanel.tokens = currentTimeline.tokens;
@@ -342,19 +312,26 @@ function updateText() {
       ? "If 0% of trips were automated"
       : `If ${shareText} of trips were automated`;
 
-  refs.metricDeaths.textContent = formatInt(summary.windowDeaths);
-  refs.metricSeriousInjuries.textContent = formatInt(summary.windowSeriousInjuries);
-  refs.metricAvoidedDeaths.textContent = formatInt(summary.avoidedDeaths);
-  refs.metricAvoidedSerious.textContent = formatInt(summary.avoidedSerious);
+  refs.metricDeaths.textContent = formatDecimal(summary.windowDeaths);
+  refs.metricSeriousInjuries.textContent = formatDecimal(summary.windowSeriousInjuries);
+  refs.metricAvoidedDeaths.textContent = formatDecimal(summary.avoidedDeaths);
+  refs.metricAvoidedSerious.textContent = formatDecimal(summary.avoidedSerious);
   refs.unknownExcluded.textContent = formatInt(state.data.summary.excludedUnknownSeverityCrashes);
-  refs.currentTotal.textContent = formatInt(summary.currentTotal);
-  refs.scenarioTotal.textContent = formatInt(summary.scenarioTotal);
+  refs.currentTotal.textContent = formatDecimal(summary.currentTotal);
+  refs.scenarioTotal.textContent = formatDecimal(summary.scenarioTotal);
   refs.scenarioNote.textContent =
-    `At ${shareText} automated trips, the right vessel removes an estimated ${formatInt(
+    `At ${shareText} automated trips, the right vessel removes an estimated ${formatDecimal(
       summary.avoidedDeaths
-    )} deaths and ${formatInt(
+    )} deaths and ${formatDecimal(
       summary.avoidedSerious
-    )} serious injuries over 100 days.`;
+    )} serious injuries over ${state.data.windowDays} days.`;
+}
+
+function restartSimulation() {
+  state.restartAt = performance.now();
+  state.lastFrameAt = state.restartAt;
+  updateText();
+  rebuildPanels();
 }
 
 function getSimulationNow() {
@@ -365,94 +342,281 @@ function getSimulationNow() {
   if (elapsed <= catchupMs) {
     return -windowMs + (elapsed / catchupMs) * windowMs;
   }
+
   return elapsed - catchupMs;
 }
 
-function getVisibleTokens(panel, simulationNow) {
-  const start = simulationNow - state.data.windowDays * DAY_MS;
-  return panel.tokens.filter(
-    (token) => token.time <= simulationNow && token.time > start
-  );
+function spawnBall(panel, token) {
+  const rng = panel.spawnRng;
+  const spread = (panel.rightWall - panel.leftWall) * 0.32;
+  const x = (panel.leftWall + panel.rightWall) / 2 + (rng() - 0.5) * spread;
+  const y = -panel.radius - rng() * 28;
+  panel.balls.push({
+    id: token.id,
+    tokenTime: token.time,
+    categoryId: token.categoryId,
+    x,
+    y,
+    vx: (rng() - 0.5) * 80,
+    vy: rng() * 30,
+    r: panel.radius,
+    dead: false,
+  });
+  panel.activeQueue.push(token.id);
 }
 
-function drawPanel(panel, visibleTokens) {
+function pruneExpired(panel, startTime) {
+  let pruned = false;
+  while (panel.activeQueue.length > 0) {
+    const id = panel.activeQueue[0];
+    const body = panel.balls.find((ball) => ball.id === id);
+    if (!body || body.tokenTime <= startTime) {
+      panel.activeQueue.shift();
+      if (body) {
+        body.dead = true;
+        pruned = true;
+      }
+      continue;
+    }
+    break;
+  }
+
+  if (pruned) {
+    panel.balls = panel.balls.filter((ball) => !ball.dead);
+  }
+}
+
+function syncPanel(panel, simulationNow) {
+  const windowStart = simulationNow - state.data.windowDays * DAY_MS;
+  while (
+    panel.tokenIndex < panel.tokens.length &&
+    panel.tokens[panel.tokenIndex].time <= simulationNow
+  ) {
+    const token = panel.tokens[panel.tokenIndex];
+    if (token.time > windowStart) {
+      spawnBall(panel, token);
+    }
+    panel.tokenIndex += 1;
+  }
+  pruneExpired(panel, windowStart);
+}
+
+function resolveWallCollisions(panel, body) {
+  const wallBounce = 0.82;
+  const floorBounce = 0.72;
+
+  if (body.x - body.r < panel.leftWall) {
+    body.x = panel.leftWall + body.r;
+    body.vx = Math.abs(body.vx) * wallBounce;
+  } else if (body.x + body.r > panel.rightWall) {
+    body.x = panel.rightWall - body.r;
+    body.vx = -Math.abs(body.vx) * wallBounce;
+  }
+
+  if (body.y + body.r > panel.floorY) {
+    body.y = panel.floorY - body.r;
+    body.vy = -Math.abs(body.vy) * floorBounce;
+    body.vx *= 0.988;
+    if (Math.abs(body.vy) < 8) {
+      body.vy = 0;
+    }
+    if (Math.abs(body.vx) < 2) {
+      body.vx = 0;
+    }
+  }
+}
+
+function resolveBodyCollisions(panel) {
+  const cellSize = panel.radius * 2.4;
+  const grid = new Map();
+
+  panel.balls.forEach((body, index) => {
+    const cellX = Math.floor(body.x / cellSize);
+    const cellY = Math.floor(body.y / cellSize);
+    const key = `${cellX},${cellY}`;
+    if (!grid.has(key)) {
+      grid.set(key, []);
+    }
+    grid.get(key).push(index);
+  });
+
+  const restitution = 0.78;
+  const friction = 0.018;
+
+  panel.balls.forEach((body, index) => {
+    const cellX = Math.floor(body.x / cellSize);
+    const cellY = Math.floor(body.y / cellSize);
+
+    for (let dx = -1; dx <= 1; dx += 1) {
+      for (let dy = -1; dy <= 1; dy += 1) {
+        const bucket = grid.get(`${cellX + dx},${cellY + dy}`);
+        if (!bucket) continue;
+
+        bucket.forEach((otherIndex) => {
+          if (otherIndex <= index) return;
+
+          const other = panel.balls[otherIndex];
+          const diffX = other.x - body.x;
+          const diffY = other.y - body.y;
+          const minDist = body.r + other.r;
+          const distSq = diffX * diffX + diffY * diffY;
+
+          if (distSq === 0 || distSq >= minDist * minDist) return;
+
+          const distance = Math.sqrt(distSq);
+          const nx = diffX / distance;
+          const ny = diffY / distance;
+          const overlap = minDist - distance;
+
+          body.x -= nx * overlap * 0.5;
+          body.y -= ny * overlap * 0.5;
+          other.x += nx * overlap * 0.5;
+          other.y += ny * overlap * 0.5;
+
+          const relVx = other.vx - body.vx;
+          const relVy = other.vy - body.vy;
+          const normalVelocity = relVx * nx + relVy * ny;
+
+          if (normalVelocity < 0) {
+            const impulse = (-(1 + restitution) * normalVelocity) / 2;
+            body.vx -= impulse * nx;
+            body.vy -= impulse * ny;
+            other.vx += impulse * nx;
+            other.vy += impulse * ny;
+
+            const tx = -ny;
+            const ty = nx;
+            const tangentVelocity = relVx * tx + relVy * ty;
+            const tangentImpulse = tangentVelocity * friction;
+            body.vx += tangentImpulse * tx;
+            body.vy += tangentImpulse * ty;
+            other.vx -= tangentImpulse * tx;
+            other.vy -= tangentImpulse * ty;
+          }
+        });
+      }
+    }
+  });
+}
+
+function stepPhysics(panel, dt) {
+  const steps = Math.max(1, Math.ceil(dt / 0.008));
+  const step = dt / steps;
+
+  for (let iteration = 0; iteration < steps; iteration += 1) {
+    panel.balls.forEach((body) => {
+      body.vy += 2400 * step;
+      body.x += body.vx * step;
+      body.y += body.vy * step;
+      body.vx *= Math.pow(0.9975, step * 60);
+      body.vy *= Math.pow(0.999, step * 60);
+      resolveWallCollisions(panel, body);
+    });
+
+    resolveBodyCollisions(panel);
+    panel.balls.forEach((body) => resolveWallCollisions(panel, body));
+  }
+}
+
+function drawVessel(panel) {
   const { ctx, width, height } = panel;
 
   ctx.clearRect(0, 0, width, height);
 
-  const background = ctx.createLinearGradient(0, 0, 0, height);
-  background.addColorStop(0, "#0b1018");
-  background.addColorStop(1, "#06080d");
-  ctx.fillStyle = background;
+  const bg = ctx.createLinearGradient(0, 0, 0, height);
+  bg.addColorStop(0, "#0c1118");
+  bg.addColorStop(1, "#05080d");
+  ctx.fillStyle = bg;
   ctx.fillRect(0, 0, width, height);
 
-  const drawCount = Math.min(visibleTokens.length, panel.positions.length);
-  for (let index = 0; index < drawCount; index += 1) {
-    const token = visibleTokens[index];
-    const position = panel.positions[index];
-    const sprite = panel.sprites[token.categoryId];
-    ctx.drawImage(
-      sprite,
-      position.x - sprite.width / 2,
-      position.y - sprite.height / 2
-    );
-  }
+  ctx.save();
+  ctx.beginPath();
+  ctx.roundRect(12, 12, width - 24, height - 24, 22);
+  ctx.clip();
 
-  ctx.strokeStyle = "rgba(255,255,255,0.06)";
+  const glow = ctx.createRadialGradient(width / 2, 0, 20, width / 2, 0, width * 0.6);
+  glow.addColorStop(0, "rgba(140,180,255,0.18)");
+  glow.addColorStop(1, "rgba(140,180,255,0)");
+  ctx.fillStyle = glow;
+  ctx.fillRect(0, 0, width, height * 0.4);
+
+  ctx.fillStyle = "rgba(255,255,255,0.02)";
+  ctx.fillRect(14, 14, width - 28, height - 28);
+
+  ctx.strokeStyle = "rgba(255,255,255,0.05)";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(width * 0.22, 18);
+  ctx.lineTo(width * 0.78, 18);
+  ctx.stroke();
+
+  panel.balls
+    .slice()
+    .sort((left, right) => left.y - right.y)
+    .forEach((body) => {
+      const sprite = panel.sprites[body.categoryId];
+      ctx.drawImage(
+        sprite,
+        body.x - sprite.width / 2,
+        body.y - sprite.height / 2
+      );
+    });
+
+  ctx.restore();
+
+  ctx.strokeStyle = "rgba(255,255,255,0.11)";
   ctx.lineWidth = 1.2;
-  ctx.strokeRect(0.6, 0.6, width - 1.2, height - 1.2);
+  ctx.beginPath();
+  ctx.roundRect(12, 12, width - 24, height - 24, 22);
+  ctx.stroke();
+
+  ctx.strokeStyle = "rgba(159,189,255,0.12)";
+  ctx.beginPath();
+  ctx.moveTo(width * 0.16, 32);
+  ctx.lineTo(width * 0.16, height - 32);
+  ctx.stroke();
 }
 
-function updateStatuses(simulationNow, currentVisible, scenarioVisible) {
+function updateStatuses(simulationNow) {
   const elapsed = performance.now() - state.restartAt;
   const catchupMs = state.data.catchupSeconds * 1000;
-  const mode = elapsed <= catchupMs ? "catchup" : "live";
+  const replayDays =
+    ((simulationNow + state.data.windowDays * DAY_MS) /
+      (state.data.windowDays * DAY_MS)) *
+    state.data.windowDays;
 
-  if (mode === "catchup") {
-    const progress = Math.max(
-      0,
-      Math.min(
-        state.data.windowDays,
-        ((simulationNow + state.data.windowDays * DAY_MS) /
-          (state.data.windowDays * DAY_MS)) *
-          state.data.windowDays
-      )
-    );
-    refs.currentStatus.textContent = `Replaying ${formatInt(progress)} of ${state.data.windowDays} days`;
-    refs.scenarioStatus.textContent = `Replay resets whenever the slider changes`;
+  if (elapsed <= catchupMs) {
+    refs.currentStatus.textContent = `Catch-up replay: ${formatDecimal(
+      Math.max(0, Math.min(state.data.windowDays, replayDays))
+    )} / ${state.data.windowDays} days`;
+    refs.scenarioStatus.textContent = "Move the slider to restart the drop";
   } else {
-    refs.currentStatus.textContent = "Live mode: the 100-day window now advances in real time";
-    refs.scenarioStatus.textContent = "Live mode: new markers arrive at the counterfactual rate";
+    refs.currentStatus.textContent = "Live mode: the 30-day window now advances in real time";
+    refs.scenarioStatus.textContent = "Live mode: new balls now arrive at the counterfactual rate";
   }
 
-  refs.currentBallCount.textContent = `${formatInt(currentVisible.length)} / ${formatInt(
-    state.currentPanel.fullBallCount
-  )} balls`;
-  refs.scenarioBallCount.textContent = `${formatInt(scenarioVisible.length)} / ${formatInt(
-    state.scenarioPanel.fullBallCount
-  )} balls`;
+  refs.currentBallCount.textContent = `${formatInt(
+    state.currentPanel.balls.length
+  )} / ${formatInt(state.currentPanel.fullBallCount)} balls`;
+  refs.scenarioBallCount.textContent = `${formatInt(
+    state.scenarioPanel.balls.length
+  )} / ${formatInt(state.scenarioPanel.fullBallCount)} balls`;
 }
 
-function render() {
+function render(now) {
   const simulationNow = getSimulationNow();
-  const currentVisible = getVisibleTokens(state.currentPanel, simulationNow);
-  const scenarioVisible = getVisibleTokens(state.scenarioPanel, simulationNow);
+  const dt = Math.min(0.03, (now - state.lastFrameAt) / 1000);
+  state.lastFrameAt = now;
 
-  drawPanel(state.currentPanel, currentVisible);
-  drawPanel(state.scenarioPanel, scenarioVisible);
-  updateStatuses(simulationNow, currentVisible, scenarioVisible);
+  syncPanel(state.currentPanel, simulationNow);
+  syncPanel(state.scenarioPanel, simulationNow);
+  stepPhysics(state.currentPanel, dt);
+  stepPhysics(state.scenarioPanel, dt);
+  drawVessel(state.currentPanel);
+  drawVessel(state.scenarioPanel);
+  updateStatuses(simulationNow);
 
   state.animationFrame = requestAnimationFrame(render);
-}
-
-function restartSimulation() {
-  state.restartAt = performance.now();
-  updateText();
-  rebuildPanels();
-}
-
-function handleResize() {
-  rebuildPanels();
 }
 
 function wireEvents() {
@@ -462,8 +626,10 @@ function wireEvents() {
   });
 
   window.addEventListener("resize", () => {
-    window.clearTimeout(handleResize.timer);
-    handleResize.timer = window.setTimeout(handleResize, 120);
+    window.clearTimeout(wireEvents.resizeTimer);
+    wireEvents.resizeTimer = window.setTimeout(() => {
+      restartSimulation();
+    }, 140);
   });
 }
 
@@ -471,10 +637,9 @@ async function init() {
   state.data = await loadData();
   state.share = state.data.defaultAutomationShare;
   refs.slider.value = String(Math.round(state.share * 100));
-
   wireEvents();
   restartSimulation();
-  render();
+  state.animationFrame = requestAnimationFrame(render);
 }
 
 init().catch((error) => {

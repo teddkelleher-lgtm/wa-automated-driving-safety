@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>100 Days on Washington Roads</title>
+    <title>The Last 30 Days on Washington Roads</title>
     <meta
       name="description"
-      content="A dark, animated Washington road-safety counterfactual showing how the last 100 days of crashes and deaths might look with more automated driving."
+      content="A dark, animated Washington road-safety counterfactual showing how the last 30 days of crashes and deaths might look with more automated driving."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,10 +20,10 @@
     <main class="shell">
       <header class="hero">
         <p class="eyebrow">Washington Automated Driving Counterfactual</p>
-        <h1>100 days on Washington roads.</h1>
+        <h1>The last 30 days on Washington roads, with and without more automated driving.</h1>
         <p class="lede">
-          The left vessel replays the estimated crash burden of the last 100 days at
-          Washington's 2024 pace. The right vessel reruns the same 100-day period if a
+          The left vessel replays the estimated crash burden of the last 30 days at
+          Washington's 2024 pace. The right vessel reruns the same 30-day period if a
           larger share of trips were automated.
         </p>
 
@@ -46,30 +46,30 @@
             />
           </div>
           <p class="scenario-note" id="scenarioNote">
-            At 50% automated trips, the right vessel removes an estimated 92 deaths and
-            414 serious injuries over 100 days.
+            At 50% automated trips, the right vessel removes an estimated 27.6 deaths
+            and 124.1 serious injuries over 30 days.
           </p>
         </section>
 
         <section class="headline-metrics">
           <article class="headline-card card">
-            <span class="metric-kicker">Estimated last 100 days</span>
-            <strong id="metricDeaths">200</strong>
+            <span class="metric-kicker">Estimated last 30 days</span>
+            <strong id="metricDeaths">59.9</strong>
             <span class="metric-label">traffic deaths</span>
           </article>
           <article class="headline-card card">
-            <span class="metric-kicker">Estimated last 100 days</span>
-            <strong id="metricSeriousInjuries">899</strong>
+            <span class="metric-kicker">Estimated last 30 days</span>
+            <strong id="metricSeriousInjuries">269.7</strong>
             <span class="metric-label">serious injuries</span>
           </article>
           <article class="headline-card card accent">
             <span class="metric-kicker">Avoided at current slider</span>
-            <strong id="metricAvoidedDeaths">92</strong>
+            <strong id="metricAvoidedDeaths">27.6</strong>
             <span class="metric-label">fewer deaths</span>
           </article>
           <article class="headline-card card accent">
             <span class="metric-kicker">Avoided at current slider</span>
-            <strong id="metricAvoidedSerious">414</strong>
+            <strong id="metricAvoidedSerious">124.1</strong>
             <span class="metric-label">fewer serious injuries</span>
           </article>
         </section>
@@ -106,16 +106,16 @@
               <h2>Current Washington pace</h2>
             </div>
             <div class="panel-summary">
-              <strong id="currentTotal">27,697</strong>
-              <span>estimated markers over 100 days</span>
+              <strong id="currentTotal">8,309.2</strong>
+              <span>estimated events over 30 days</span>
             </div>
           </div>
           <div class="panel-canvas-wrap">
             <canvas id="currentCanvas" aria-label="Current Washington crash marker vessel"></canvas>
           </div>
           <div class="panel-footer">
-            <span id="currentStatus">Replaying the last 100 days</span>
-            <span id="currentBallCount">0 / 2,770 balls</span>
+            <span id="currentStatus">Replaying the last 30 days</span>
+            <span id="currentBallCount">0 / 415 balls</span>
           </div>
         </article>
 
@@ -126,8 +126,8 @@
               <h2 id="scenarioTitle">If 50% of trips were automated</h2>
             </div>
             <div class="panel-summary">
-              <strong id="scenarioTotal">15,346</strong>
-              <span>estimated markers over 100 days</span>
+              <strong id="scenarioTotal">4,603.9</strong>
+              <span>estimated events over 30 days</span>
             </div>
           </div>
           <div class="panel-canvas-wrap">
@@ -135,7 +135,7 @@
           </div>
           <div class="panel-footer">
             <span id="scenarioStatus">Replay restarts whenever the slider moves</span>
-            <span id="scenarioBallCount">0 / 1,535 balls</span>
+            <span id="scenarioBallCount">0 / 230 balls</span>
           </div>
         </article>
       </section>
@@ -145,9 +145,9 @@
           <p class="eyebrow">Method</p>
           <h3>Simple, transparent arithmetic</h3>
           <p>
-            This animation compresses the last 100 days into 65 seconds, then advances
+            This animation compresses the last 30 days into 30 seconds, then advances
             in real time. It does not show literal one-to-one crashes. Each ball
-            represents <strong>10 estimated events</strong> in this 100-day window.
+            represents <strong>20 estimated events</strong> in this 30-day window.
           </p>
           <p>
             For each category, the right vessel applies:

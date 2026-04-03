@@ -1,10 +1,10 @@
 {
   "baselineYear": 2024,
-  "windowDays": 100,
+  "windowDays": 30,
   "daysInBaselineYear": 366,
-  "catchupSeconds": 65,
+  "catchupSeconds": 30,
   "futureHorizonDays": 365,
-  "ballScale": 10,
+  "ballScale": 20,
   "defaultAutomationShare": 0.5,
   "summary": {
     "annualTrafficDeaths": 731,
