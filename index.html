@@ -3,286 +3,211 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Washington Automated Driving Safety Counterfactual</title>
+    <title>100 Days on Washington Roads</title>
     <meta
       name="description"
-      content="An interactive Washington state road-safety counterfactual showing how many deaths and serious injuries could be avoided as automated driving becomes more common."
+      content="A dark, animated Washington road-safety counterfactual showing how the last 100 days of crashes and deaths might look with more automated driving."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Space+Grotesk:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="page-shell">
-      <header class="hero section">
-        <div class="hero-copy">
-          <p class="eyebrow">Washington Road Safety Counterfactual</p>
-          <h1>How many Washington lives could wider automated driving save?</h1>
-          <p class="lede">
-            Washington is not a place where automated driving is blocked outright.
-            The harder question is what continued slow adoption costs. This site
-            models how many traffic deaths and serious injuries could be avoided if a
-            larger share of vehicle miles in Washington were driven by systems that
-            perform closer to current Waymo safety benchmarks than to human drivers.
-          </p>
-          <div class="hero-notes">
-            <span>Latest county-complete fatality baseline used here: 2024</span>
-            <span>County map uses 730 deaths from federal county data</span>
-            <span>WTSC statewide 2024 preliminary death count: 731</span>
-          </div>
-        </div>
+    <main class="shell">
+      <header class="hero">
+        <p class="eyebrow">Washington Automated Driving Counterfactual</p>
+        <h1>100 days on Washington roads.</h1>
+        <p class="lede">
+          The left vessel replays the estimated crash burden of the last 100 days at
+          Washington's 2024 pace. The right vessel reruns the same 100-day period if a
+          larger share of trips were automated.
+        </p>
 
-        <aside class="control-card card">
-          <p class="eyebrow">Scenario Control</p>
-          <h2>Automated miles in Washington</h2>
-          <label class="slider-label" for="automationShare">
-            Share of statewide vehicle miles driven by automated vehicles
-          </label>
-          <div class="slider-header">
-            <strong id="shareValue">5%</strong>
-            <span id="shareCaption">baseline scenario</span>
+        <section class="controls card">
+          <div class="controls-copy">
+            <label class="slider-label" for="automationShare">
+              Share of trips in automated vehicles
+            </label>
+            <div class="slider-headline">
+              <strong id="shareValue">50%</strong>
+              <span id="scenarioCopy">default counterfactual</span>
+            </div>
+            <input
+              id="automationShare"
+              type="range"
+              min="0"
+              max="100"
+              step="1"
+              value="50"
+            />
           </div>
-          <input
-            id="automationShare"
-            type="range"
-            min="0"
-            max="100"
-            step="1"
-            value="5"
-          />
-          <div class="quick-picks" aria-label="Quick share presets">
-            <button type="button" class="quick-pick" data-share="0">0%</button>
-            <button type="button" class="quick-pick is-active" data-share="5">5%</button>
-            <button type="button" class="quick-pick" data-share="10">10%</button>
-            <button type="button" class="quick-pick" data-share="25">25%</button>
-            <button type="button" class="quick-pick" data-share="50">50%</button>
-          </div>
-          <p class="microcopy">
-            Conservative safety-effect assumption: automated miles experience
-            <strong>82% fewer injury-causing crashes</strong> than the human benchmark
-            on Waymo’s current public safety-impact page.
+          <p class="scenario-note" id="scenarioNote">
+            At 50% automated trips, the right vessel removes an estimated 92 deaths and
+            414 serious injuries over 100 days.
           </p>
-          <p class="microcopy subtle">
-            This is a transparent counterfactual, not a forecast. It scales linearly:
-            current harm × automated share × safety effect.
-          </p>
-        </aside>
+        </section>
+
+        <section class="headline-metrics">
+          <article class="headline-card card">
+            <span class="metric-kicker">Estimated last 100 days</span>
+            <strong id="metricDeaths">200</strong>
+            <span class="metric-label">traffic deaths</span>
+          </article>
+          <article class="headline-card card">
+            <span class="metric-kicker">Estimated last 100 days</span>
+            <strong id="metricSeriousInjuries">899</strong>
+            <span class="metric-label">serious injuries</span>
+          </article>
+          <article class="headline-card card accent">
+            <span class="metric-kicker">Avoided at current slider</span>
+            <strong id="metricAvoidedDeaths">92</strong>
+            <span class="metric-label">fewer deaths</span>
+          </article>
+          <article class="headline-card card accent">
+            <span class="metric-kicker">Avoided at current slider</span>
+            <strong id="metricAvoidedSerious">414</strong>
+            <span class="metric-label">fewer serious injuries</span>
+          </article>
+        </section>
       </header>
 
-      <main>
-        <section class="stats-grid section" aria-label="Statewide summary metrics">
-          <article class="metric-card card">
-            <p class="metric-label">2024 county-attributed deaths</p>
-            <p class="metric-value" id="metricDeaths">730</p>
-            <p class="metric-note">From NHTSA FARS county data</p>
-          </article>
-          <article class="metric-card card">
-            <p class="metric-label">2024 serious injuries</p>
-            <p class="metric-value" id="metricSeriousInjuries">3,290</p>
-            <p class="metric-note">WTSC statewide preliminary count</p>
-          </article>
-          <article class="metric-card card accent-card">
-            <p class="metric-label">Estimated deaths avoided / year</p>
-            <p class="metric-value" id="metricAvoidedDeaths">33</p>
-            <p class="metric-note" id="metricAvoidedDeathsNote">At 5% automated miles</p>
-          </article>
-          <article class="metric-card card accent-card">
-            <p class="metric-label">Estimated people spared from fatal or serious injury</p>
-            <p class="metric-value" id="metricAvoidedCombined">165</p>
-            <p class="metric-note" id="metricAvoidedCombinedNote">Deaths + serious injuries</p>
-          </article>
-        </section>
+      <section class="legend-row" aria-label="Severity legend">
+        <div class="legend-item">
+          <span class="legend-ball low"></span>
+          <span>No injury crashes</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-ball possible"></span>
+          <span>Possible injury crashes</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-ball minor"></span>
+          <span>Suspected minor injury crashes</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-ball serious"></span>
+          <span>Suspected serious injury crashes</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-ball death">☠</span>
+          <span>Traffic deaths</span>
+        </div>
+      </section>
 
-        <section class="impact-grid section">
-          <article class="card map-panel">
-            <div class="panel-header">
-              <div>
-                <p class="eyebrow">County Map</p>
-                <h2>Where the burden sits today, and where automation could matter most</h2>
-              </div>
-              <div class="mode-toggle" role="tablist" aria-label="Map view">
-                <button
-                  type="button"
-                  class="mode-button"
-                  data-mode="avoidable"
-                  aria-pressed="true"
-                >
-                  Avoidable deaths
-                </button>
-                <button
-                  type="button"
-                  class="mode-button"
-                  data-mode="actual"
-                  aria-pressed="false"
-                >
-                  Actual 2024 deaths
-                </button>
-              </div>
-            </div>
-            <p class="panel-copy" id="mapCopy">
-              Default map shows the estimated deaths that could be avoided each year if
-              5% of Washington vehicle miles were automated and achieved an 82% lower
-              injury-crash rate than the human baseline.
-            </p>
-
-            <div class="map-wrap">
-              <svg id="waMap" viewBox="0 0 760 640" aria-label="Washington counties map"></svg>
-              <div id="mapTooltip" class="map-tooltip" hidden></div>
-            </div>
-
-            <div class="legend-block">
-              <div class="legend-bar" id="legendBar" aria-hidden="true"></div>
-              <div class="legend-labels">
-                <span id="legendMin">0</span>
-                <span id="legendMax">14 deaths avoided</span>
-              </div>
-            </div>
-          </article>
-
-          <aside class="card county-panel">
-            <div class="selected-county">
-              <p class="eyebrow">County Detail</p>
-              <h2 id="countyName">King County</h2>
-              <div class="county-metrics">
-                <div>
-                  <span class="county-label">Actual deaths in 2024</span>
-                  <strong id="countyDeaths">152</strong>
-                </div>
-                <div>
-                  <span class="county-label">Avoidable at current slider</span>
-                  <strong id="countyAvoidable">6.2</strong>
-                </div>
-                <div>
-                  <span class="county-label">Share of Washington deaths</span>
-                  <strong id="countyShare">20.8%</strong>
-                </div>
-              </div>
-            </div>
-
-            <div class="leaderboard-block">
-              <div class="leaderboard-header">
-                <p class="eyebrow">Priority Counties</p>
-                <h3 id="leaderboardTitle">Largest avoidable losses at current slider</h3>
-              </div>
-              <ol id="leaderboard" class="leaderboard-list"></ol>
-            </div>
-          </aside>
-        </section>
-
-        <section class="method-grid section">
-          <article class="card prose-card">
-            <p class="eyebrow">Methodology</p>
-            <h2>How the calculation works</h2>
-            <div class="formula-box">
-              <code>avoidable deaths = county deaths × automated share × 0.82</code>
-            </div>
-            <ul class="prose-list">
-              <li>
-                County deaths come from <strong>2024 NHTSA FARS</strong>,
-                grouped by Washington county using the <code>FATALS</code> field in
-                <code>accident.csv</code>.
-              </li>
-              <li>
-                Statewide serious injuries come from the
-                <strong>Washington Traffic Safety Commission</strong>, which reported
-                <strong>3,290 serious injuries</strong> in 2024.
-              </li>
-              <li>
-                The safety-effect parameter is fixed at <strong>82%</strong>, matching
-                Waymo’s current public claim for fewer injury-causing crashes versus the
-                human benchmark. The same page reports <strong>92%</strong> fewer serious
-                injury or worse crashes, so this site uses the lower figure as the
-                baseline.
-              </li>
-              <li>
-                The model assumes automated miles are spread across the state in
-                proportion to today’s harm and that benefits scale linearly with market
-                share. Reality will be messier, but the arithmetic is transparent and
-                easy to audit.
-              </li>
-            </ul>
-          </article>
-
-          <article class="card prose-card">
-            <p class="eyebrow">Policy Posture</p>
-            <h2>What this argues for in Washington</h2>
-            <p>
-              Washington already allows automated-vehicle testing and operation through a
-              self-certification regime. So the point here is not to claim that the
-              state has a DC-style blockade. The point is that every year of slower
-              deployment still carries a measurable human cost.
-            </p>
-            <p>
-              A pro-safety posture would keep unnecessary barriers low, preserve room for
-              commercial scaling, and consider neutral incentives that speed up adoption
-              of demonstrably safer automated fleets. That does not require taking away
-              the option for people to drive themselves. It means letting safer driving
-              technology earn share faster where it proves safer.
-            </p>
-          </article>
-        </section>
-
-        <section class="audit-section section">
-          <div class="audit-header">
+      <section class="vessels">
+        <article class="panel card">
+          <div class="panel-header">
             <div>
-              <p class="eyebrow">Audit Trail</p>
-              <h2>Check the math yourself</h2>
+              <p class="panel-kicker">Left Vessel</p>
+              <h2>Current Washington pace</h2>
             </div>
-            <div class="download-links">
-              <a class="download-link" href="data/wa-county-deaths-2024.csv">County CSV</a>
-              <a class="download-link" href="data/wa-traffic-data.json">Full JSON</a>
+            <div class="panel-summary">
+              <strong id="currentTotal">27,697</strong>
+              <span>estimated markers over 100 days</span>
             </div>
           </div>
-
-          <div class="sources card">
-            <h3>Original sources</h3>
-            <ul class="source-list">
-              <li>
-                <a href="https://static.nhtsa.gov/nhtsa/downloads/FARS/2024/National/FARS2024NationalCSV.zip">
-                  NHTSA FARS 2024 national CSV download
-                </a>
-              </li>
-              <li>
-                <a href="https://wtsc.wa.gov/wp-content/uploads/dlm_uploads/2025/10/11_State-of-the-State_Oct2025.pdf">
-                  WTSC Brief No. 11: State of the State, October 2025
-                </a>
-              </li>
-              <li>
-                <a href="https://www.waymo.com/safety/impact/">
-                  Waymo Safety Impact
-                </a>
-              </li>
-              <li>
-                <a href="https://dol.wa.gov/vehicles-and-boats/vehicles/vehicle-registration/register-other-vehicles-and-other-services/registering-autonomous-vehicles">
-                  Washington DOL autonomous vehicle self-certification page
-                </a>
-              </li>
-            </ul>
+          <div class="panel-canvas-wrap">
+            <canvas id="currentCanvas" aria-label="Current Washington crash marker vessel"></canvas>
           </div>
-
-          <div class="table-card card">
-            <table>
-              <thead>
-                <tr>
-                  <th scope="col">County</th>
-                  <th scope="col">2024 deaths</th>
-                  <th scope="col">Avoidable at current slider</th>
-                  <th scope="col">Share of WA deaths</th>
-                </tr>
-              </thead>
-              <tbody id="auditTableBody"></tbody>
-            </table>
+          <div class="panel-footer">
+            <span id="currentStatus">Replaying the last 100 days</span>
+            <span id="currentBallCount">0 / 2,770 balls</span>
           </div>
-        </section>
-      </main>
-    </div>
+        </article>
 
-    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-    <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+        <article class="panel card">
+          <div class="panel-header">
+            <div>
+              <p class="panel-kicker">Right Vessel</p>
+              <h2 id="scenarioTitle">If 50% of trips were automated</h2>
+            </div>
+            <div class="panel-summary">
+              <strong id="scenarioTotal">15,346</strong>
+              <span>estimated markers over 100 days</span>
+            </div>
+          </div>
+          <div class="panel-canvas-wrap">
+            <canvas id="scenarioCanvas" aria-label="Counterfactual Washington crash marker vessel"></canvas>
+          </div>
+          <div class="panel-footer">
+            <span id="scenarioStatus">Replay restarts whenever the slider moves</span>
+            <span id="scenarioBallCount">0 / 1,535 balls</span>
+          </div>
+        </article>
+      </section>
+
+      <section class="notes-grid">
+        <article class="note-card card">
+          <p class="eyebrow">Method</p>
+          <h3>Simple, transparent arithmetic</h3>
+          <p>
+            This animation compresses the last 100 days into 65 seconds, then advances
+            in real time. It does not show literal one-to-one crashes. Each ball
+            represents <strong>10 estimated events</strong> in this 100-day window.
+          </p>
+          <p>
+            For each category, the right vessel applies:
+            <code>baseline × (1 - automated share × safety effect)</code>
+          </p>
+          <ul class="note-list">
+            <li>
+              No-injury crashes use an <strong>88%</strong> safety effect, mapped from
+              Waymo and Swiss Re's property-damage claim comparison.
+            </li>
+            <li>
+              Injury crashes and deaths use a <strong>92%</strong> safety effect, mapped
+              from Waymo and Swiss Re's bodily-injury claim comparison.
+            </li>
+            <li>
+              Unknown-severity crashes are excluded from the ball mix:
+              <strong id="unknownExcluded">2,971</strong> in 2024.
+            </li>
+          </ul>
+        </article>
+
+        <article class="note-card card">
+          <p class="eyebrow">Sources</p>
+          <h3>Original data and downloadable summary</h3>
+          <ul class="link-list">
+            <li>
+              <a href="https://remoteapps.wsdot.wa.gov/HighwaySafety/Collision/Data/Portal/Public/">
+                WSDOT Crash Data Portal
+              </a>
+            </li>
+            <li>
+              <a href="https://wtsc.wa.gov/wp-content/uploads/dlm_uploads/2025/10/11_State-of-the-State_Oct2025.pdf">
+                WTSC Brief No. 11: State of the State, October 2025
+              </a>
+            </li>
+            <li>
+              <a href="https://waymo.com/safety/impact/">
+                Waymo safety impact
+              </a>
+            </li>
+            <li>
+              <a href="https://waymo.com/safety/">
+                Waymo safety overview and Swiss Re claims comparison
+              </a>
+            </li>
+            <li>
+              <a href="data/wa-ball-summary.csv">Download the summary table used here</a>
+            </li>
+          </ul>
+          <p class="policy-note">
+            Washington does not need a DC-style anti-AV narrative for this argument.
+            The narrower point is that if automated fleets keep proving materially safer,
+            the state should avoid unnecessary barriers and consider incentives that let
+            the safer option scale faster, while leaving people free to drive
+            themselves.
+          </p>
+        </article>
+      </section>
+    </main>
+
     <script src="app.js"></script>
   </body>
 </html>

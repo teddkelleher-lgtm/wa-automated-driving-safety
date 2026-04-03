@@ -1,446 +1,484 @@
+const DAY_MS = 24 * 60 * 60 * 1000;
+
 const formatterInt = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 0,
 });
 
-const formatterOneDecimal = new Intl.NumberFormat("en-US", {
-  minimumFractionDigits: 1,
-  maximumFractionDigits: 1,
-});
-
-const formatterPercent = new Intl.NumberFormat("en-US", {
+const formatterPct = new Intl.NumberFormat("en-US", {
   style: "percent",
-  minimumFractionDigits: 1,
-  maximumFractionDigits: 1,
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0,
 });
 
-const elements = {
+const refs = {
   slider: document.querySelector("#automationShare"),
   shareValue: document.querySelector("#shareValue"),
-  shareCaption: document.querySelector("#shareCaption"),
+  scenarioCopy: document.querySelector("#scenarioCopy"),
+  scenarioNote: document.querySelector("#scenarioNote"),
+  scenarioTitle: document.querySelector("#scenarioTitle"),
   metricDeaths: document.querySelector("#metricDeaths"),
   metricSeriousInjuries: document.querySelector("#metricSeriousInjuries"),
   metricAvoidedDeaths: document.querySelector("#metricAvoidedDeaths"),
-  metricAvoidedDeathsNote: document.querySelector("#metricAvoidedDeathsNote"),
-  metricAvoidedCombined: document.querySelector("#metricAvoidedCombined"),
-  metricAvoidedCombinedNote: document.querySelector("#metricAvoidedCombinedNote"),
-  mapCopy: document.querySelector("#mapCopy"),
-  legendBar: document.querySelector("#legendBar"),
-  legendMin: document.querySelector("#legendMin"),
-  legendMax: document.querySelector("#legendMax"),
-  countyName: document.querySelector("#countyName"),
-  countyDeaths: document.querySelector("#countyDeaths"),
-  countyAvoidable: document.querySelector("#countyAvoidable"),
-  countyShare: document.querySelector("#countyShare"),
-  leaderboard: document.querySelector("#leaderboard"),
-  leaderboardTitle: document.querySelector("#leaderboardTitle"),
-  auditTableBody: document.querySelector("#auditTableBody"),
-  tooltip: document.querySelector("#mapTooltip"),
-  mapSvg: d3.select("#waMap"),
-  modeButtons: [...document.querySelectorAll(".mode-button")],
-  quickPicks: [...document.querySelectorAll(".quick-pick")],
+  metricAvoidedSerious: document.querySelector("#metricAvoidedSerious"),
+  unknownExcluded: document.querySelector("#unknownExcluded"),
+  currentTotal: document.querySelector("#currentTotal"),
+  scenarioTotal: document.querySelector("#scenarioTotal"),
+  currentStatus: document.querySelector("#currentStatus"),
+  scenarioStatus: document.querySelector("#scenarioStatus"),
+  currentBallCount: document.querySelector("#currentBallCount"),
+  scenarioBallCount: document.querySelector("#scenarioBallCount"),
+  currentCanvas: document.querySelector("#currentCanvas"),
+  scenarioCanvas: document.querySelector("#scenarioCanvas"),
 };
 
 const state = {
-  share: 0.05,
-  mapMode: "avoidable",
-  selectedFips: "53033",
   data: null,
-  counties: [],
-  featureByFips: new Map(),
-  countyPathSelection: null,
+  share: 0.5,
+  restartAt: performance.now(),
+  currentPanel: null,
+  scenarioPanel: null,
+  animationFrame: null,
 };
 
-const actualInterpolator = d3.interpolateRgbBasis([
-  "#eef4e9",
-  "#7ca36b",
-  "#f1b24a",
-  "#943316",
-]);
-
-const avoidableInterpolator = d3.interpolateRgbBasis([
-  "#edf8ec",
-  "#8ecf9d",
-  "#f6c15e",
-  "#c95d2b",
-  "#7a1e14",
-]);
-
-function computeAvoidableDeaths(deaths) {
-  return deaths * state.share * state.data.statewide.safetyEffect;
+function mulberry32(seed) {
+  let t = seed >>> 0;
+  return () => {
+    t += 0x6d2b79f5;
+    let value = Math.imul(t ^ (t >>> 15), t | 1);
+    value ^= value + Math.imul(value ^ (value >>> 7), value | 61);
+    return ((value ^ (value >>> 14)) >>> 0) / 4294967296;
+  };
 }
 
-function formatShareLabel(share) {
-  return `${Math.round(share * 100)}%`;
+function hashString(text) {
+  let hash = 2166136261;
+  for (let index = 0; index < text.length; index += 1) {
+    hash ^= text.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
 }
 
-function updateQuickPickState() {
-  const sliderValue = Number(elements.slider.value);
-  elements.quickPicks.forEach((button) => {
-    button.classList.toggle("is-active", Number(button.dataset.share) === sliderValue);
+function formatInt(value) {
+  return formatterInt.format(Math.round(value));
+}
+
+function allocateBallCounts(items, accessor, scale) {
+  const rawItems = items.map((item) => {
+    const raw = accessor(item) / scale;
+    const whole = Math.floor(raw);
+    return {
+      item,
+      raw,
+      whole,
+      remainder: raw - whole,
+    };
   });
-}
 
-function updateModeButtonState() {
-  elements.modeButtons.forEach((button) => {
-    const isActive = button.dataset.mode === state.mapMode;
-    button.classList.toggle("is-active", isActive);
-    button.setAttribute("aria-pressed", String(isActive));
-  });
-}
-
-function updateHeadlineMetrics() {
-  const statewide = state.data.statewide;
-  const avoidedDeaths = statewide.countyAttributedDeaths * state.share * statewide.safetyEffect;
-  const avoidedCombined =
-    statewide.fatalOrSeriousVictims * state.share * statewide.safetyEffect;
-
-  elements.shareValue.textContent = formatShareLabel(state.share);
-  elements.shareCaption.textContent =
-    state.share === 0
-      ? "human-driving status quo"
-      : state.share <= 0.05
-        ? "baseline scenario"
-        : "counterfactual scenario";
-
-  elements.metricDeaths.textContent = formatterInt.format(statewide.countyAttributedDeaths);
-  elements.metricSeriousInjuries.textContent = formatterInt.format(statewide.seriousInjuries);
-  elements.metricAvoidedDeaths.textContent = formatterInt.format(avoidableDeaths);
-  elements.metricAvoidedDeathsNote.textContent =
-    `${formatShareLabel(state.share)} automated miles, ${Math.round(
-      statewide.safetyEffect * 100
-    )}% safety effect`;
-  elements.metricAvoidedCombined.textContent = formatterInt.format(avoidableCombined);
-  elements.metricAvoidedCombinedNote.textContent =
-    "Deaths plus serious injuries, statewide";
-
-  elements.mapCopy.textContent =
-    state.mapMode === "avoidable"
-      ? `Map shows the estimated deaths that could be avoided each year if ${formatShareLabel(
-          state.share
-        )} of Washington vehicle miles were automated and achieved an ${Math.round(
-          statewide.safetyEffect * 100
-        )}% lower injury-crash rate than the human baseline.`
-      : "Map shows the raw county death burden in 2024. Use the slider to see how much of that burden could plausibly disappear under faster automated-driving adoption.";
-}
-
-function updateCountyDetail() {
-  const county = state.data.counties.find((item) => item.countyFips === state.selectedFips);
-  if (!county) return;
-
-  elements.countyName.textContent = `${county.county} County`;
-  elements.countyDeaths.textContent = formatterInt.format(county.trafficDeaths2024);
-  elements.countyAvoidable.textContent = formatterOneDecimal.format(
-    computeAvoidableDeaths(county.trafficDeaths2024)
+  const targetTotal = Math.round(
+    rawItems.reduce((sum, entry) => sum + entry.raw, 0)
   );
-  elements.countyShare.textContent = formatterPercent.format(county.shareOfStateDeaths);
-}
+  let assigned = rawItems.reduce((sum, entry) => sum + entry.whole, 0);
 
-function renderLeaderboard() {
-  const sorted = [...state.data.counties].sort((a, b) => {
-    const left =
-      state.mapMode === "avoidable"
-        ? computeAvoidableDeaths(a.trafficDeaths2024)
-        : a.trafficDeaths2024;
-    const right =
-      state.mapMode === "avoidable"
-        ? computeAvoidableDeaths(b.trafficDeaths2024)
-        : b.trafficDeaths2024;
-    return right - left;
-  });
-
-  elements.leaderboardTitle.textContent =
-    state.mapMode === "avoidable"
-      ? "Largest avoidable losses at current slider"
-      : "Highest 2024 death totals";
-
-  elements.leaderboard.innerHTML = "";
-
-  sorted.slice(0, 8).forEach((county, index) => {
-    const item = document.createElement("li");
-    item.className = "leaderboard-item";
-
-    const value =
-      state.mapMode === "avoidable"
-        ? formatterOneDecimal.format(computeAvoidableDeaths(county.trafficDeaths2024))
-        : formatterInt.format(county.trafficDeaths2024);
-
-    const valueLabel =
-      state.mapMode === "avoidable" ? "avoidable deaths" : "deaths in 2024";
-
-    item.innerHTML = `
-      <span class="leaderboard-rank">${index + 1}</span>
-      <div>
-        <strong>${county.county}</strong>
-        <div class="leaderboard-meta">${formatterPercent.format(
-          county.shareOfStateDeaths
-        )} of Washington deaths</div>
-      </div>
-      <div class="leaderboard-value">
-        ${value}
-        <div class="leaderboard-meta">${valueLabel}</div>
-      </div>
-    `;
-
-    item.addEventListener("click", () => {
-      state.selectedFips = county.countyFips;
-      updateCountyDetail();
-      updateMapSelection();
+  rawItems
+    .sort((left, right) => right.remainder - left.remainder)
+    .forEach((entry) => {
+      if (assigned >= targetTotal) return;
+      entry.whole += 1;
+      assigned += 1;
     });
 
-    elements.leaderboard.appendChild(item);
+  return new Map(rawItems.map((entry) => [entry.item.id, entry.whole]));
+}
+
+function loadData() {
+  return fetch("data/wa-ball-simulation.json").then((response) => {
+    if (!response.ok) {
+      throw new Error("Could not load simulation data.");
+    }
+    return response.json();
   });
 }
 
-function renderAuditTable() {
-  const sorted = [...state.data.counties].sort((a, b) => b.trafficDeaths2024 - a.trafficDeaths2024);
-  elements.auditTableBody.innerHTML = "";
+function computeSummary(share) {
+  const { data } = state;
+  const windowFactor = data.windowDays / data.daysInBaselineYear;
+  const annualDeaths = data.summary.annualTrafficDeaths;
+  const annualSeriousInjuries = data.summary.annualSeriousInjuries;
+  const deathAvoided =
+    annualDeaths * windowFactor * share * data.summary.injuryAndDeathReduction;
+  const seriousAvoided =
+    annualSeriousInjuries *
+    windowFactor *
+    share *
+    data.summary.injuryAndDeathReduction;
 
-  sorted.forEach((county) => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${county.county}</td>
-      <td>${formatterInt.format(county.trafficDeaths2024)}</td>
-      <td>${formatterOneDecimal.format(computeAvoidableDeaths(county.trafficDeaths2024))}</td>
-      <td>${formatterPercent.format(county.shareOfStateDeaths)}</td>
-    `;
-
-    row.addEventListener("mouseenter", () => {
-      state.selectedFips = county.countyFips;
-      updateCountyDetail();
-      updateMapSelection();
-    });
-
-    elements.auditTableBody.appendChild(row);
-  });
-}
-
-function getCountyFill(county) {
-  if (state.mapMode === "actual") {
-    const actualScale = d3.scaleSequential(actualInterpolator).domain([
-      0,
-      d3.max(state.data.counties, (item) => item.trafficDeaths2024) || 1,
-    ]);
-    return county.trafficDeaths2024 === 0 ? "#f4f2eb" : actualScale(county.trafficDeaths2024);
-  }
-
-  const maxAvoidable =
-    d3.max(state.data.counties, (item) => computeAvoidableDeaths(item.trafficDeaths2024)) || 1;
-  const avoidableScale = d3.scaleSequential(avoidableInterpolator).domain([0, maxAvoidable]);
-  const avoidableDeaths = computeAvoidableDeaths(county.trafficDeaths2024);
-  return avoidableDeaths === 0 ? "#f4f2eb" : avoidableScale(avoidableDeaths);
-}
-
-function updateLegend() {
-  if (state.mapMode === "actual") {
-    elements.legendBar.style.background =
-      "linear-gradient(90deg, #eef4e9, #7ca36b, #f1b24a, #943316)";
-    elements.legendMin.textContent = "0";
-    elements.legendMax.textContent = `${formatterInt.format(
-      d3.max(state.data.counties, (item) => item.trafficDeaths2024) || 0
-    )} deaths`;
-    return;
-  }
-
-  elements.legendBar.style.background =
-    "linear-gradient(90deg, #edf8ec, #8ecf9d, #f6c15e, #c95d2b, #7a1e14)";
-  elements.legendMin.textContent = "0";
-  elements.legendMax.textContent = `${formatterOneDecimal.format(
-    d3.max(state.data.counties, (item) => computeAvoidableDeaths(item.trafficDeaths2024)) || 0
-  )} avoidable deaths`;
-}
-
-function tooltipMarkup(county) {
-  return `
-    <strong>${county.county} County</strong>
-    <span>${formatterInt.format(county.trafficDeaths2024)} deaths in 2024</span>
-    <span>${formatterOneDecimal.format(
-      computeAvoidableDeaths(county.trafficDeaths2024)
-    )} avoidable at ${formatShareLabel(state.share)} automated miles</span>
-    <span>${formatterPercent.format(county.shareOfStateDeaths)} of Washington deaths</span>
-  `;
-}
-
-function updateMapSelection() {
-  if (!state.countyPathSelection) return;
-  state.countyPathSelection.classed("is-selected", (feature) => {
-    const fips = String(feature.id).padStart(5, "0");
-    return fips === state.selectedFips;
-  });
-}
-
-function updateMapColors() {
-  if (!state.countyPathSelection) return;
-  state.countyPathSelection.attr("fill", (feature) => {
-    const fips = String(feature.id).padStart(5, "0");
-    const county = state.data.counties.find((item) => item.countyFips === fips);
-    return county ? getCountyFill(county) : "#f4f2eb";
-  });
-  updateMapSelection();
-  updateLegend();
-}
-
-function renderMap(topology) {
-  const countiesObject = topology.objects.counties;
-  const waFeatures = topojson
-    .feature(topology, countiesObject)
-    .features.filter((feature) => String(feature.id).padStart(5, "0").startsWith("53"));
-
-  waFeatures.forEach((feature) => {
-    state.featureByFips.set(String(feature.id).padStart(5, "0"), feature);
+  const categories = data.categories.map((category) => {
+    const base = category.annualCount * windowFactor;
+    const scenario = base * (1 - share * category.reduction);
+    return {
+      ...category,
+      base100: base,
+      scenario100: scenario,
+    };
   });
 
-  const width = 760;
-  const height = 640;
-  const projection = d3
-    .geoMercator()
-    .fitExtent(
-      [
-        [28, 20],
-        [width - 28, height - 20],
-      ],
-      { type: "FeatureCollection", features: waFeatures }
-    );
-  const path = d3.geoPath(projection);
+  return {
+    windowDeaths: annualDeaths * windowFactor,
+    windowSeriousInjuries: annualSeriousInjuries * windowFactor,
+    avoidedDeaths: deathAvoided,
+    avoidedSerious: seriousAvoided,
+    currentTotal: categories.reduce((sum, category) => sum + category.base100, 0),
+    scenarioTotal: categories.reduce((sum, category) => sum + category.scenario100, 0),
+    categories,
+  };
+}
 
-  elements.mapSvg.selectAll("*").remove();
+function createBallSprite(radius, color, icon) {
+  const size = Math.ceil(radius * 2.8);
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+  const center = size / 2;
 
-  const glow = elements.mapSvg
-    .append("defs")
-    .append("filter")
-    .attr("id", "county-shadow")
-    .attr("x", "-20%")
-    .attr("y", "-20%")
-    .attr("width", "140%")
-    .attr("height", "140%");
-
-  glow.append("feDropShadow").attr("dx", 0).attr("dy", 8).attr("stdDeviation", 10).attr(
-    "flood-color",
-    "rgba(20, 43, 34, 0.15)"
+  const gradient = ctx.createRadialGradient(
+    center - radius * 0.35,
+    center - radius * 0.45,
+    radius * 0.3,
+    center,
+    center,
+    radius * 1.1
   );
 
-  elements.mapSvg
-    .append("rect")
-    .attr("width", width)
-    .attr("height", height)
-    .attr("fill", "transparent");
+  gradient.addColorStop(0, "#ffffff");
+  gradient.addColorStop(0.15, color);
+  gradient.addColorStop(1, "#10151d");
 
-  state.countyPathSelection = elements.mapSvg
-    .append("g")
-    .selectAll("path")
-    .data(waFeatures)
-    .join("path")
-    .attr("class", "county-path")
-    .attr("d", path)
-    .attr("fill", (feature) => {
-      const fips = String(feature.id).padStart(5, "0");
-      const county = state.data.counties.find((item) => item.countyFips === fips);
-      return county ? getCountyFill(county) : "#f4f2eb";
-    })
-    .attr("filter", "url(#county-shadow)")
-    .on("mouseenter", (event, feature) => {
-      const fips = String(feature.id).padStart(5, "0");
-      const county = state.data.counties.find((item) => item.countyFips === fips);
-      if (!county) return;
-      elements.tooltip.hidden = false;
-      elements.tooltip.innerHTML = tooltipMarkup(county);
-      state.selectedFips = county.countyFips;
-      updateCountyDetail();
-      updateMapSelection();
-      const [x, y] = d3.pointer(event, elements.mapSvg.node());
-      elements.tooltip.style.left = `${x}px`;
-      elements.tooltip.style.top = `${y}px`;
-    })
-    .on("mousemove", (event, feature) => {
-      const [x, y] = d3.pointer(event, elements.mapSvg.node());
-      elements.tooltip.style.left = `${x}px`;
-      elements.tooltip.style.top = `${y}px`;
-      const fips = String(feature.id).padStart(5, "0");
-      const county = state.data.counties.find((item) => item.countyFips === fips);
-      if (county) {
-        elements.tooltip.innerHTML = tooltipMarkup(county);
+  ctx.beginPath();
+  ctx.arc(center, center, radius, 0, Math.PI * 2);
+  ctx.fillStyle = color;
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.arc(center, center, radius, 0, Math.PI * 2);
+  ctx.fillStyle = gradient;
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.arc(center - radius * 0.35, center - radius * 0.4, radius * 0.24, 0, Math.PI * 2);
+  ctx.fillStyle = "rgba(255,255,255,0.46)";
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.arc(center, center, radius - 0.5, 0, Math.PI * 2);
+  ctx.strokeStyle = "rgba(255,255,255,0.22)";
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  if (icon) {
+    ctx.fillStyle = "rgba(255,255,255,0.92)";
+    ctx.font = `${Math.round(radius * 1.05)}px Sora`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(icon, center, center + 0.2);
+  }
+
+  return canvas;
+}
+
+function buildPositions(width, height, neededCount) {
+  const padding = width < 500 ? 18 : 22;
+  const availableWidth = width - padding * 2;
+  const availableHeight = height - padding * 2;
+  let radius = Math.min(8, Math.max(4.4, Math.sqrt((availableWidth * availableHeight) / (neededCount * 15))));
+  let positions = [];
+
+  while (radius >= 3.2) {
+    const stepX = radius * 2.15;
+    const stepY = radius * 1.85;
+    positions = [];
+    let rowIndex = 0;
+    for (let y = height - padding - radius; y >= padding + radius; y -= stepY) {
+      const offset = rowIndex % 2 === 0 ? 0 : radius * 1.08;
+      const row = [];
+      for (let x = padding + radius + offset; x <= width - padding - radius; x += stepX) {
+        row.push({
+          x,
+          y,
+        });
       }
-    })
-    .on("mouseleave", () => {
-      elements.tooltip.hidden = true;
-    })
-    .on("click", (_, feature) => {
-      const fips = String(feature.id).padStart(5, "0");
-      state.selectedFips = fips;
-      updateCountyDetail();
-      updateMapSelection();
-    });
+      const rng = mulberry32(hashString(`row-${rowIndex}-${width}-${height}`));
+      for (let index = row.length - 1; index > 0; index -= 1) {
+        const swapIndex = Math.floor(rng() * (index + 1));
+        [row[index], row[swapIndex]] = [row[swapIndex], row[index]];
+      }
+      positions.push(...row);
+      rowIndex += 1;
+    }
 
-  elements.mapSvg
-    .append("path")
-    .datum(
-      topojson.mesh(topology, countiesObject, (a, b) => {
-        const left = String(a.id).padStart(5, "0");
-        const right = String(b.id).padStart(5, "0");
-        return a !== b && left.startsWith("53") && right.startsWith("53");
-      })
-    )
-    .attr("fill", "none")
-    .attr("stroke", "rgba(255,255,255,0.7)")
-    .attr("stroke-width", 1)
-    .attr("d", path);
+    if (positions.length >= neededCount) {
+      return {
+        radius,
+        positions,
+      };
+    }
+    radius -= 0.25;
+  }
 
-  updateMapSelection();
-  updateLegend();
+  return {
+    radius,
+    positions,
+  };
 }
 
-function refresh() {
-  updateQuickPickState();
-  updateModeButtonState();
-  updateHeadlineMetrics();
-  updateCountyDetail();
-  renderLeaderboard();
-  renderAuditTable();
-  updateMapColors();
+function createPanelConfig(kind, visibleSummary) {
+  const width = refs.currentCanvas.clientWidth;
+  const height = refs.currentCanvas.clientHeight;
+  const neededCount = Math.max(
+    Math.round(visibleSummary.currentTotal / state.data.ballScale) + 40,
+    Math.round(visibleSummary.scenarioTotal / state.data.ballScale) + 40
+  );
+
+  const canvas = kind === "current" ? refs.currentCanvas : refs.scenarioCanvas;
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = Math.round(width * dpr);
+  canvas.height = Math.round(height * dpr);
+  const ctx = canvas.getContext("2d");
+  ctx.scale(dpr, dpr);
+
+  const positionSet = buildPositions(width, height, neededCount);
+  const sprites = {};
+  state.data.categories.forEach((category) => {
+    sprites[category.id] = createBallSprite(
+      positionSet.radius,
+      category.color,
+      category.icon === "skull" ? "☠" : ""
+    );
+  });
+
+  return {
+    kind,
+    canvas,
+    ctx,
+    width,
+    height,
+    radius: positionSet.radius,
+    positions: positionSet.positions,
+    sprites,
+    tokens: [],
+    fullBallCount: 0,
+  };
 }
 
-function wireControls() {
-  elements.slider.addEventListener("input", (event) => {
+function buildTimeline(kind, categories) {
+  const scale = state.data.ballScale;
+  const windowMs = state.data.windowDays * DAY_MS;
+  const futureMs = state.data.futureHorizonDays * DAY_MS;
+  const targetKey = kind === "current" ? "base100" : "scenario100";
+  const ballMap = allocateBallCounts(categories, (category) => category[targetKey], scale);
+  const tokens = [];
+
+  categories.forEach((category) => {
+    const historicalBallCount = ballMap.get(category.id) || 0;
+    if (historicalBallCount <= 0) return;
+
+    const historyRng = mulberry32(
+      hashString(`${kind}-${category.id}-${Math.round(state.share * 100)}`)
+    );
+
+    for (let index = 0; index < historicalBallCount; index += 1) {
+      const time =
+        -windowMs + ((index + historyRng()) / historicalBallCount) * windowMs;
+      tokens.push({
+        time,
+        categoryId: category.id,
+      });
+    }
+
+    const interval = windowMs / historicalBallCount;
+    const futureBallCount = Math.ceil(futureMs / interval) + 2;
+    let nextTime = historyRng() * interval;
+
+    for (let index = 0; index < futureBallCount; index += 1) {
+      tokens.push({
+        time: nextTime,
+        categoryId: category.id,
+      });
+      nextTime += interval;
+    }
+  });
+
+  tokens.sort((left, right) => left.time - right.time);
+  return {
+    tokens,
+    fullBallCount: tokens.filter((token) => token.time <= 0 && token.time > -windowMs).length,
+  };
+}
+
+function rebuildPanels() {
+  const summary = computeSummary(state.share);
+  state.currentPanel = createPanelConfig("current", summary);
+  state.scenarioPanel = createPanelConfig("scenario", summary);
+
+  const currentTimeline = buildTimeline("current", summary.categories);
+  state.currentPanel.tokens = currentTimeline.tokens;
+  state.currentPanel.fullBallCount = currentTimeline.fullBallCount;
+
+  const scenarioTimeline = buildTimeline("scenario", summary.categories);
+  state.scenarioPanel.tokens = scenarioTimeline.tokens;
+  state.scenarioPanel.fullBallCount = scenarioTimeline.fullBallCount;
+}
+
+function updateText() {
+  const summary = computeSummary(state.share);
+  const shareText = formatterPct.format(state.share);
+
+  refs.shareValue.textContent = shareText;
+  refs.scenarioCopy.textContent =
+    state.share === 0 ? "status quo replay" : "counterfactual replay";
+  refs.scenarioTitle.textContent =
+    state.share === 0
+      ? "If 0% of trips were automated"
+      : `If ${shareText} of trips were automated`;
+
+  refs.metricDeaths.textContent = formatInt(summary.windowDeaths);
+  refs.metricSeriousInjuries.textContent = formatInt(summary.windowSeriousInjuries);
+  refs.metricAvoidedDeaths.textContent = formatInt(summary.avoidedDeaths);
+  refs.metricAvoidedSerious.textContent = formatInt(summary.avoidedSerious);
+  refs.unknownExcluded.textContent = formatInt(state.data.summary.excludedUnknownSeverityCrashes);
+  refs.currentTotal.textContent = formatInt(summary.currentTotal);
+  refs.scenarioTotal.textContent = formatInt(summary.scenarioTotal);
+  refs.scenarioNote.textContent =
+    `At ${shareText} automated trips, the right vessel removes an estimated ${formatInt(
+      summary.avoidedDeaths
+    )} deaths and ${formatInt(
+      summary.avoidedSerious
+    )} serious injuries over 100 days.`;
+}
+
+function getSimulationNow() {
+  const elapsed = performance.now() - state.restartAt;
+  const catchupMs = state.data.catchupSeconds * 1000;
+  const windowMs = state.data.windowDays * DAY_MS;
+
+  if (elapsed <= catchupMs) {
+    return -windowMs + (elapsed / catchupMs) * windowMs;
+  }
+  return elapsed - catchupMs;
+}
+
+function getVisibleTokens(panel, simulationNow) {
+  const start = simulationNow - state.data.windowDays * DAY_MS;
+  return panel.tokens.filter(
+    (token) => token.time <= simulationNow && token.time > start
+  );
+}
+
+function drawPanel(panel, visibleTokens) {
+  const { ctx, width, height } = panel;
+
+  ctx.clearRect(0, 0, width, height);
+
+  const background = ctx.createLinearGradient(0, 0, 0, height);
+  background.addColorStop(0, "#0b1018");
+  background.addColorStop(1, "#06080d");
+  ctx.fillStyle = background;
+  ctx.fillRect(0, 0, width, height);
+
+  const drawCount = Math.min(visibleTokens.length, panel.positions.length);
+  for (let index = 0; index < drawCount; index += 1) {
+    const token = visibleTokens[index];
+    const position = panel.positions[index];
+    const sprite = panel.sprites[token.categoryId];
+    ctx.drawImage(
+      sprite,
+      position.x - sprite.width / 2,
+      position.y - sprite.height / 2
+    );
+  }
+
+  ctx.strokeStyle = "rgba(255,255,255,0.06)";
+  ctx.lineWidth = 1.2;
+  ctx.strokeRect(0.6, 0.6, width - 1.2, height - 1.2);
+}
+
+function updateStatuses(simulationNow, currentVisible, scenarioVisible) {
+  const elapsed = performance.now() - state.restartAt;
+  const catchupMs = state.data.catchupSeconds * 1000;
+  const mode = elapsed <= catchupMs ? "catchup" : "live";
+
+  if (mode === "catchup") {
+    const progress = Math.max(
+      0,
+      Math.min(
+        state.data.windowDays,
+        ((simulationNow + state.data.windowDays * DAY_MS) /
+          (state.data.windowDays * DAY_MS)) *
+          state.data.windowDays
+      )
+    );
+    refs.currentStatus.textContent = `Replaying ${formatInt(progress)} of ${state.data.windowDays} days`;
+    refs.scenarioStatus.textContent = `Replay resets whenever the slider changes`;
+  } else {
+    refs.currentStatus.textContent = "Live mode: the 100-day window now advances in real time";
+    refs.scenarioStatus.textContent = "Live mode: new markers arrive at the counterfactual rate";
+  }
+
+  refs.currentBallCount.textContent = `${formatInt(currentVisible.length)} / ${formatInt(
+    state.currentPanel.fullBallCount
+  )} balls`;
+  refs.scenarioBallCount.textContent = `${formatInt(scenarioVisible.length)} / ${formatInt(
+    state.scenarioPanel.fullBallCount
+  )} balls`;
+}
+
+function render() {
+  const simulationNow = getSimulationNow();
+  const currentVisible = getVisibleTokens(state.currentPanel, simulationNow);
+  const scenarioVisible = getVisibleTokens(state.scenarioPanel, simulationNow);
+
+  drawPanel(state.currentPanel, currentVisible);
+  drawPanel(state.scenarioPanel, scenarioVisible);
+  updateStatuses(simulationNow, currentVisible, scenarioVisible);
+
+  state.animationFrame = requestAnimationFrame(render);
+}
+
+function restartSimulation() {
+  state.restartAt = performance.now();
+  updateText();
+  rebuildPanels();
+}
+
+function handleResize() {
+  rebuildPanels();
+}
+
+function wireEvents() {
+  refs.slider.addEventListener("input", (event) => {
     state.share = Number(event.target.value) / 100;
-    refresh();
+    restartSimulation();
   });
 
-  elements.quickPicks.forEach((button) => {
-    button.addEventListener("click", () => {
-      elements.slider.value = button.dataset.share;
-      state.share = Number(button.dataset.share) / 100;
-      refresh();
-    });
-  });
-
-  elements.modeButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      state.mapMode = button.dataset.mode;
-      refresh();
-    });
+  window.addEventListener("resize", () => {
+    window.clearTimeout(handleResize.timer);
+    handleResize.timer = window.setTimeout(handleResize, 120);
   });
 }
 
 async function init() {
-  const [dataResponse, topoResponse] = await Promise.all([
-    fetch("data/wa-traffic-data.json"),
-    fetch("data/counties-10m.json"),
-  ]);
+  state.data = await loadData();
+  state.share = state.data.defaultAutomationShare;
+  refs.slider.value = String(Math.round(state.share * 100));
 
-  if (!dataResponse.ok || !topoResponse.ok) {
-    throw new Error("Failed to load required data files.");
-  }
-
-  state.data = await dataResponse.json();
-  state.counties = state.data.counties;
-  state.selectedFips =
-    state.counties.find((item) => item.county === "King")?.countyFips || state.counties[0].countyFips;
-  renderMap(await topoResponse.json());
-  wireControls();
-  refresh();
+  wireEvents();
+  restartSimulation();
+  render();
 }
 
 init().catch((error) => {
   console.error(error);
-  elements.mapCopy.textContent =
-    "The page could not load its data files. Check that the site is being served over HTTP rather than opened directly from the filesystem.";
+  refs.scenarioNote.textContent =
+    "The simulation data could not be loaded. Serve the site over HTTP and reload.";
 });

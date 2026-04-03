@@ -1,0 +1,59 @@
+{
+  "baselineYear": 2024,
+  "windowDays": 100,
+  "daysInBaselineYear": 366,
+  "catchupSeconds": 65,
+  "futureHorizonDays": 365,
+  "ballScale": 10,
+  "defaultAutomationShare": 0.5,
+  "summary": {
+    "annualTrafficDeaths": 731,
+    "annualSeriousInjuries": 3290,
+    "excludedUnknownSeverityCrashes": 2971,
+    "propertyDamageReduction": 0.88,
+    "injuryAndDeathReduction": 0.92
+  },
+  "categories": [
+    {
+      "id": "no_injury",
+      "label": "No injury crashes",
+      "unit": "crashes",
+      "annualCount": 71304,
+      "reduction": 0.88,
+      "color": "#4a5b68"
+    },
+    {
+      "id": "possible_injury",
+      "label": "Possible injury crashes",
+      "unit": "crashes",
+      "annualCount": 14676,
+      "reduction": 0.92,
+      "color": "#58a6ff"
+    },
+    {
+      "id": "minor_injury",
+      "label": "Suspected minor injury crashes",
+      "unit": "crashes",
+      "annualCount": 11835,
+      "reduction": 0.92,
+      "color": "#ffb84a"
+    },
+    {
+      "id": "serious_injury",
+      "label": "Suspected serious injury crashes",
+      "unit": "crashes",
+      "annualCount": 2826,
+      "reduction": 0.92,
+      "color": "#ff7b57"
+    },
+    {
+      "id": "traffic_deaths",
+      "label": "Traffic deaths",
+      "unit": "deaths",
+      "annualCount": 731,
+      "reduction": 0.92,
+      "color": "#ff4c6a",
+      "icon": "skull"
+    }
+  ]
+}
