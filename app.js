@@ -20,6 +20,7 @@ const refs = {
   shareValue: document.querySelector("#shareValue"),
   scenarioCopy: document.querySelector("#scenarioCopy"),
   scenarioNote: document.querySelector("#scenarioNote"),
+  pedestrianNote: document.querySelector("#pedestrianNote"),
   scenarioTitle: document.querySelector("#scenarioTitle"),
   metricDeaths: document.querySelector("#metricDeaths"),
   metricSeriousInjuries: document.querySelector("#metricSeriousInjuries"),
@@ -105,6 +106,7 @@ function computeSummary(share) {
   const windowFactor = data.windowDays / data.daysInBaselineYear;
   const annualDeaths = data.summary.annualTrafficDeaths;
   const annualSeriousInjuries = data.summary.annualSeriousInjuries;
+  const pedestrianAnnualByCategory = data.pedestrianSubset.byCategoryAnnual;
 
   const avoidedDeaths =
     annualDeaths * windowFactor * share * data.summary.injuryAndDeathReduction;
@@ -117,10 +119,17 @@ function computeSummary(share) {
   const categories = data.categories.map((category) => {
     const base = category.annualCount * windowFactor;
     const scenario = base * (1 - share * category.reduction);
+    const pedestrianAnnualCount = pedestrianAnnualByCategory[category.id] || 0;
+    const pedestrianBaseWindow = pedestrianAnnualCount * windowFactor;
+    const pedestrianScenarioWindow =
+      pedestrianBaseWindow * (1 - share * category.reduction);
     return {
       ...category,
       baseWindow: base,
       scenarioWindow: scenario,
+      pedestrianAnnualCount,
+      pedestrianBaseWindow,
+      pedestrianScenarioWindow,
     };
   });
 
@@ -131,6 +140,14 @@ function computeSummary(share) {
     avoidedSerious,
     currentTotal: categories.reduce((sum, category) => sum + category.baseWindow, 0),
     scenarioTotal: categories.reduce((sum, category) => sum + category.scenarioWindow, 0),
+    pedestrianCurrentTotal: categories.reduce(
+      (sum, category) => sum + category.pedestrianBaseWindow,
+      0
+    ),
+    pedestrianScenarioTotal: categories.reduce(
+      (sum, category) => sum + category.pedestrianScenarioWindow,
+      0
+    ),
     categories,
   };
 }
@@ -161,8 +178,34 @@ function allocateBallCounts(items, accessor, scale) {
   return new Map(allocations.map((entry) => [entry.item.id, entry.count]));
 }
 
+function drawPedestrianGlyph(ctx, x, y, size, color) {
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.fillStyle = color;
+  ctx.lineWidth = Math.max(1.15, size * 0.12);
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+
+  ctx.beginPath();
+  ctx.arc(x, y - size * 0.33, size * 0.12, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.moveTo(x, y - size * 0.18);
+  ctx.lineTo(x - size * 0.02, y + size * 0.06);
+  ctx.lineTo(x - size * 0.13, y + size * 0.29);
+  ctx.moveTo(x - size * 0.02, y - size * 0.02);
+  ctx.lineTo(x - size * 0.2, y + size * 0.07);
+  ctx.moveTo(x - size * 0.01, y);
+  ctx.lineTo(x + size * 0.19, y + size * 0.1);
+  ctx.moveTo(x - size * 0.02, y + size * 0.06);
+  ctx.lineTo(x + size * 0.15, y + size * 0.27);
+  ctx.stroke();
+  ctx.restore();
+}
+
 function createBallSprite(radius, color, options = {}) {
-  const { icon = "", ominous = false } = options;
+  const { icon = "", ominous = false, pedestrian = false } = options;
   const size = Math.ceil(radius * 2.85);
   const canvas = document.createElement("canvas");
   canvas.width = size;
@@ -222,15 +265,41 @@ function createBallSprite(radius, color, options = {}) {
   ctx.lineWidth = 1.1;
   ctx.stroke();
 
+  if (pedestrian) {
+    ctx.beginPath();
+    ctx.arc(center, center, radius * 0.87, 0, Math.PI * 2);
+    ctx.strokeStyle = "rgba(170, 255, 226, 0.88)";
+    ctx.lineWidth = Math.max(1.4, radius * 0.12);
+    ctx.stroke();
+  }
+
   if (icon) {
     ctx.fillStyle = ominous ? "rgba(255,248,249,0.97)" : "rgba(255,255,255,0.94)";
     ctx.font = `${Math.round(radius * (ominous ? 0.9 : 0.98))}px Sora`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText(icon, center, center + 0.4);
+  } else if (pedestrian) {
+    drawPedestrianGlyph(ctx, center + radius * 0.02, center + radius * 0.08, radius * 0.92, "rgba(238,255,249,0.92)");
   }
 
   return canvas;
+}
+
+function pickMarkedIndices(total, markedCount, rng) {
+  if (markedCount <= 0 || total <= 0) {
+    return new Set();
+  }
+
+  const ranked = Array.from({ length: total }, (_, index) => ({
+    index,
+    score: rng(),
+  }));
+  ranked.sort((left, right) => left.score - right.score);
+
+  return new Set(
+    ranked.slice(0, Math.min(total, markedCount)).map((entry) => entry.index)
+  );
 }
 
 function buildSlots(width, height, requiredSlots, maxMultiplier) {
@@ -322,10 +391,17 @@ function buildPanel(kind, slotPlan) {
   state.data.categories.forEach((category) => {
     const radius = slotPlan.baseRadius * (category.sizeMultiplier || 1);
     categoryVisuals[category.id] = { radius };
-    sprites[category.id] = createBallSprite(radius, category.color, {
-      icon: category.icon ? "☠" : "",
-      ominous: Boolean(category.ominous),
-    });
+    sprites[category.id] = {
+      default: createBallSprite(radius, category.color, {
+        icon: category.icon ? "☠" : "",
+        ominous: Boolean(category.ominous),
+      }),
+      pedestrian: createBallSprite(radius, category.color, {
+        icon: category.icon ? "☠" : "",
+        ominous: Boolean(category.ominous),
+        pedestrian: true,
+      }),
+    };
   });
 
   return {
@@ -351,7 +427,14 @@ function buildTimeline(kind, categories) {
   const windowMs = state.data.windowDays * DAY_MS;
   const futureMs = state.data.futureHorizonDays * DAY_MS;
   const key = kind === "current" ? "baseWindow" : "scenarioWindow";
+  const pedestrianKey =
+    kind === "current" ? "pedestrianBaseWindow" : "pedestrianScenarioWindow";
   const ballCounts = allocateBallCounts(categories, (category) => category[key], scale);
+  const pedestrianBallCounts = allocateBallCounts(
+    categories,
+    (category) => category[pedestrianKey],
+    scale
+  );
   const tokens = [];
 
   categories.forEach((category) => {
@@ -359,15 +442,28 @@ function buildTimeline(kind, categories) {
     if (historicalCount <= 0) return;
 
     const rng = mulberry32(hashString(`${kind}-${category.id}-${Math.round(state.share * 100)}`));
+    const pedestrianHistoricalCount = Math.min(
+      historicalCount,
+      pedestrianBallCounts.get(category.id) || 0
+    );
+    const pedestrianHistoricalIndices = pickMarkedIndices(
+      historicalCount,
+      pedestrianHistoricalCount,
+      rng
+    );
+
     for (let index = 0; index < historicalCount; index += 1) {
       const time = -windowMs + ((index + rng()) / historicalCount) * windowMs;
       tokens.push({
         id: `${kind}-${category.id}-h-${index}`,
         categoryId: category.id,
         time,
+        pedestrian: pedestrianHistoricalIndices.has(index),
       });
     }
 
+    const pedestrianRatio =
+      category[key] > 0 ? Math.min(1, category[pedestrianKey] / category[key]) : 0;
     const interval = windowMs / historicalCount;
     const futureCount = Math.ceil(futureMs / interval) + 2;
     let nextTime = rng() * interval;
@@ -376,6 +472,7 @@ function buildTimeline(kind, categories) {
         id: `${kind}-${category.id}-f-${index}`,
         categoryId: category.id,
         time: nextTime,
+        pedestrian: pedestrianRatio > 0 && rng() < pedestrianRatio,
       });
       nextTime += interval;
     }
@@ -432,9 +529,15 @@ function updateText() {
   refs.scenarioNote.textContent =
     `At ${shareText}, robots avert ${formatDecimal(
       summary.avoidedDeaths
-    )} deaths and ${formatDecimal(summary.avoidedSerious)} serious injuries in ${
-      state.data.windowDays
-    } days.`;
+    )} deaths, ${formatDecimal(summary.avoidedSerious)} serious injuries, and ${formatDecimal(
+      summary.pedestrianCurrentTotal - summary.pedestrianScenarioTotal
+    )} pedestrian-involved crashes in ${state.data.windowDays} days.`;
+  refs.pedestrianNote.textContent =
+    `Pedestrian-marked balls show ${formatDecimal(
+      summary.pedestrianCurrentTotal
+    )} pedestrian-involved crashes in this ${state.data.windowDays}-day replay and ${formatDecimal(
+      summary.pedestrianScenarioTotal
+    )} if robots drove ${shareText} of the time.`;
 }
 
 function restartSimulation() {
@@ -464,6 +567,7 @@ function spawnBall(panel, token, now) {
   panel.balls.push({
     id: token.id,
     categoryId: token.categoryId,
+    pedestrian: Boolean(token.pedestrian),
     targetX: slot.x,
     targetY: slot.y,
     targetIndex: slotIndex,
@@ -527,7 +631,9 @@ function drawVessel(panel, now) {
     .sort((left, right) => left.targetY - right.targetY);
 
   drawBalls.forEach((ball) => {
-    const sprite = panel.sprites[ball.categoryId];
+    const sprite = panel.sprites[ball.categoryId][
+      ball.pedestrian ? "pedestrian" : "default"
+    ];
     ctx.drawImage(
       sprite,
       ball.targetX - sprite.width / 2,

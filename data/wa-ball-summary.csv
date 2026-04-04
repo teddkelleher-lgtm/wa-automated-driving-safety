@@ -6,3 +6,10 @@ Suspected serious injury crashes,crashes,2826,231.64,0.92,125.09,WSDOT Crash Dat
 Traffic deaths,deaths,731,59.92,0.92,32.36,WTSC Brief No. 11 State of the State October 2025
 Serious injuries people,people,3290,269.67,0.92,145.62,WTSC Brief No. 11 State of the State October 2025
 Unknown severity crashes excluded,crashes,2971,243.52,0.00,243.52,WSDOT Crash Data Portal statewide 2024 Total Crashes report
+Pedestrian-involved no injury crashes,crashes,72,5.90,0.88,3.30,WSDOT Crash Data Portal statewide 2024 Pedestrian Involved report
+Pedestrian-involved possible injury crashes,crashes,499,40.90,0.92,22.09,WSDOT Crash Data Portal statewide 2024 Pedestrian Involved report
+Pedestrian-involved suspected minor injury crashes,crashes,894,73.28,0.92,39.57,WSDOT Crash Data Portal statewide 2024 Pedestrian Involved report
+Pedestrian-involved suspected serious injury crashes,crashes,464,38.03,0.92,20.54,WSDOT Crash Data Portal statewide 2024 Pedestrian Involved report
+Pedestrian-involved fatal crashes,crashes,152,12.46,0.92,6.73,WSDOT Crash Data Portal statewide 2024 Pedestrian Involved report
+Pedestrian-involved crashes total,crashes,2081,170.57,mixed by severity,92.23,WSDOT Crash Data Portal statewide 2024 Pedestrian Involved report
+Pedestrian fatalities,people,154,12.62,0.92,6.82,WSDOT Crash Data Portal statewide 2024 Pedestrians by Injury Type report

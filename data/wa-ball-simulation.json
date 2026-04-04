@@ -57,5 +57,19 @@
       "sizeMultiplier": 1.42,
       "ominous": true
     }
-  ]
+  ],
+  "pedestrianSubset": {
+    "label": "Pedestrian-involved crashes",
+    "unit": "crashes",
+    "annualCount": 2081,
+    "annualPedestrianFatalities": 154,
+    "excludedUnknownCrashes": 18,
+    "byCategoryAnnual": {
+      "no_injury": 72,
+      "possible_injury": 499,
+      "minor_injury": 894,
+      "serious_injury": 464,
+      "traffic_deaths": 152
+    }
+  }
 }
