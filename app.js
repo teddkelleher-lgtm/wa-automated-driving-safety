@@ -205,15 +205,12 @@ function buildPanel(kind, summary) {
   const ctx = canvas.getContext("2d");
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-  const expectedBalls = Math.max(
-    Math.round(summary.currentTotal / state.data.ballScale),
-    Math.round(summary.scenarioTotal / state.data.ballScale)
-  );
+  const expectedBalls = Math.round(summary.currentTotal / state.data.ballScale);
   const innerWidth = width - 48;
   const innerHeight = height - 44;
   const radius = Math.max(
-    8,
-    Math.min(16, Math.sqrt((innerWidth * innerHeight) / (Math.max(expectedBalls, 1) * 4.6)))
+    11,
+    Math.min(18, Math.sqrt((innerWidth * innerHeight) / (Math.max(expectedBalls, 1) * 3.15)))
   );
 
   const sprites = {};
