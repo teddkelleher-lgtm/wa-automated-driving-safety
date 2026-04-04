@@ -630,32 +630,38 @@ function rebuildPanels() {
     scenarioTimeline.tokens.length,
     scenarioTimeline.fullBallCount + liveBuffer
   );
-  const baseRadius = fitBaseRadius(
+  const currentBaseRadius = fitBaseRadius(
     refs.currentCanvas.clientWidth,
     refs.currentCanvas.clientHeight,
     currentTimeline.tokens,
     currentLimit
   );
+  const scenarioBaseRadius = fitBaseRadius(
+    refs.scenarioCanvas.clientWidth,
+    refs.scenarioCanvas.clientHeight,
+    scenarioTimeline.tokens,
+    scenarioLimit
+  );
   const currentLayout = buildPlacements(
     refs.currentCanvas.clientWidth,
     refs.currentCanvas.clientHeight,
     currentTimeline.tokens,
-    baseRadius,
+    currentBaseRadius,
     currentLimit
   );
   const scenarioLayout = buildPlacements(
     refs.scenarioCanvas.clientWidth,
     refs.scenarioCanvas.clientHeight,
     scenarioTimeline.tokens,
-    baseRadius,
+    scenarioBaseRadius,
     scenarioLimit
   );
 
-  state.currentPanel = buildPanel("current", baseRadius, currentLayout.placements);
+  state.currentPanel = buildPanel("current", currentBaseRadius, currentLayout.placements);
   state.currentPanel.tokens = currentTimeline.tokens;
   state.currentPanel.fullBallCount = currentTimeline.fullBallCount;
 
-  state.scenarioPanel = buildPanel("scenario", baseRadius, scenarioLayout.placements);
+  state.scenarioPanel = buildPanel("scenario", scenarioBaseRadius, scenarioLayout.placements);
   state.scenarioPanel.tokens = scenarioTimeline.tokens;
   state.scenarioPanel.fullBallCount = scenarioTimeline.fullBallCount;
 }
