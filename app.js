@@ -361,6 +361,9 @@ function spawnBall(panel, token) {
     vy: rng() * 30,
     r: panel.radius,
     dead: false,
+    sleeping: false,
+    restFrames: 0,
+    supported: false,
   });
   panel.activeQueue.push(token.id);
 }
@@ -402,8 +405,20 @@ function syncPanel(panel, simulationNow) {
 }
 
 function resolveWallCollisions(panel, body) {
-  const wallBounce = 0.82;
-  const floorBounce = 0.72;
+  const wallBounce = 0.58;
+  const floorBounce = 0.48;
+
+  if (body.sleeping) {
+    if (body.x - body.r < panel.leftWall) {
+      body.x = panel.leftWall + body.r;
+    } else if (body.x + body.r > panel.rightWall) {
+      body.x = panel.rightWall - body.r;
+    }
+    if (body.y + body.r > panel.floorY) {
+      body.y = panel.floorY - body.r;
+    }
+    return;
+  }
 
   if (body.x - body.r < panel.leftWall) {
     body.x = panel.leftWall + body.r;
@@ -416,11 +431,12 @@ function resolveWallCollisions(panel, body) {
   if (body.y + body.r > panel.floorY) {
     body.y = panel.floorY - body.r;
     body.vy = -Math.abs(body.vy) * floorBounce;
-    body.vx *= 0.988;
-    if (Math.abs(body.vy) < 8) {
+    body.vx *= 0.94;
+    body.supported = true;
+    if (Math.abs(body.vy) < 16) {
       body.vy = 0;
     }
-    if (Math.abs(body.vx) < 2) {
+    if (Math.abs(body.vx) < 4) {
       body.vx = 0;
     }
   }
@@ -440,8 +456,8 @@ function resolveBodyCollisions(panel) {
     grid.get(key).push(index);
   });
 
-  const restitution = 0.78;
-  const friction = 0.018;
+  const restitution = 0.32;
+  const friction = 0.05;
 
   panel.balls.forEach((body, index) => {
     const cellX = Math.floor(body.x / cellSize);
@@ -456,6 +472,7 @@ function resolveBodyCollisions(panel) {
           if (otherIndex <= index) return;
 
           const other = panel.balls[otherIndex];
+          if (body.sleeping && other.sleeping) return;
           const diffX = other.x - body.x;
           const diffY = other.y - body.y;
           const minDist = body.r + other.r;
@@ -467,31 +484,68 @@ function resolveBodyCollisions(panel) {
           const nx = diffX / distance;
           const ny = diffY / distance;
           const overlap = minDist - distance;
+          const bodyShareBase = body.sleeping ? 0.03 : 0.5;
+          const otherShareBase = other.sleeping ? 0.03 : 0.5;
+          const shareTotal = bodyShareBase + otherShareBase;
+          const bodyShare = bodyShareBase / shareTotal;
+          const otherShare = otherShareBase / shareTotal;
 
-          body.x -= nx * overlap * 0.5;
-          body.y -= ny * overlap * 0.5;
-          other.x += nx * overlap * 0.5;
-          other.y += ny * overlap * 0.5;
+          body.x -= nx * overlap * bodyShare;
+          body.y -= ny * overlap * bodyShare;
+          other.x += nx * overlap * otherShare;
+          other.y += ny * overlap * otherShare;
+
+          if (ny > 0.32) {
+            body.supported = true;
+          } else if (ny < -0.32) {
+            other.supported = true;
+          }
 
           const relVx = other.vx - body.vx;
           const relVy = other.vy - body.vy;
           const normalVelocity = relVx * nx + relVy * ny;
 
+          if (Math.abs(normalVelocity) > 54) {
+            body.sleeping = false;
+            other.sleeping = false;
+            body.restFrames = 0;
+            other.restFrames = 0;
+          }
+
           if (normalVelocity < 0) {
-            const impulse = (-(1 + restitution) * normalVelocity) / 2;
-            body.vx -= impulse * nx;
-            body.vy -= impulse * ny;
-            other.vx += impulse * nx;
-            other.vy += impulse * ny;
+            const collisionRestitution =
+              body.sleeping || other.sleeping ? 0.22 : restitution;
+            const impulse = (-(1 + collisionRestitution) * normalVelocity) / 2;
+            if (!body.sleeping) {
+              body.vx -= impulse * nx;
+              body.vy -= impulse * ny;
+            }
+            if (!other.sleeping) {
+              other.vx += impulse * nx;
+              other.vy += impulse * ny;
+            }
 
             const tx = -ny;
             const ty = nx;
             const tangentVelocity = relVx * tx + relVy * ty;
             const tangentImpulse = tangentVelocity * friction;
-            body.vx += tangentImpulse * tx;
-            body.vy += tangentImpulse * ty;
-            other.vx -= tangentImpulse * tx;
-            other.vy -= tangentImpulse * ty;
+            if (!body.sleeping) {
+              body.vx += tangentImpulse * tx;
+              body.vy += tangentImpulse * ty;
+            }
+            if (!other.sleeping) {
+              other.vx -= tangentImpulse * tx;
+              other.vy -= tangentImpulse * ty;
+            }
+          }
+
+          if (body.sleeping) {
+            body.vx = 0;
+            body.vy = 0;
+          }
+          if (other.sleeping) {
+            other.vx = 0;
+            other.vy = 0;
           }
         });
       }
@@ -505,16 +559,36 @@ function stepPhysics(panel, dt) {
 
   for (let iteration = 0; iteration < steps; iteration += 1) {
     panel.balls.forEach((body) => {
+      body.supported = body.y + body.r >= panel.floorY - 0.8;
+      if (body.sleeping) {
+        body.vx = 0;
+        body.vy = 0;
+        return;
+      }
       body.vy += 2400 * step;
       body.x += body.vx * step;
       body.y += body.vy * step;
-      body.vx *= Math.pow(0.9975, step * 60);
-      body.vy *= Math.pow(0.999, step * 60);
+      body.vx *= Math.pow(0.989, step * 60);
+      body.vy *= Math.pow(0.995, step * 60);
       resolveWallCollisions(panel, body);
     });
 
     resolveBodyCollisions(panel);
-    panel.balls.forEach((body) => resolveWallCollisions(panel, body));
+    panel.balls.forEach((body) => {
+      resolveWallCollisions(panel, body);
+      if (body.sleeping) return;
+      const nearlyStill = Math.abs(body.vx) < 7 && Math.abs(body.vy) < 9;
+      if (body.supported && nearlyStill) {
+        body.restFrames += 1;
+      } else {
+        body.restFrames = 0;
+      }
+      if (body.restFrames > 18) {
+        body.sleeping = true;
+        body.vx = 0;
+        body.vy = 0;
+      }
+    });
   }
 }
 

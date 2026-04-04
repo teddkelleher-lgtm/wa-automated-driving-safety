@@ -20,11 +20,10 @@
     <main class="shell">
       <header class="hero">
         <p class="eyebrow">Washington Automated Driving Counterfactual</p>
-        <h1>Death and Destruction on WA Roads: Humans vs. Robots.</h1>
+        <h1>Death and Destruction on WA Roads: Humans vs. Robots</h1>
         <p class="lede">
-          The left vessel replays the estimated crash burden of the last 30 days at
-          Washington's 2024 pace. The right vessel reruns the same 30-day period if a
-          larger share of trips were automated.
+          Left: the estimated crash burden of the last 30 days at Washington's current
+          pace. Right: the same 30 days if more trips were automated.
         </p>
 
         <section class="controls card">
@@ -50,53 +49,7 @@
             and 124.1 serious injuries over 30 days.
           </p>
         </section>
-
-        <section class="headline-metrics">
-          <article class="headline-card card">
-            <span class="metric-kicker">Estimated last 30 days</span>
-            <strong id="metricDeaths">59.9</strong>
-            <span class="metric-label">traffic deaths</span>
-          </article>
-          <article class="headline-card card">
-            <span class="metric-kicker">Estimated last 30 days</span>
-            <strong id="metricSeriousInjuries">269.7</strong>
-            <span class="metric-label">serious injuries</span>
-          </article>
-          <article class="headline-card card accent">
-            <span class="metric-kicker">Avoided at current slider</span>
-            <strong id="metricAvoidedDeaths">27.6</strong>
-            <span class="metric-label">fewer deaths</span>
-          </article>
-          <article class="headline-card card accent">
-            <span class="metric-kicker">Avoided at current slider</span>
-            <strong id="metricAvoidedSerious">124.1</strong>
-            <span class="metric-label">fewer serious injuries</span>
-          </article>
-        </section>
       </header>
-
-      <section class="legend-row" aria-label="Severity legend">
-        <div class="legend-item">
-          <span class="legend-ball low"></span>
-          <span>No injury crashes</span>
-        </div>
-        <div class="legend-item">
-          <span class="legend-ball possible"></span>
-          <span>Possible injury crashes</span>
-        </div>
-        <div class="legend-item">
-          <span class="legend-ball minor"></span>
-          <span>Suspected minor injury crashes</span>
-        </div>
-        <div class="legend-item">
-          <span class="legend-ball serious"></span>
-          <span>Suspected serious injury crashes</span>
-        </div>
-        <div class="legend-item">
-          <span class="legend-ball death">☠</span>
-          <span>Traffic deaths</span>
-        </div>
-      </section>
 
       <section class="vessels">
         <article class="panel card">
@@ -137,6 +90,52 @@
             <span id="scenarioStatus">Replay restarts whenever the slider moves</span>
             <span id="scenarioBallCount">0 / 230 balls</span>
           </div>
+        </article>
+      </section>
+
+      <section class="legend-row" aria-label="Severity legend">
+        <div class="legend-item">
+          <span class="legend-ball low"></span>
+          <span>No injury crashes</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-ball possible"></span>
+          <span>Possible injury crashes</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-ball minor"></span>
+          <span>Suspected minor injury crashes</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-ball serious"></span>
+          <span>Suspected serious injury crashes</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-ball death">☠</span>
+          <span>Traffic deaths</span>
+        </div>
+      </section>
+
+      <section class="headline-metrics">
+        <article class="headline-card card">
+          <span class="metric-kicker">Estimated last 30 days</span>
+          <strong id="metricDeaths">59.9</strong>
+          <span class="metric-label">traffic deaths</span>
+        </article>
+        <article class="headline-card card">
+          <span class="metric-kicker">Estimated last 30 days</span>
+          <strong id="metricSeriousInjuries">269.7</strong>
+          <span class="metric-label">serious injuries</span>
+        </article>
+        <article class="headline-card card accent">
+          <span class="metric-kicker">Avoided at current slider</span>
+          <strong id="metricAvoidedDeaths">27.6</strong>
+          <span class="metric-label">fewer deaths</span>
+        </article>
+        <article class="headline-card card accent">
+          <span class="metric-kicker">Avoided at current slider</span>
+          <strong id="metricAvoidedSerious">124.1</strong>
+          <span class="metric-label">fewer serious injuries</span>
         </article>
       </section>
 
