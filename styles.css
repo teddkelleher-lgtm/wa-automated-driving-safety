@@ -90,18 +90,20 @@ h1 {
   background:
     linear-gradient(
       90deg,
-      #fff4f1 0%,
-      #ffb0a4 16%,
-      #ff675f 38%,
-      #da233e 64%,
-      #7b1123 86%,
+      #d0b4ff 0%,
+      #8857ff 8%,
+      #ff8f86 20%,
+      #ff514e 34%,
+      #d51533 58%,
+      #7b1123 84%,
       rgba(52, 8, 15, 0.16) 100%
     );
   -webkit-background-clip: text;
   background-clip: text;
   text-shadow:
-    0 0 16px rgba(212, 38, 60, 0.18),
-    0 0 38px rgba(108, 15, 31, 0.2);
+    0 0 14px rgba(124, 82, 255, 0.16),
+    0 0 18px rgba(212, 38, 60, 0.18),
+    0 0 42px rgba(108, 15, 31, 0.24);
   animation: headlineFade 6.5s ease-in-out infinite alternate;
 }
 

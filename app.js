@@ -206,24 +206,25 @@ function drawPedestrianGlyph(ctx, x, y, size, color) {
 }
 
 function drawDeathGlyph(ctx, x, y, size) {
-  const boneStroke = Math.max(1.4, size * 0.09);
-  const skullWidth = size * 0.42;
-  const skullHeight = size * 0.34;
-  const skullTop = y - size * 0.14;
-  const jawWidth = skullWidth * 0.62;
-  const jawHeight = skullHeight * 0.28;
-  const boneOffset = size * 0.26;
+  const boneStroke = Math.max(2, size * 0.12);
+  const boneOffset = size * 0.28;
+  const boneNub = size * 0.06;
+  const skullCenterY = y - size * 0.04;
+  const skullWidth = size * 0.5;
+  const skullHeight = size * 0.4;
+  const jawWidth = skullWidth * 0.6;
+  const jawHeight = skullHeight * 0.26;
 
   ctx.save();
-  ctx.strokeStyle = "rgba(255,246,248,0.95)";
-  ctx.fillStyle = "rgba(255,246,248,0.95)";
+  ctx.strokeStyle = "rgba(255,248,249,0.98)";
+  ctx.fillStyle = "rgba(255,248,249,0.98)";
   ctx.lineWidth = boneStroke;
   ctx.lineCap = "round";
   ctx.lineJoin = "round";
 
   [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([sx, sy]) => {
     ctx.beginPath();
-    ctx.arc(x + sx * boneOffset, y + sy * boneOffset, size * 0.05, 0, Math.PI * 2);
+    ctx.arc(x + sx * boneOffset, y + sy * boneOffset, boneNub, 0, Math.PI * 2);
     ctx.fill();
   });
 
@@ -235,35 +236,31 @@ function drawDeathGlyph(ctx, x, y, size) {
   ctx.stroke();
 
   ctx.beginPath();
-  ctx.ellipse(x, skullTop, skullWidth / 2, skullHeight / 2, 0, 0, Math.PI * 2);
+  ctx.ellipse(x, skullCenterY, skullWidth / 2, skullHeight / 2, 0, 0, Math.PI * 2);
   ctx.fill();
 
   ctx.beginPath();
-  ctx.roundRect(x - jawWidth / 2, skullTop + skullHeight * 0.12, jawWidth, jawHeight, jawHeight * 0.26);
+  ctx.roundRect(
+    x - jawWidth / 2,
+    skullCenterY + skullHeight * 0.12,
+    jawWidth,
+    jawHeight,
+    jawHeight * 0.24
+  );
   ctx.fill();
 
   ctx.fillStyle = "rgba(82, 8, 20, 0.96)";
   ctx.beginPath();
-  ctx.arc(x - skullWidth * 0.18, skullTop - skullHeight * 0.05, size * 0.05, 0, Math.PI * 2);
-  ctx.arc(x + skullWidth * 0.18, skullTop - skullHeight * 0.05, size * 0.05, 0, Math.PI * 2);
+  ctx.arc(x - skullWidth * 0.17, skullCenterY - skullHeight * 0.06, size * 0.064, 0, Math.PI * 2);
+  ctx.arc(x + skullWidth * 0.17, skullCenterY - skullHeight * 0.06, size * 0.064, 0, Math.PI * 2);
   ctx.fill();
 
   ctx.beginPath();
-  ctx.moveTo(x, skullTop + skullHeight * 0.03);
-  ctx.lineTo(x - size * 0.04, skullTop + skullHeight * 0.14);
-  ctx.lineTo(x + size * 0.04, skullTop + skullHeight * 0.14);
+  ctx.moveTo(x, skullCenterY + skullHeight * 0.02);
+  ctx.lineTo(x - size * 0.05, skullCenterY + skullHeight * 0.16);
+  ctx.lineTo(x + size * 0.05, skullCenterY + skullHeight * 0.16);
   ctx.closePath();
   ctx.fill();
-
-  ctx.strokeStyle = "rgba(82, 8, 20, 0.82)";
-  ctx.lineWidth = Math.max(0.7, size * 0.024);
-  for (let tooth = -1; tooth <= 1; tooth += 1) {
-    const toothX = x + tooth * jawWidth * 0.16;
-    ctx.beginPath();
-    ctx.moveTo(toothX, skullTop + skullHeight * 0.14);
-    ctx.lineTo(toothX, skullTop + skullHeight * 0.35);
-    ctx.stroke();
-  }
 
   ctx.restore();
 }
