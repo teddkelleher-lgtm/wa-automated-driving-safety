@@ -143,13 +143,25 @@ function allocateBallCounts(items, accessor, scale) {
   return new Map(allocations.map((entry) => [entry.item.id, entry.count]));
 }
 
-function createBallSprite(radius, color, icon) {
+function createBallSprite(radius, color, options = {}) {
+  const { icon = "", ominous = false } = options;
   const size = Math.ceil(radius * 2.8);
   const canvas = document.createElement("canvas");
   canvas.width = size;
   canvas.height = size;
   const ctx = canvas.getContext("2d");
   const center = size / 2;
+
+  if (ominous) {
+    const aura = ctx.createRadialGradient(center, center, radius * 0.2, center, center, radius * 1.45);
+    aura.addColorStop(0, "rgba(200,29,61,0)");
+    aura.addColorStop(0.68, "rgba(200,29,61,0.12)");
+    aura.addColorStop(1, "rgba(200,29,61,0)");
+    ctx.beginPath();
+    ctx.arc(center, center, radius * 1.35, 0, Math.PI * 2);
+    ctx.fillStyle = aura;
+    ctx.fill();
+  }
 
   const outer = ctx.createRadialGradient(
     center - radius * 0.45,
@@ -159,9 +171,16 @@ function createBallSprite(radius, color, icon) {
     center,
     radius * 1.15
   );
-  outer.addColorStop(0, "rgba(255,255,255,0.95)");
-  outer.addColorStop(0.12, color);
-  outer.addColorStop(1, "#09111a");
+  if (ominous) {
+    outer.addColorStop(0, "rgba(255,245,247,0.96)");
+    outer.addColorStop(0.12, "#f04f71");
+    outer.addColorStop(0.58, color);
+    outer.addColorStop(1, "#14070d");
+  } else {
+    outer.addColorStop(0, "rgba(255,255,255,0.95)");
+    outer.addColorStop(0.12, color);
+    outer.addColorStop(1, "#09111a");
+  }
 
   ctx.beginPath();
   ctx.arc(center, center, radius, 0, Math.PI * 2);
@@ -180,13 +199,13 @@ function createBallSprite(radius, color, icon) {
 
   ctx.beginPath();
   ctx.arc(center, center, radius - 0.7, 0, Math.PI * 2);
-  ctx.strokeStyle = "rgba(255,255,255,0.2)";
+  ctx.strokeStyle = ominous ? "rgba(255,231,236,0.35)" : "rgba(255,255,255,0.2)";
   ctx.lineWidth = 1.1;
   ctx.stroke();
 
   if (icon) {
-    ctx.fillStyle = "rgba(255,255,255,0.94)";
-    ctx.font = `${Math.round(radius * 0.98)}px Sora`;
+    ctx.fillStyle = ominous ? "rgba(255,248,249,0.97)" : "rgba(255,255,255,0.94)";
+    ctx.font = `${Math.round(radius * (ominous ? 0.9 : 0.98))}px Sora`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText(icon, center, center + 0.2);
@@ -214,8 +233,18 @@ function buildPanel(kind, summary) {
   );
 
   const sprites = {};
+  const categoryVisuals = {};
+  let maxRadius = radius;
   state.data.categories.forEach((category) => {
-    sprites[category.id] = createBallSprite(radius, category.color, category.icon ? "☠" : "");
+    const categoryRadius = radius * (category.sizeMultiplier || 1);
+    maxRadius = Math.max(maxRadius, categoryRadius);
+    categoryVisuals[category.id] = {
+      radius: categoryRadius,
+    };
+    sprites[category.id] = createBallSprite(categoryRadius, category.color, {
+      icon: category.icon ? "☠" : "",
+      ominous: Boolean(category.ominous),
+    });
   });
 
   return {
@@ -229,12 +258,14 @@ function buildPanel(kind, summary) {
     floorY: height - 18,
     leftWall: 18,
     rightWall: width - 18,
+    maxRadius,
     balls: [],
     activeQueue: [],
     tokenIndex: 0,
     tokens: [],
     fullBallCount: 0,
     sprites,
+    categoryVisuals,
     spawnRng: mulberry32(hashString(`${kind}-${Math.round(state.share * 1000)}`)),
   };
 }
@@ -346,17 +377,18 @@ function getSimulationNow() {
 function spawnBall(panel, token) {
   const rng = panel.spawnRng;
   const spread = (panel.rightWall - panel.leftWall) * 0.32;
+  const radius = panel.categoryVisuals[token.categoryId].radius;
   const x = (panel.leftWall + panel.rightWall) / 2 + (rng() - 0.5) * spread;
-  const y = -panel.radius - rng() * 28;
+  const y = -radius - rng() * 28;
   panel.balls.push({
     id: token.id,
     tokenTime: token.time,
     categoryId: token.categoryId,
-    x,
+    x: Math.max(panel.leftWall + radius, Math.min(panel.rightWall - radius, x)),
     y,
     vx: (rng() - 0.5) * 80,
     vy: rng() * 30,
-    r: panel.radius,
+    r: radius,
     dead: false,
     sleeping: false,
     restFrames: 0,
@@ -440,7 +472,7 @@ function resolveWallCollisions(panel, body) {
 }
 
 function resolveBodyCollisions(panel) {
-  const cellSize = panel.radius * 2.4;
+  const cellSize = panel.maxRadius * 2.5;
   const grid = new Map();
 
   panel.balls.forEach((body, index) => {

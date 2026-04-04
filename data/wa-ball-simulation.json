@@ -52,8 +52,10 @@
       "unit": "deaths",
       "annualCount": 731,
       "reduction": 0.92,
-      "color": "#ff4c6a",
-      "icon": "skull"
+      "color": "#c81d3d",
+      "icon": "skull",
+      "sizeMultiplier": 1.42,
+      "ominous": true
     }
   ]
 }
