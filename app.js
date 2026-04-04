@@ -42,6 +42,7 @@ const state = {
   categoryById: null,
   share: 0.5,
   restartAt: performance.now(),
+  statusMode: null,
   currentPanel: null,
   scenarioPanel: null,
   animationFrame: null,
@@ -91,6 +92,26 @@ function formatInt(value) {
 
 function formatDecimal(value) {
   return formatterOneDecimal.format(value);
+}
+
+function syncEqualSectionHeights(elements) {
+  elements.forEach((element) => {
+    element.style.minHeight = "";
+  });
+
+  const maxHeight = Math.max(
+    0,
+    ...elements.map((element) => Math.ceil(element.getBoundingClientRect().height))
+  );
+
+  elements.forEach((element) => {
+    element.style.minHeight = `${maxHeight}px`;
+  });
+}
+
+function syncPanelChromeHeights() {
+  syncEqualSectionHeights([...document.querySelectorAll(".panel-header")]);
+  syncEqualSectionHeights([...document.querySelectorAll(".panel-footer")]);
 }
 
 function loadData() {
@@ -671,7 +692,9 @@ function updateText() {
 
 function restartSimulation() {
   state.restartAt = performance.now();
+  state.statusMode = null;
   updateText();
+  syncPanelChromeHeights();
   rebuildPanels();
 }
 
@@ -814,7 +837,11 @@ function updateStatuses(simulationNow) {
       (state.data.windowDays * DAY_MS)) *
     state.data.windowDays;
 
-  if (elapsed <= catchupMs) {
+  const nextStatusMode = elapsed <= catchupMs ? "catchup" : "live";
+  const modeChanged = nextStatusMode !== state.statusMode;
+  state.statusMode = nextStatusMode;
+
+  if (nextStatusMode === "catchup") {
     refs.currentStatus.textContent = `Catch-up replay: ${formatDecimal(
       Math.max(0, Math.min(state.data.windowDays, replayDays))
     )} / ${state.data.windowDays} days`;
@@ -822,6 +849,10 @@ function updateStatuses(simulationNow) {
   } else {
     refs.currentStatus.textContent = `Live mode: the ${state.data.windowDays}-day window now advances in real time`;
     refs.scenarioStatus.textContent = "Live mode: new balls arrive at the counterfactual rate";
+  }
+
+  if (modeChanged) {
+    syncPanelChromeHeights();
   }
 
   refs.currentBallCount.textContent = `${formatInt(
