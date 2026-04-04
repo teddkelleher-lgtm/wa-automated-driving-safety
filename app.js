@@ -653,18 +653,18 @@ function updateText() {
   refs.metricAvoidedDeaths.textContent = formatDecimal(summary.avoidedDeaths);
   refs.metricAvoidedSerious.textContent = formatDecimal(summary.avoidedSerious);
   refs.unknownExcluded.textContent = formatInt(state.data.summary.excludedUnknownSeverityCrashes);
-  refs.currentTotal.textContent = formatDecimal(summary.currentTotal);
-  refs.scenarioTotal.textContent = formatDecimal(summary.scenarioTotal);
+  refs.currentTotal.textContent = formatInt(summary.currentTotal);
+  refs.scenarioTotal.textContent = formatInt(summary.scenarioTotal);
   refs.scenarioNote.textContent =
     `At ${shareText}, robots avert ${formatDecimal(
       summary.avoidedDeaths
-    )} deaths, ${formatDecimal(summary.avoidedSerious)} serious injuries, and ${formatDecimal(
+    )} deaths, ${formatDecimal(summary.avoidedSerious)} serious injuries, and ${formatInt(
       summary.pedestrianCurrentTotal - summary.pedestrianScenarioTotal
     )} pedestrian-involved crashes in ${state.data.windowDays} days.`;
   refs.pedestrianNote.textContent =
-    `Pedestrian-marked balls show ${formatDecimal(
+    `Pedestrian-marked balls show ${formatInt(
       summary.pedestrianCurrentTotal
-    )} pedestrian-involved crashes in this ${state.data.windowDays}-day replay and ${formatDecimal(
+    )} pedestrian-involved crashes in this ${state.data.windowDays}-day replay and ${formatInt(
       summary.pedestrianScenarioTotal
     )} if robots drove ${shareText} of the time.`;
 }
