@@ -630,38 +630,40 @@ function rebuildPanels() {
     scenarioTimeline.tokens.length,
     scenarioTimeline.fullBallCount + liveBuffer
   );
-  const currentBaseRadius = fitBaseRadius(
+  const sharedWidth = Math.min(
     refs.currentCanvas.clientWidth,
+    refs.scenarioCanvas.clientWidth
+  );
+  const sharedHeight = Math.min(
     refs.currentCanvas.clientHeight,
+    refs.scenarioCanvas.clientHeight
+  );
+  const baseRadius = fitBaseRadius(
+    sharedWidth,
+    sharedHeight,
     currentTimeline.tokens,
     currentLimit
-  );
-  const scenarioBaseRadius = fitBaseRadius(
-    refs.scenarioCanvas.clientWidth,
-    refs.scenarioCanvas.clientHeight,
-    scenarioTimeline.tokens,
-    scenarioLimit
   );
   const currentLayout = buildPlacements(
     refs.currentCanvas.clientWidth,
     refs.currentCanvas.clientHeight,
     currentTimeline.tokens,
-    currentBaseRadius,
+    baseRadius,
     currentLimit
   );
   const scenarioLayout = buildPlacements(
     refs.scenarioCanvas.clientWidth,
     refs.scenarioCanvas.clientHeight,
     scenarioTimeline.tokens,
-    scenarioBaseRadius,
+    baseRadius,
     scenarioLimit
   );
 
-  state.currentPanel = buildPanel("current", currentBaseRadius, currentLayout.placements);
+  state.currentPanel = buildPanel("current", baseRadius, currentLayout.placements);
   state.currentPanel.tokens = currentTimeline.tokens;
   state.currentPanel.fullBallCount = currentTimeline.fullBallCount;
 
-  state.scenarioPanel = buildPanel("scenario", scenarioBaseRadius, scenarioLayout.placements);
+  state.scenarioPanel = buildPanel("scenario", baseRadius, scenarioLayout.placements);
   state.scenarioPanel.tokens = scenarioTimeline.tokens;
   state.scenarioPanel.fullBallCount = scenarioTimeline.fullBallCount;
 }
