@@ -337,68 +337,116 @@ function getTokenRadius(token, baseRadius) {
   return baseRadius * (state.categoryById[token.categoryId].sizeMultiplier || 1);
 }
 
+function getRadiusKey(radius) {
+  return radius.toFixed(4);
+}
+
+function getSpawnColumnIndex(columnCount, token) {
+  const rng = mulberry32(hashString(`spawn-${token.id}`));
+  const center = Math.floor(columnCount / 2);
+  const spread = Math.max(4, Math.round(columnCount * 0.14));
+  const bias = token.categoryId === "traffic_deaths" ? 0.08 : 1;
+  const offset = Math.round((rng() * 2 - 1) * spread * bias);
+  return Math.max(0, Math.min(columnCount - 1, center + offset));
+}
+
+function settleOnSurface(surface, startIndex) {
+  let index = startIndex;
+  const tolerance = 0.001;
+
+  for (;;) {
+    const current = surface[index];
+    const left = index > 0 ? surface[index - 1] : -Infinity;
+    const right = index < surface.length - 1 ? surface[index + 1] : -Infinity;
+
+    if (left > current + tolerance || right > current + tolerance) {
+      if (left >= right) {
+        index -= 1;
+      } else {
+        index += 1;
+      }
+      continue;
+    }
+
+    while (index > 0 && Math.abs(surface[index - 1] - surface[index]) <= tolerance) {
+      index -= 1;
+    }
+    return index;
+  }
+}
+
 function buildPlacements(width, height, tokens, baseRadius, requiredCount = tokens.length) {
-  const paddingX = Math.max(6, width * 0.022);
-  const paddingTop = Math.max(10, height * 0.024);
-  const paddingBottom = Math.max(10, height * 0.024);
-  const innerWidth = width - paddingX * 2;
-  const horizontalGap = Math.max(0.3, baseRadius * 0.22);
-  const verticalGap = Math.max(0.45, baseRadius * 0.34);
-  const placements = new Array(Math.min(tokens.length, requiredCount));
-  const rows = [];
+  const count = Math.min(tokens.length, requiredCount);
+  const paddingX = Math.max(6, width * 0.018);
+  const paddingTop = Math.max(8, height * 0.02);
+  const paddingBottom = Math.max(8, height * 0.018);
+  const floorY = height - paddingBottom;
+  const xStep = Math.max(0.5, baseRadius * 0.88);
+  const xPositions = [];
 
-  let rowItems = [];
-  let rowWidth = 0;
-  let rowMaxRadius = 0;
-
-  for (let index = 0; index < Math.min(tokens.length, requiredCount); index += 1) {
-    const radius = getTokenRadius(tokens[index], baseRadius);
-    const itemWidth = radius * 2;
-    if (itemWidth > innerWidth) {
-      return { placements, placedCount: 0, baseRadius };
-    }
-
-    const nextWidth = rowItems.length === 0 ? itemWidth : rowWidth + horizontalGap + itemWidth;
-    if (rowItems.length > 0 && nextWidth > innerWidth) {
-      rows.push({ items: rowItems, width: rowWidth, maxRadius: rowMaxRadius });
-      rowItems = [];
-      rowWidth = 0;
-      rowMaxRadius = 0;
-    }
-
-    rowItems.push({ index, radius });
-    rowWidth = rowItems.length === 1 ? itemWidth : rowWidth + horizontalGap + itemWidth;
-    rowMaxRadius = Math.max(rowMaxRadius, radius);
+  for (let x = paddingX; x <= width - paddingX; x += xStep) {
+    xPositions.push(x);
+  }
+  if (xPositions[xPositions.length - 1] < width - paddingX) {
+    xPositions.push(width - paddingX);
   }
 
-  if (rowItems.length > 0) {
-    rows.push({ items: rowItems, width: rowWidth, maxRadius: rowMaxRadius });
-  }
+  const placements = new Array(count);
+  const radii = tokens
+    .slice(0, count)
+    .map((token) => getTokenRadius(token, baseRadius));
+  const uniqueRadii = [...new Set(radii.map((radius) => getRadiusKey(radius)))];
+  const surfaces = Object.fromEntries(
+    uniqueRadii.map((key) => {
+      const radius = Number.parseFloat(key);
+      const minX = paddingX + radius;
+      const maxX = width - paddingX - radius;
+      const surface = new Float32Array(xPositions.length);
+      for (let index = 0; index < xPositions.length; index += 1) {
+        surface[index] =
+          xPositions[index] >= minX && xPositions[index] <= maxX
+            ? floorY - radius
+            : Number.NEGATIVE_INFINITY;
+      }
+      return [key, surface];
+    })
+  );
 
-  let currentBottom = height - paddingBottom;
   let placedCount = 0;
+  for (let index = 0; index < count; index += 1) {
+    const token = tokens[index];
+    const radius = radii[index];
+    const radiusKey = getRadiusKey(radius);
+    const surface = surfaces[radiusKey];
+    const spawnIndex = getSpawnColumnIndex(xPositions.length, token);
+    const columnIndex = settleOnSurface(surface, spawnIndex);
+    const x = xPositions[columnIndex];
+    const y = surface[columnIndex];
 
-  for (const row of rows) {
-    const centerY = currentBottom - row.maxRadius;
-    if (centerY - row.maxRadius < paddingTop) {
+    if (!Number.isFinite(y) || y - radius < paddingTop) {
       break;
     }
 
-    let xCursor = width / 2 - row.width / 2;
-    row.items.forEach((item, itemIndex) => {
-      xCursor += item.radius;
-      placements[item.index] = {
-        x: xCursor,
-        y: centerY,
-      };
-      placedCount += 1;
-      xCursor += item.radius;
-      if (itemIndex < row.items.length - 1) {
-        xCursor += horizontalGap;
+    placements[index] = { x, y };
+    placedCount += 1;
+
+    uniqueRadii.forEach((key) => {
+      const targetRadius = Number.parseFloat(key);
+      const targetSurface = surfaces[key];
+      const sumRadius = radius + targetRadius;
+      const colRange = Math.ceil(sumRadius / xStep);
+      const start = Math.max(0, columnIndex - colRange);
+      const end = Math.min(xPositions.length - 1, columnIndex + colRange);
+
+      for (let col = start; col <= end; col += 1) {
+        const dx = Math.abs(xPositions[col] - x);
+        if (dx >= sumRadius) continue;
+        const ceiling = y - Math.sqrt(sumRadius * sumRadius - dx * dx);
+        if (ceiling < targetSurface[col]) {
+          targetSurface[col] = ceiling;
+        }
       }
     });
-
-    currentBottom = centerY - row.maxRadius - verticalGap;
   }
 
   return { placements, placedCount, baseRadius };
