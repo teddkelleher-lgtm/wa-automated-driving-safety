@@ -39,6 +39,7 @@ const refs = {
 
 const state = {
   data: null,
+  categoryById: null,
   share: 0.5,
   restartAt: performance.now(),
   currentPanel: null,
@@ -216,7 +217,7 @@ function createBallSprite(radius, color, options = {}) {
   if (ominous) {
     const aura = ctx.createRadialGradient(center, center, radius * 0.2, center, center, radius * 1.45);
     aura.addColorStop(0, "rgba(200,29,61,0)");
-    aura.addColorStop(0.68, "rgba(200,29,61,0.12)");
+    aura.addColorStop(0.68, "rgba(200,29,61,0.16)");
     aura.addColorStop(1, "rgba(200,29,61,0)");
     ctx.beginPath();
     ctx.arc(center, center, radius * 1.35, 0, Math.PI * 2);
@@ -234,13 +235,14 @@ function createBallSprite(radius, color, options = {}) {
   );
 
   if (ominous) {
-    gradient.addColorStop(0, "rgba(255,245,247,0.72)");
-    gradient.addColorStop(0.12, "#db3d5d");
+    gradient.addColorStop(0, "rgba(255,246,248,0.96)");
+    gradient.addColorStop(0.09, "#ff8aa0");
     gradient.addColorStop(0.58, color);
     gradient.addColorStop(1, "#14070d");
   } else {
-    gradient.addColorStop(0, "rgba(255,255,255,0.66)");
-    gradient.addColorStop(0.12, color);
+    gradient.addColorStop(0, "rgba(255,255,255,0.95)");
+    gradient.addColorStop(0.11, "#f4f7fb");
+    gradient.addColorStop(0.19, color);
     gradient.addColorStop(1, "#09111a");
   }
 
@@ -255,13 +257,29 @@ function createBallSprite(radius, color, options = {}) {
   ctx.fill();
 
   ctx.beginPath();
-  ctx.arc(center - radius * 0.28, center - radius * 0.34, radius * 0.14, 0, Math.PI * 2);
-  ctx.fillStyle = ominous ? "rgba(255,244,246,0.18)" : "rgba(255,255,255,0.16)";
+  ctx.arc(center - radius * 0.34, center - radius * 0.44, radius * 0.21, 0, Math.PI * 2);
+  ctx.fillStyle = ominous ? "rgba(255,250,251,0.44)" : "rgba(255,255,255,0.52)";
   ctx.fill();
+
+  const streak = ctx.createLinearGradient(
+    center - radius * 0.7,
+    center - radius * 0.92,
+    center + radius * 0.16,
+    center - radius * 0.16
+  );
+  streak.addColorStop(0, "rgba(255,255,255,0)");
+  streak.addColorStop(0.38, ominous ? "rgba(255,249,250,0.32)" : "rgba(255,255,255,0.38)");
+  streak.addColorStop(1, "rgba(255,255,255,0)");
+  ctx.save();
+  ctx.translate(center, center);
+  ctx.rotate(-0.55);
+  ctx.fillStyle = streak;
+  ctx.fillRect(-radius * 0.62, -radius * 0.96, radius * 1.06, radius * 0.36);
+  ctx.restore();
 
   ctx.beginPath();
   ctx.arc(center, center, radius - 0.7, 0, Math.PI * 2);
-  ctx.strokeStyle = ominous ? "rgba(255,231,236,0.22)" : "rgba(255,255,255,0.12)";
+  ctx.strokeStyle = ominous ? "rgba(255,231,236,0.28)" : "rgba(255,255,255,0.18)";
   ctx.lineWidth = 1.1;
   ctx.stroke();
 
@@ -280,7 +298,20 @@ function createBallSprite(radius, color, options = {}) {
     ctx.textBaseline = "middle";
     ctx.fillText(icon, center, center + 0.4);
   } else if (pedestrian) {
-    drawPedestrianGlyph(ctx, center + radius * 0.02, center + radius * 0.08, radius * 0.92, "rgba(238,255,249,0.92)");
+    if (radius >= 4) {
+      drawPedestrianGlyph(
+        ctx,
+        center + radius * 0.02,
+        center + radius * 0.08,
+        radius * 0.92,
+        "rgba(238,255,249,0.92)"
+      );
+    } else {
+      ctx.beginPath();
+      ctx.arc(center, center, Math.max(0.7, radius * 0.18), 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(238,255,249,0.92)";
+      ctx.fill();
+    }
   }
 
   return canvas;
@@ -302,81 +333,99 @@ function pickMarkedIndices(total, markedCount, rng) {
   );
 }
 
-function buildSlots(width, height, requiredSlots, maxMultiplier) {
-  const paddingX = 18;
-  const paddingTop = 18;
-  const paddingBottom = 18;
-  const centerX = width / 2;
-  const leftBound = paddingX;
-  const rightBound = width - paddingX;
-  let fallback = null;
+function getTokenRadius(token, baseRadius) {
+  return baseRadius * (state.categoryById[token.categoryId].sizeMultiplier || 1);
+}
 
-  for (let baseRadius = 24; baseRadius >= 8; baseRadius -= 0.25) {
-    const maxRadius = baseRadius * maxMultiplier;
-    const stepX = maxRadius * 2.02;
-    const stepY = maxRadius * 1.74;
-    const slots = [];
-    let rowIndex = 0;
+function buildPlacements(width, height, tokens, baseRadius, requiredCount = tokens.length) {
+  const paddingX = Math.max(6, width * 0.022);
+  const paddingTop = Math.max(10, height * 0.024);
+  const paddingBottom = Math.max(10, height * 0.024);
+  const innerWidth = width - paddingX * 2;
+  const horizontalGap = Math.max(0.3, baseRadius * 0.22);
+  const verticalGap = Math.max(0.45, baseRadius * 0.34);
+  const placements = new Array(Math.min(tokens.length, requiredCount));
+  const rows = [];
 
-    for (let y = height - paddingBottom - maxRadius; y >= paddingTop + maxRadius; y -= stepY) {
-      const rowSlots = [];
-      if (rowIndex % 2 === 0) {
-        for (let step = 0; ; step += 1) {
-          let added = false;
-          if (step === 0) {
-            if (centerX - maxRadius >= leftBound && centerX + maxRadius <= rightBound) {
-              rowSlots.push({ x: centerX, y });
-              added = true;
-            }
-          } else {
-            const leftX = centerX - step * stepX;
-            const rightX = centerX + step * stepX;
-            if (leftX - maxRadius >= leftBound) {
-              rowSlots.push({ x: leftX, y });
-              added = true;
-            }
-            if (rightX + maxRadius <= rightBound) {
-              rowSlots.push({ x: rightX, y });
-              added = true;
-            }
-          }
-          if (!added) break;
-        }
-      } else {
-        for (let step = 0; ; step += 1) {
-          const offset = (step + 0.5) * stepX;
-          const leftX = centerX - offset;
-          const rightX = centerX + offset;
-          let added = false;
-          if (leftX - maxRadius >= leftBound) {
-            rowSlots.push({ x: leftX, y });
-            added = true;
-          }
-          if (rightX + maxRadius <= rightBound) {
-            rowSlots.push({ x: rightX, y });
-            added = true;
-          }
-          if (!added) break;
-        }
+  let rowItems = [];
+  let rowWidth = 0;
+  let rowMaxRadius = 0;
+
+  for (let index = 0; index < Math.min(tokens.length, requiredCount); index += 1) {
+    const radius = getTokenRadius(tokens[index], baseRadius);
+    const itemWidth = radius * 2;
+    if (itemWidth > innerWidth) {
+      return { placements, placedCount: 0, baseRadius };
+    }
+
+    const nextWidth = rowItems.length === 0 ? itemWidth : rowWidth + horizontalGap + itemWidth;
+    if (rowItems.length > 0 && nextWidth > innerWidth) {
+      rows.push({ items: rowItems, width: rowWidth, maxRadius: rowMaxRadius });
+      rowItems = [];
+      rowWidth = 0;
+      rowMaxRadius = 0;
+    }
+
+    rowItems.push({ index, radius });
+    rowWidth = rowItems.length === 1 ? itemWidth : rowWidth + horizontalGap + itemWidth;
+    rowMaxRadius = Math.max(rowMaxRadius, radius);
+  }
+
+  if (rowItems.length > 0) {
+    rows.push({ items: rowItems, width: rowWidth, maxRadius: rowMaxRadius });
+  }
+
+  let currentBottom = height - paddingBottom;
+  let placedCount = 0;
+
+  for (const row of rows) {
+    const centerY = currentBottom - row.maxRadius;
+    if (centerY - row.maxRadius < paddingTop) {
+      break;
+    }
+
+    let xCursor = width / 2 - row.width / 2;
+    row.items.forEach((item, itemIndex) => {
+      xCursor += item.radius;
+      placements[item.index] = {
+        x: xCursor,
+        y: centerY,
+      };
+      placedCount += 1;
+      xCursor += item.radius;
+      if (itemIndex < row.items.length - 1) {
+        xCursor += horizontalGap;
       }
+    });
 
-      slots.push(...rowSlots);
-      rowIndex += 1;
-    }
+    currentBottom = centerY - row.maxRadius - verticalGap;
+  }
 
-    const plan = { baseRadius, maxRadius, slots };
-    if (!fallback) {
-      fallback = plan;
-    }
-    if (slots.length >= requiredSlots) {
-      return plan;
+  return { placements, placedCount, baseRadius };
+}
+
+function fitBaseRadius(width, height, tokens, requiredCount) {
+  const minRadius = 0.55;
+  const maxRadius = Math.max(minRadius, Math.min(width, height) * 0.07);
+  let low = minRadius;
+  let high = maxRadius;
+  let best = minRadius;
+
+  for (let iteration = 0; iteration < 18; iteration += 1) {
+    const mid = (low + high) / 2;
+    const { placedCount } = buildPlacements(width, height, tokens, mid, requiredCount);
+    if (placedCount >= requiredCount) {
+      best = mid;
+      low = mid;
+    } else {
+      high = mid;
     }
   }
 
-  return fallback;
+  return best;
 }
 
-function buildPanel(kind, slotPlan) {
+function buildPanel(kind, baseRadius, positions) {
   const canvas = kind === "current" ? refs.currentCanvas : refs.scenarioCanvas;
   const width = canvas.clientWidth;
   const height = canvas.clientHeight;
@@ -389,7 +438,7 @@ function buildPanel(kind, slotPlan) {
   const sprites = {};
   const categoryVisuals = {};
   state.data.categories.forEach((category) => {
-    const radius = slotPlan.baseRadius * (category.sizeMultiplier || 1);
+    const radius = baseRadius * (category.sizeMultiplier || 1);
     categoryVisuals[category.id] = { radius };
     sprites[category.id] = {
       default: createBallSprite(radius, category.color, {
@@ -410,8 +459,8 @@ function buildPanel(kind, slotPlan) {
     ctx,
     width,
     height,
-    slots: slotPlan.slots,
-    slotPlan,
+    positions,
+    baseRadius,
     sprites,
     categoryVisuals,
     spawnRng: mulberry32(hashString(`${kind}-${Math.round(state.share * 1000)}`)),
@@ -489,23 +538,43 @@ function buildTimeline(kind, categories) {
 
 function rebuildPanels() {
   const summary = computeSummary(state.share);
-  const currentBallTarget = Math.round(summary.currentTotal / state.data.ballScale);
-  const maxMultiplier = Math.max(...state.data.categories.map((category) => category.sizeMultiplier || 1));
-  const slotPlan = buildSlots(
+  const currentTimeline = buildTimeline("current", summary.categories);
+  const scenarioTimeline = buildTimeline("scenario", summary.categories);
+  const liveBuffer = Math.max(180, Math.round(currentTimeline.fullBallCount * 0.02));
+  const currentLimit = Math.min(
+    currentTimeline.tokens.length,
+    currentTimeline.fullBallCount + liveBuffer
+  );
+  const scenarioLimit = Math.min(
+    scenarioTimeline.tokens.length,
+    scenarioTimeline.fullBallCount + liveBuffer
+  );
+  const baseRadius = fitBaseRadius(
     refs.currentCanvas.clientWidth,
     refs.currentCanvas.clientHeight,
-    currentBallTarget + 12,
-    maxMultiplier
+    currentTimeline.tokens,
+    currentLimit
+  );
+  const currentLayout = buildPlacements(
+    refs.currentCanvas.clientWidth,
+    refs.currentCanvas.clientHeight,
+    currentTimeline.tokens,
+    baseRadius,
+    currentLimit
+  );
+  const scenarioLayout = buildPlacements(
+    refs.scenarioCanvas.clientWidth,
+    refs.scenarioCanvas.clientHeight,
+    scenarioTimeline.tokens,
+    baseRadius,
+    scenarioLimit
   );
 
-  state.currentPanel = buildPanel("current", slotPlan);
-  state.scenarioPanel = buildPanel("scenario", slotPlan);
-
-  const currentTimeline = buildTimeline("current", summary.categories);
+  state.currentPanel = buildPanel("current", baseRadius, currentLayout.placements);
   state.currentPanel.tokens = currentTimeline.tokens;
   state.currentPanel.fullBallCount = currentTimeline.fullBallCount;
 
-  const scenarioTimeline = buildTimeline("scenario", summary.categories);
+  state.scenarioPanel = buildPanel("scenario", baseRadius, scenarioLayout.placements);
   state.scenarioPanel.tokens = scenarioTimeline.tokens;
   state.scenarioPanel.fullBallCount = scenarioTimeline.fullBallCount;
 }
@@ -560,16 +629,16 @@ function getSimulationNow() {
 
 function spawnBall(panel, token, now) {
   const slotIndex = panel.balls.length;
-  const slot = panel.slots[slotIndex];
-  if (!slot) return;
+  const position = panel.positions[slotIndex];
+  if (!position) return;
 
   const radius = panel.categoryVisuals[token.categoryId].radius;
   panel.balls.push({
     id: token.id,
     categoryId: token.categoryId,
     pedestrian: Boolean(token.pedestrian),
-    targetX: slot.x,
-    targetY: slot.y,
+    targetX: position.x,
+    targetY: position.y,
     targetIndex: slotIndex,
     startY: -radius * 4 - panel.spawnRng() * 38,
     spawnAt: now,
@@ -708,6 +777,9 @@ function wireEvents() {
 
 async function init() {
   state.data = await loadData();
+  state.categoryById = Object.fromEntries(
+    state.data.categories.map((category) => [category.id, category])
+  );
   state.share = state.data.defaultAutomationShare;
   refs.slider.value = String(Math.round(state.share * 100));
   wireEvents();

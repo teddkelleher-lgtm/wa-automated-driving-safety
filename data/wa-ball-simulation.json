@@ -3,8 +3,8 @@
   "windowDays": 30,
   "daysInBaselineYear": 366,
   "catchupSeconds": 30,
-  "futureHorizonDays": 365,
-  "ballScale": 20,
+  "futureHorizonDays": 45,
+  "ballScale": 1,
   "defaultAutomationShare": 0.5,
   "summary": {
     "annualTrafficDeaths": 731,
@@ -54,7 +54,7 @@
       "reduction": 0.92,
       "color": "#c81d3d",
       "icon": "skull",
-      "sizeMultiplier": 1.42,
+      "sizeMultiplier": 10,
       "ominous": true
     }
   ],

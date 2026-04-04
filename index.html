@@ -22,7 +22,7 @@
         <p class="eyebrow">Washington Automated Driving Counterfactual</p>
         <h1>Death and Destruction on WA Roads: Humans vs. Robots</h1>
         <p class="lede">
-          Each ball stands for 20 crashes from the last 30 days. Left is today's toll.
+          One ball is one estimated event from the last 30 days. Left is today's toll.
           Right is the same month with more robot driving.
         </p>
       </header>
@@ -44,7 +44,7 @@
           </div>
           <div class="panel-footer">
             <span id="currentStatus">Replaying the last 30 days</span>
-            <span id="currentBallCount">0 / 415 balls</span>
+            <span id="currentBallCount">0 / 8,309 balls</span>
           </div>
         </article>
 
@@ -64,7 +64,7 @@
           </div>
           <div class="panel-footer">
             <span id="scenarioStatus">Replay restarts whenever the slider moves</span>
-            <span id="scenarioBallCount">0 / 230 balls</span>
+            <span id="scenarioBallCount">0 / 4,604 balls</span>
           </div>
         </article>
       </section>
@@ -154,8 +154,9 @@
           <h3>Simple, transparent arithmetic</h3>
           <p>
             This animation compresses the last 30 days into 30 seconds, then advances
-            in real time. It does not show literal one-to-one crashes. Each ball
-            represents <strong>20 estimated events</strong> in this 30-day window.
+            in real time. It now uses <strong>one ball per estimated event</strong> in
+            this 30-day window. Death balls are deliberately drawn much larger for
+            emphasis, so size is not area-proportional across categories.
           </p>
           <p>
             For each category, the right vessel applies:
