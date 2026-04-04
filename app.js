@@ -420,10 +420,7 @@ function updateText() {
   refs.shareValue.textContent = shareText;
   refs.scenarioCopy.textContent =
     state.share === 0 ? "status quo replay" : "counterfactual replay";
-  refs.scenarioTitle.textContent =
-    state.share === 0
-      ? "If 0% of trips were automated"
-      : `If ${shareText} of trips were automated`;
+  refs.scenarioTitle.textContent = `If robots drove ${shareText} of the time`;
 
   refs.metricDeaths.textContent = formatDecimal(summary.windowDeaths);
   refs.metricSeriousInjuries.textContent = formatDecimal(summary.windowSeriousInjuries);
