@@ -214,72 +214,14 @@ function createBallSprite(radius, color, options = {}) {
   const ctx = canvas.getContext("2d");
   const center = size / 2;
 
-  if (ominous) {
-    const aura = ctx.createRadialGradient(center, center, radius * 0.2, center, center, radius * 1.45);
-    aura.addColorStop(0, "rgba(200,29,61,0)");
-    aura.addColorStop(0.68, "rgba(200,29,61,0.16)");
-    aura.addColorStop(1, "rgba(200,29,61,0)");
-    ctx.beginPath();
-    ctx.arc(center, center, radius * 1.35, 0, Math.PI * 2);
-    ctx.fillStyle = aura;
-    ctx.fill();
-  }
-
-  const gradient = ctx.createRadialGradient(
-    center - radius * 0.45,
-    center - radius * 0.55,
-    radius * 0.28,
-    center,
-    center,
-    radius * 1.15
-  );
-
-  if (ominous) {
-    gradient.addColorStop(0, "rgba(255,246,248,0.96)");
-    gradient.addColorStop(0.09, "#ff8aa0");
-    gradient.addColorStop(0.58, color);
-    gradient.addColorStop(1, "#14070d");
-  } else {
-    gradient.addColorStop(0, "rgba(255,255,255,0.95)");
-    gradient.addColorStop(0.11, "#f4f7fb");
-    gradient.addColorStop(0.19, color);
-    gradient.addColorStop(1, "#09111a");
-  }
-
   ctx.beginPath();
   ctx.arc(center, center, radius, 0, Math.PI * 2);
   ctx.fillStyle = color;
   ctx.fill();
 
   ctx.beginPath();
-  ctx.arc(center, center, radius, 0, Math.PI * 2);
-  ctx.fillStyle = gradient;
-  ctx.fill();
-
-  ctx.beginPath();
-  ctx.arc(center - radius * 0.34, center - radius * 0.44, radius * 0.21, 0, Math.PI * 2);
-  ctx.fillStyle = ominous ? "rgba(255,250,251,0.44)" : "rgba(255,255,255,0.52)";
-  ctx.fill();
-
-  const streak = ctx.createLinearGradient(
-    center - radius * 0.7,
-    center - radius * 0.92,
-    center + radius * 0.16,
-    center - radius * 0.16
-  );
-  streak.addColorStop(0, "rgba(255,255,255,0)");
-  streak.addColorStop(0.38, ominous ? "rgba(255,249,250,0.32)" : "rgba(255,255,255,0.38)");
-  streak.addColorStop(1, "rgba(255,255,255,0)");
-  ctx.save();
-  ctx.translate(center, center);
-  ctx.rotate(-0.55);
-  ctx.fillStyle = streak;
-  ctx.fillRect(-radius * 0.62, -radius * 0.96, radius * 1.06, radius * 0.36);
-  ctx.restore();
-
-  ctx.beginPath();
   ctx.arc(center, center, radius - 0.7, 0, Math.PI * 2);
-  ctx.strokeStyle = ominous ? "rgba(255,231,236,0.28)" : "rgba(255,255,255,0.18)";
+  ctx.strokeStyle = ominous ? "rgba(255,231,236,0.22)" : "rgba(255,255,255,0.12)";
   ctx.lineWidth = 1.1;
   ctx.stroke();
 
@@ -482,6 +424,11 @@ function buildPanel(kind, baseRadius, positions) {
   canvas.height = Math.round(height * dpr);
   const ctx = canvas.getContext("2d");
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const settledCanvas = document.createElement("canvas");
+  settledCanvas.width = canvas.width;
+  settledCanvas.height = canvas.height;
+  const settledCtx = settledCanvas.getContext("2d");
+  settledCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
   const sprites = {};
   const categoryVisuals = {};
@@ -509,12 +456,15 @@ function buildPanel(kind, baseRadius, positions) {
     height,
     positions,
     baseRadius,
+    settledCanvas,
+    settledCtx,
     sprites,
     categoryVisuals,
     spawnRng: mulberry32(hashString(`${kind}-${Math.round(state.share * 1000)}`)),
     tokens: [],
     tokenIndex: 0,
     balls: [],
+    activeIndices: [],
     fullBallCount: 0,
   };
 }
@@ -691,7 +641,9 @@ function spawnBall(panel, token, now) {
     startY: -radius * 4 - panel.spawnRng() * 38,
     spawnAt: now,
     dropDuration: 760 + panel.spawnRng() * 260,
+    settled: false,
   });
+  panel.activeIndices.push(slotIndex);
 }
 
 function syncPanel(panel, simulationNow, now) {
@@ -702,6 +654,13 @@ function syncPanel(panel, simulationNow, now) {
     spawnBall(panel, panel.tokens[panel.tokenIndex], now);
     panel.tokenIndex += 1;
   }
+}
+
+function drawBallToContext(ctx, panel, ball, x, y) {
+  const sprite = panel.sprites[ball.categoryId][
+    ball.pedestrian ? "pedestrian" : "default"
+  ];
+  ctx.drawImage(sprite, x - sprite.width / 2, y - sprite.height / 2);
 }
 
 function drawVessel(panel, now) {
@@ -736,27 +695,39 @@ function drawVessel(panel, now) {
   ctx.lineTo(width * 0.78, 18);
   ctx.stroke();
 
-  const drawBalls = panel.balls
-    .map((ball) => {
-      const elapsed = Math.max(0, now - ball.spawnAt);
-      const progress = Math.min(1, elapsed / ball.dropDuration);
-      return {
-        ...ball,
-        y: ball.startY + bounceOut(progress) * (ball.targetY - ball.startY),
-      };
-    })
-    .sort((left, right) => left.targetY - right.targetY);
+  ctx.drawImage(panel.settledCanvas, 0, 0, width, height);
 
-  drawBalls.forEach((ball) => {
-    const sprite = panel.sprites[ball.categoryId][
-      ball.pedestrian ? "pedestrian" : "default"
-    ];
-    ctx.drawImage(
-      sprite,
-      ball.targetX - sprite.width / 2,
-      ball.y - sprite.height / 2
-    );
+  const activeBalls = [];
+  const nextActiveIndices = [];
+
+  panel.activeIndices.forEach((ballIndex) => {
+    const ball = panel.balls[ballIndex];
+    const elapsed = Math.max(0, now - ball.spawnAt);
+    const progress = Math.min(1, elapsed / ball.dropDuration);
+    const y = ball.startY + bounceOut(progress) * (ball.targetY - ball.startY);
+
+    if (progress >= 1) {
+      if (!ball.settled) {
+        drawBallToContext(panel.settledCtx, panel, ball, ball.targetX, ball.targetY);
+        ball.settled = true;
+      }
+      return;
+    }
+
+    activeBalls.push({
+      ...ball,
+      y,
+    });
+    nextActiveIndices.push(ballIndex);
   });
+
+  panel.activeIndices = nextActiveIndices;
+
+  activeBalls
+    .sort((left, right) => left.targetY - right.targetY)
+    .forEach((ball) => {
+      drawBallToContext(ctx, panel, ball, ball.targetX, ball.y);
+    });
 
   ctx.restore();
 

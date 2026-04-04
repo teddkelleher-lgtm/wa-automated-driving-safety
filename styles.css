@@ -115,6 +115,15 @@ h1 {
   font-size: 0.92rem;
 }
 
+.vessel-subhead {
+  margin: 14px 0 0;
+  text-align: center;
+  color: var(--muted-strong);
+  font-size: 0.92rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .card {
   background: linear-gradient(180deg, rgba(18, 24, 33, 0.96), rgba(13, 17, 24, 0.94));
   border: 1px solid var(--line);
@@ -389,6 +398,11 @@ canvas {
     max-width: none;
     font-size: 0.82rem;
     line-height: 1.35;
+  }
+
+  .vessel-subhead {
+    margin-top: 10px;
+    font-size: 0.76rem;
   }
 
   .vessels {
