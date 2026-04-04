@@ -22,33 +22,9 @@
         <p class="eyebrow">Washington Automated Driving Counterfactual</p>
         <h1>Death and Destruction on WA Roads: Humans vs. Robots</h1>
         <p class="lede">
-          Left: the estimated crash burden of the last 30 days at Washington's current
-          pace. Right: the same 30 days if more trips were automated.
+          Each ball stands for 20 crashes from the last 30 days. Left is today's toll.
+          Right is the same month with more robot driving.
         </p>
-
-        <section class="controls card">
-          <div class="controls-copy">
-            <label class="slider-label" for="automationShare">
-              Share of trips in automated vehicles
-            </label>
-            <div class="slider-headline">
-              <strong id="shareValue">50%</strong>
-              <span id="scenarioCopy">default counterfactual</span>
-            </div>
-            <input
-              id="automationShare"
-              type="range"
-              min="0"
-              max="100"
-              step="1"
-              value="50"
-            />
-          </div>
-          <p class="scenario-note" id="scenarioNote">
-            At 50% automated trips, the right vessel removes an estimated 27.6 deaths
-            and 124.1 serious injuries over 30 days.
-          </p>
-        </section>
       </header>
 
       <section class="vessels">
@@ -91,6 +67,30 @@
             <span id="scenarioBallCount">0 / 230 balls</span>
           </div>
         </article>
+      </section>
+
+      <section class="controls card">
+        <div class="controls-copy">
+          <label class="slider-label" for="automationShare">
+            Robot share of trips
+          </label>
+          <div class="slider-headline">
+            <strong id="shareValue">50%</strong>
+            <span id="scenarioCopy">robot-driving replay</span>
+          </div>
+          <input
+            id="automationShare"
+            type="range"
+            min="0"
+            max="100"
+            step="1"
+            value="50"
+          />
+        </div>
+        <p class="scenario-note" id="scenarioNote">
+          At 50%, robots avert an estimated 27.6 deaths and 124.1 serious injuries in
+          30 days.
+        </p>
       </section>
 
       <section class="legend-row" aria-label="Severity legend">

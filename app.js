@@ -191,12 +191,12 @@ function createBallSprite(radius, color, options = {}) {
   );
 
   if (ominous) {
-    gradient.addColorStop(0, "rgba(255,245,247,0.96)");
-    gradient.addColorStop(0.12, "#f04f71");
+    gradient.addColorStop(0, "rgba(255,245,247,0.72)");
+    gradient.addColorStop(0.12, "#db3d5d");
     gradient.addColorStop(0.58, color);
     gradient.addColorStop(1, "#14070d");
   } else {
-    gradient.addColorStop(0, "rgba(255,255,255,0.95)");
+    gradient.addColorStop(0, "rgba(255,255,255,0.66)");
     gradient.addColorStop(0.12, color);
     gradient.addColorStop(1, "#09111a");
   }
@@ -212,13 +212,13 @@ function createBallSprite(radius, color, options = {}) {
   ctx.fill();
 
   ctx.beginPath();
-  ctx.arc(center - radius * 0.34, center - radius * 0.44, radius * 0.22, 0, Math.PI * 2);
-  ctx.fillStyle = "rgba(255,255,255,0.44)";
+  ctx.arc(center - radius * 0.28, center - radius * 0.34, radius * 0.14, 0, Math.PI * 2);
+  ctx.fillStyle = ominous ? "rgba(255,244,246,0.18)" : "rgba(255,255,255,0.16)";
   ctx.fill();
 
   ctx.beginPath();
   ctx.arc(center, center, radius - 0.7, 0, Math.PI * 2);
-  ctx.strokeStyle = ominous ? "rgba(255,231,236,0.35)" : "rgba(255,255,255,0.2)";
+  ctx.strokeStyle = ominous ? "rgba(255,231,236,0.22)" : "rgba(255,255,255,0.12)";
   ctx.lineWidth = 1.1;
   ctx.stroke();
 
@@ -419,7 +419,7 @@ function updateText() {
 
   refs.shareValue.textContent = shareText;
   refs.scenarioCopy.textContent =
-    state.share === 0 ? "status quo replay" : "counterfactual replay";
+    state.share === 0 ? "status quo replay" : "robot-driving replay";
   refs.scenarioTitle.textContent = `If robots drove ${shareText} of the time`;
 
   refs.metricDeaths.textContent = formatDecimal(summary.windowDeaths);
@@ -430,11 +430,11 @@ function updateText() {
   refs.currentTotal.textContent = formatDecimal(summary.currentTotal);
   refs.scenarioTotal.textContent = formatDecimal(summary.scenarioTotal);
   refs.scenarioNote.textContent =
-    `At ${shareText} automated trips, the right vessel removes an estimated ${formatDecimal(
+    `At ${shareText}, robots avert ${formatDecimal(
       summary.avoidedDeaths
-    )} deaths and ${formatDecimal(
-      summary.avoidedSerious
-    )} serious injuries over ${state.data.windowDays} days.`;
+    )} deaths and ${formatDecimal(summary.avoidedSerious)} serious injuries in ${
+      state.data.windowDays
+    } days.`;
 }
 
 function restartSimulation() {
