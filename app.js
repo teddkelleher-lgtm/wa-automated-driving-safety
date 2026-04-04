@@ -205,6 +205,69 @@ function drawPedestrianGlyph(ctx, x, y, size, color) {
   ctx.restore();
 }
 
+function drawDeathGlyph(ctx, x, y, size) {
+  const boneStroke = Math.max(1.4, size * 0.09);
+  const skullWidth = size * 0.42;
+  const skullHeight = size * 0.34;
+  const skullTop = y - size * 0.14;
+  const jawWidth = skullWidth * 0.62;
+  const jawHeight = skullHeight * 0.28;
+  const boneOffset = size * 0.26;
+
+  ctx.save();
+  ctx.strokeStyle = "rgba(255,246,248,0.95)";
+  ctx.fillStyle = "rgba(255,246,248,0.95)";
+  ctx.lineWidth = boneStroke;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+
+  [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([sx, sy]) => {
+    ctx.beginPath();
+    ctx.arc(x + sx * boneOffset, y + sy * boneOffset, size * 0.05, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  ctx.beginPath();
+  ctx.moveTo(x - boneOffset, y - boneOffset);
+  ctx.lineTo(x + boneOffset, y + boneOffset);
+  ctx.moveTo(x + boneOffset, y - boneOffset);
+  ctx.lineTo(x - boneOffset, y + boneOffset);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.ellipse(x, skullTop, skullWidth / 2, skullHeight / 2, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.roundRect(x - jawWidth / 2, skullTop + skullHeight * 0.12, jawWidth, jawHeight, jawHeight * 0.26);
+  ctx.fill();
+
+  ctx.fillStyle = "rgba(82, 8, 20, 0.96)";
+  ctx.beginPath();
+  ctx.arc(x - skullWidth * 0.18, skullTop - skullHeight * 0.05, size * 0.05, 0, Math.PI * 2);
+  ctx.arc(x + skullWidth * 0.18, skullTop - skullHeight * 0.05, size * 0.05, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.moveTo(x, skullTop + skullHeight * 0.03);
+  ctx.lineTo(x - size * 0.04, skullTop + skullHeight * 0.14);
+  ctx.lineTo(x + size * 0.04, skullTop + skullHeight * 0.14);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.strokeStyle = "rgba(82, 8, 20, 0.82)";
+  ctx.lineWidth = Math.max(0.7, size * 0.024);
+  for (let tooth = -1; tooth <= 1; tooth += 1) {
+    const toothX = x + tooth * jawWidth * 0.16;
+    ctx.beginPath();
+    ctx.moveTo(toothX, skullTop + skullHeight * 0.14);
+    ctx.lineTo(toothX, skullTop + skullHeight * 0.35);
+    ctx.stroke();
+  }
+
+  ctx.restore();
+}
+
 function createBallSprite(radius, color, options = {}) {
   const { icon = "", ominous = false, pedestrian = false } = options;
   const size = Math.ceil(radius * 2.85);
@@ -233,9 +296,11 @@ function createBallSprite(radius, color, options = {}) {
     ctx.stroke();
   }
 
-  if (icon) {
-    ctx.fillStyle = ominous ? "rgba(255,248,249,0.97)" : "rgba(255,255,255,0.94)";
-    ctx.font = `${Math.round(radius * (ominous ? 0.9 : 0.98))}px Sora`;
+  if (ominous) {
+    drawDeathGlyph(ctx, center, center + radius * 0.08, radius * 0.92);
+  } else if (icon) {
+    ctx.fillStyle = "rgba(255,255,255,0.94)";
+    ctx.font = `${Math.round(radius * 0.98)}px Sora`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText(icon, center, center + 0.4);
