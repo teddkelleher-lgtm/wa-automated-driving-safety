@@ -40,7 +40,6 @@ const state = {
   data: null,
   share: 0.5,
   restartAt: performance.now(),
-  lastFrameAt: performance.now(),
   currentPanel: null,
   scenarioPanel: null,
   animationFrame: null,
@@ -63,6 +62,25 @@ function hashString(text) {
     hash = Math.imul(hash, 16777619);
   }
   return hash >>> 0;
+}
+
+function bounceOut(t) {
+  const n1 = 7.5625;
+  const d1 = 2.75;
+
+  if (t < 1 / d1) {
+    return n1 * t * t;
+  }
+  if (t < 2 / d1) {
+    const value = t - 1.5 / d1;
+    return n1 * value * value + 0.75;
+  }
+  if (t < 2.5 / d1) {
+    const value = t - 2.25 / d1;
+    return n1 * value * value + 0.9375;
+  }
+  const value = t - 2.625 / d1;
+  return n1 * value * value + 0.984375;
 }
 
 function formatInt(value) {
@@ -145,7 +163,7 @@ function allocateBallCounts(items, accessor, scale) {
 
 function createBallSprite(radius, color, options = {}) {
   const { icon = "", ominous = false } = options;
-  const size = Math.ceil(radius * 2.8);
+  const size = Math.ceil(radius * 2.85);
   const canvas = document.createElement("canvas");
   canvas.width = size;
   canvas.height = size;
@@ -163,7 +181,7 @@ function createBallSprite(radius, color, options = {}) {
     ctx.fill();
   }
 
-  const outer = ctx.createRadialGradient(
+  const gradient = ctx.createRadialGradient(
     center - radius * 0.45,
     center - radius * 0.55,
     radius * 0.28,
@@ -171,15 +189,16 @@ function createBallSprite(radius, color, options = {}) {
     center,
     radius * 1.15
   );
+
   if (ominous) {
-    outer.addColorStop(0, "rgba(255,245,247,0.96)");
-    outer.addColorStop(0.12, "#f04f71");
-    outer.addColorStop(0.58, color);
-    outer.addColorStop(1, "#14070d");
+    gradient.addColorStop(0, "rgba(255,245,247,0.96)");
+    gradient.addColorStop(0.12, "#f04f71");
+    gradient.addColorStop(0.58, color);
+    gradient.addColorStop(1, "#14070d");
   } else {
-    outer.addColorStop(0, "rgba(255,255,255,0.95)");
-    outer.addColorStop(0.12, color);
-    outer.addColorStop(1, "#09111a");
+    gradient.addColorStop(0, "rgba(255,255,255,0.95)");
+    gradient.addColorStop(0.12, color);
+    gradient.addColorStop(1, "#09111a");
   }
 
   ctx.beginPath();
@@ -189,7 +208,7 @@ function createBallSprite(radius, color, options = {}) {
 
   ctx.beginPath();
   ctx.arc(center, center, radius, 0, Math.PI * 2);
-  ctx.fillStyle = outer;
+  ctx.fillStyle = gradient;
   ctx.fill();
 
   ctx.beginPath();
@@ -208,13 +227,87 @@ function createBallSprite(radius, color, options = {}) {
     ctx.font = `${Math.round(radius * (ominous ? 0.9 : 0.98))}px Sora`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(icon, center, center + 0.2);
+    ctx.fillText(icon, center, center + 0.4);
   }
 
   return canvas;
 }
 
-function buildPanel(kind, summary) {
+function buildSlots(width, height, requiredSlots, maxMultiplier) {
+  const paddingX = 18;
+  const paddingTop = 18;
+  const paddingBottom = 18;
+  const centerX = width / 2;
+  const leftBound = paddingX;
+  const rightBound = width - paddingX;
+  let fallback = null;
+
+  for (let baseRadius = 24; baseRadius >= 8; baseRadius -= 0.25) {
+    const maxRadius = baseRadius * maxMultiplier;
+    const stepX = maxRadius * 2.02;
+    const stepY = maxRadius * 1.74;
+    const slots = [];
+    let rowIndex = 0;
+
+    for (let y = height - paddingBottom - maxRadius; y >= paddingTop + maxRadius; y -= stepY) {
+      const rowSlots = [];
+      if (rowIndex % 2 === 0) {
+        for (let step = 0; ; step += 1) {
+          let added = false;
+          if (step === 0) {
+            if (centerX - maxRadius >= leftBound && centerX + maxRadius <= rightBound) {
+              rowSlots.push({ x: centerX, y });
+              added = true;
+            }
+          } else {
+            const leftX = centerX - step * stepX;
+            const rightX = centerX + step * stepX;
+            if (leftX - maxRadius >= leftBound) {
+              rowSlots.push({ x: leftX, y });
+              added = true;
+            }
+            if (rightX + maxRadius <= rightBound) {
+              rowSlots.push({ x: rightX, y });
+              added = true;
+            }
+          }
+          if (!added) break;
+        }
+      } else {
+        for (let step = 0; ; step += 1) {
+          const offset = (step + 0.5) * stepX;
+          const leftX = centerX - offset;
+          const rightX = centerX + offset;
+          let added = false;
+          if (leftX - maxRadius >= leftBound) {
+            rowSlots.push({ x: leftX, y });
+            added = true;
+          }
+          if (rightX + maxRadius <= rightBound) {
+            rowSlots.push({ x: rightX, y });
+            added = true;
+          }
+          if (!added) break;
+        }
+      }
+
+      slots.push(...rowSlots);
+      rowIndex += 1;
+    }
+
+    const plan = { baseRadius, maxRadius, slots };
+    if (!fallback) {
+      fallback = plan;
+    }
+    if (slots.length >= requiredSlots) {
+      return plan;
+    }
+  }
+
+  return fallback;
+}
+
+function buildPanel(kind, slotPlan) {
   const canvas = kind === "current" ? refs.currentCanvas : refs.scenarioCanvas;
   const width = canvas.clientWidth;
   const height = canvas.clientHeight;
@@ -224,24 +317,12 @@ function buildPanel(kind, summary) {
   const ctx = canvas.getContext("2d");
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-  const expectedBalls = Math.round(summary.currentTotal / state.data.ballScale);
-  const innerWidth = width - 48;
-  const innerHeight = height - 44;
-  const radius = Math.max(
-    11,
-    Math.min(18, Math.sqrt((innerWidth * innerHeight) / (Math.max(expectedBalls, 1) * 3.15)))
-  );
-
   const sprites = {};
   const categoryVisuals = {};
-  let maxRadius = radius;
   state.data.categories.forEach((category) => {
-    const categoryRadius = radius * (category.sizeMultiplier || 1);
-    maxRadius = Math.max(maxRadius, categoryRadius);
-    categoryVisuals[category.id] = {
-      radius: categoryRadius,
-    };
-    sprites[category.id] = createBallSprite(categoryRadius, category.color, {
+    const radius = slotPlan.baseRadius * (category.sizeMultiplier || 1);
+    categoryVisuals[category.id] = { radius };
+    sprites[category.id] = createBallSprite(radius, category.color, {
       icon: category.icon ? "☠" : "",
       ominous: Boolean(category.ominous),
     });
@@ -253,20 +334,15 @@ function buildPanel(kind, summary) {
     ctx,
     width,
     height,
-    radius,
-    padding: 18,
-    floorY: height - 18,
-    leftWall: 18,
-    rightWall: width - 18,
-    maxRadius,
-    balls: [],
-    activeQueue: [],
-    tokenIndex: 0,
-    tokens: [],
-    fullBallCount: 0,
+    slots: slotPlan.slots,
+    slotPlan,
     sprites,
     categoryVisuals,
     spawnRng: mulberry32(hashString(`${kind}-${Math.round(state.share * 1000)}`)),
+    tokens: [],
+    tokenIndex: 0,
+    balls: [],
+    fullBallCount: 0,
   };
 }
 
@@ -316,8 +392,17 @@ function buildTimeline(kind, categories) {
 
 function rebuildPanels() {
   const summary = computeSummary(state.share);
-  state.currentPanel = buildPanel("current", summary);
-  state.scenarioPanel = buildPanel("scenario", summary);
+  const currentBallTarget = Math.round(summary.currentTotal / state.data.ballScale);
+  const maxMultiplier = Math.max(...state.data.categories.map((category) => category.sizeMultiplier || 1));
+  const slotPlan = buildSlots(
+    refs.currentCanvas.clientWidth,
+    refs.currentCanvas.clientHeight,
+    currentBallTarget + 12,
+    maxMultiplier
+  );
+
+  state.currentPanel = buildPanel("current", slotPlan);
+  state.scenarioPanel = buildPanel("scenario", slotPlan);
 
   const currentTimeline = buildTimeline("current", summary.categories);
   state.currentPanel.tokens = currentTimeline.tokens;
@@ -357,7 +442,6 @@ function updateText() {
 
 function restartSimulation() {
   state.restartAt = performance.now();
-  state.lastFrameAt = state.restartAt;
   updateText();
   rebuildPanels();
 }
@@ -374,254 +458,35 @@ function getSimulationNow() {
   return elapsed - catchupMs;
 }
 
-function spawnBall(panel, token) {
-  const rng = panel.spawnRng;
-  const spread = (panel.rightWall - panel.leftWall) * 0.32;
+function spawnBall(panel, token, now) {
+  const slotIndex = panel.balls.length;
+  const slot = panel.slots[slotIndex];
+  if (!slot) return;
+
   const radius = panel.categoryVisuals[token.categoryId].radius;
-  const x = (panel.leftWall + panel.rightWall) / 2 + (rng() - 0.5) * spread;
-  const y = -radius - rng() * 28;
   panel.balls.push({
     id: token.id,
-    tokenTime: token.time,
     categoryId: token.categoryId,
-    x: Math.max(panel.leftWall + radius, Math.min(panel.rightWall - radius, x)),
-    y,
-    vx: (rng() - 0.5) * 80,
-    vy: rng() * 30,
-    r: radius,
-    dead: false,
-    sleeping: false,
-    restFrames: 0,
-    supported: false,
+    targetX: slot.x,
+    targetY: slot.y,
+    targetIndex: slotIndex,
+    startY: -radius * 4 - panel.spawnRng() * 38,
+    spawnAt: now,
+    dropDuration: 760 + panel.spawnRng() * 260,
   });
-  panel.activeQueue.push(token.id);
 }
 
-function pruneExpired(panel, startTime) {
-  let pruned = false;
-  while (panel.activeQueue.length > 0) {
-    const id = panel.activeQueue[0];
-    const body = panel.balls.find((ball) => ball.id === id);
-    if (!body || body.tokenTime <= startTime) {
-      panel.activeQueue.shift();
-      if (body) {
-        body.dead = true;
-        pruned = true;
-      }
-      continue;
-    }
-    break;
-  }
-
-  if (pruned) {
-    panel.balls = panel.balls.filter((ball) => !ball.dead);
-  }
-}
-
-function syncPanel(panel, simulationNow) {
-  const windowStart = simulationNow - state.data.windowDays * DAY_MS;
+function syncPanel(panel, simulationNow, now) {
   while (
     panel.tokenIndex < panel.tokens.length &&
     panel.tokens[panel.tokenIndex].time <= simulationNow
   ) {
-    const token = panel.tokens[panel.tokenIndex];
-    if (token.time > windowStart) {
-      spawnBall(panel, token);
-    }
+    spawnBall(panel, panel.tokens[panel.tokenIndex], now);
     panel.tokenIndex += 1;
   }
-  pruneExpired(panel, windowStart);
 }
 
-function resolveWallCollisions(panel, body) {
-  const wallBounce = 0.58;
-  const floorBounce = 0.48;
-
-  if (body.sleeping) {
-    if (body.x - body.r < panel.leftWall) {
-      body.x = panel.leftWall + body.r;
-    } else if (body.x + body.r > panel.rightWall) {
-      body.x = panel.rightWall - body.r;
-    }
-    if (body.y + body.r > panel.floorY) {
-      body.y = panel.floorY - body.r;
-    }
-    return;
-  }
-
-  if (body.x - body.r < panel.leftWall) {
-    body.x = panel.leftWall + body.r;
-    body.vx = Math.abs(body.vx) * wallBounce;
-  } else if (body.x + body.r > panel.rightWall) {
-    body.x = panel.rightWall - body.r;
-    body.vx = -Math.abs(body.vx) * wallBounce;
-  }
-
-  if (body.y + body.r > panel.floorY) {
-    body.y = panel.floorY - body.r;
-    body.vy = -Math.abs(body.vy) * floorBounce;
-    body.vx *= 0.94;
-    body.supported = true;
-    if (Math.abs(body.vy) < 16) {
-      body.vy = 0;
-    }
-    if (Math.abs(body.vx) < 4) {
-      body.vx = 0;
-    }
-  }
-}
-
-function resolveBodyCollisions(panel) {
-  const cellSize = panel.maxRadius * 2.5;
-  const grid = new Map();
-
-  panel.balls.forEach((body, index) => {
-    const cellX = Math.floor(body.x / cellSize);
-    const cellY = Math.floor(body.y / cellSize);
-    const key = `${cellX},${cellY}`;
-    if (!grid.has(key)) {
-      grid.set(key, []);
-    }
-    grid.get(key).push(index);
-  });
-
-  const restitution = 0.32;
-  const friction = 0.05;
-
-  panel.balls.forEach((body, index) => {
-    const cellX = Math.floor(body.x / cellSize);
-    const cellY = Math.floor(body.y / cellSize);
-
-    for (let dx = -1; dx <= 1; dx += 1) {
-      for (let dy = -1; dy <= 1; dy += 1) {
-        const bucket = grid.get(`${cellX + dx},${cellY + dy}`);
-        if (!bucket) continue;
-
-        bucket.forEach((otherIndex) => {
-          if (otherIndex <= index) return;
-
-          const other = panel.balls[otherIndex];
-          if (body.sleeping && other.sleeping) return;
-          const diffX = other.x - body.x;
-          const diffY = other.y - body.y;
-          const minDist = body.r + other.r;
-          const distSq = diffX * diffX + diffY * diffY;
-
-          if (distSq === 0 || distSq >= minDist * minDist) return;
-
-          const distance = Math.sqrt(distSq);
-          const nx = diffX / distance;
-          const ny = diffY / distance;
-          const overlap = minDist - distance;
-          const bodyShareBase = body.sleeping ? 0.03 : 0.5;
-          const otherShareBase = other.sleeping ? 0.03 : 0.5;
-          const shareTotal = bodyShareBase + otherShareBase;
-          const bodyShare = bodyShareBase / shareTotal;
-          const otherShare = otherShareBase / shareTotal;
-
-          body.x -= nx * overlap * bodyShare;
-          body.y -= ny * overlap * bodyShare;
-          other.x += nx * overlap * otherShare;
-          other.y += ny * overlap * otherShare;
-
-          if (ny > 0.32) {
-            body.supported = true;
-          } else if (ny < -0.32) {
-            other.supported = true;
-          }
-
-          const relVx = other.vx - body.vx;
-          const relVy = other.vy - body.vy;
-          const normalVelocity = relVx * nx + relVy * ny;
-
-          if (Math.abs(normalVelocity) > 54) {
-            body.sleeping = false;
-            other.sleeping = false;
-            body.restFrames = 0;
-            other.restFrames = 0;
-          }
-
-          if (normalVelocity < 0) {
-            const collisionRestitution =
-              body.sleeping || other.sleeping ? 0.22 : restitution;
-            const impulse = (-(1 + collisionRestitution) * normalVelocity) / 2;
-            if (!body.sleeping) {
-              body.vx -= impulse * nx;
-              body.vy -= impulse * ny;
-            }
-            if (!other.sleeping) {
-              other.vx += impulse * nx;
-              other.vy += impulse * ny;
-            }
-
-            const tx = -ny;
-            const ty = nx;
-            const tangentVelocity = relVx * tx + relVy * ty;
-            const tangentImpulse = tangentVelocity * friction;
-            if (!body.sleeping) {
-              body.vx += tangentImpulse * tx;
-              body.vy += tangentImpulse * ty;
-            }
-            if (!other.sleeping) {
-              other.vx -= tangentImpulse * tx;
-              other.vy -= tangentImpulse * ty;
-            }
-          }
-
-          if (body.sleeping) {
-            body.vx = 0;
-            body.vy = 0;
-          }
-          if (other.sleeping) {
-            other.vx = 0;
-            other.vy = 0;
-          }
-        });
-      }
-    }
-  });
-}
-
-function stepPhysics(panel, dt) {
-  const steps = Math.max(1, Math.ceil(dt / 0.008));
-  const step = dt / steps;
-
-  for (let iteration = 0; iteration < steps; iteration += 1) {
-    panel.balls.forEach((body) => {
-      body.supported = body.y + body.r >= panel.floorY - 0.8;
-      if (body.sleeping) {
-        body.vx = 0;
-        body.vy = 0;
-        return;
-      }
-      body.vy += 2400 * step;
-      body.x += body.vx * step;
-      body.y += body.vy * step;
-      body.vx *= Math.pow(0.989, step * 60);
-      body.vy *= Math.pow(0.995, step * 60);
-      resolveWallCollisions(panel, body);
-    });
-
-    resolveBodyCollisions(panel);
-    panel.balls.forEach((body) => {
-      resolveWallCollisions(panel, body);
-      if (body.sleeping) return;
-      const nearlyStill = Math.abs(body.vx) < 7 && Math.abs(body.vy) < 9;
-      if (body.supported && nearlyStill) {
-        body.restFrames += 1;
-      } else {
-        body.restFrames = 0;
-      }
-      if (body.restFrames > 18) {
-        body.sleeping = true;
-        body.vx = 0;
-        body.vy = 0;
-      }
-    });
-  }
-}
-
-function drawVessel(panel) {
+function drawVessel(panel, now) {
   const { ctx, width, height } = panel;
 
   ctx.clearRect(0, 0, width, height);
@@ -641,7 +506,7 @@ function drawVessel(panel) {
   glow.addColorStop(0, "rgba(140,180,255,0.18)");
   glow.addColorStop(1, "rgba(140,180,255,0)");
   ctx.fillStyle = glow;
-  ctx.fillRect(0, 0, width, height * 0.4);
+  ctx.fillRect(0, 0, width, height * 0.36);
 
   ctx.fillStyle = "rgba(255,255,255,0.02)";
   ctx.fillRect(14, 14, width - 28, height - 28);
@@ -653,17 +518,25 @@ function drawVessel(panel) {
   ctx.lineTo(width * 0.78, 18);
   ctx.stroke();
 
-  panel.balls
-    .slice()
-    .sort((left, right) => left.y - right.y)
-    .forEach((body) => {
-      const sprite = panel.sprites[body.categoryId];
-      ctx.drawImage(
-        sprite,
-        body.x - sprite.width / 2,
-        body.y - sprite.height / 2
-      );
-    });
+  const drawBalls = panel.balls
+    .map((ball) => {
+      const elapsed = Math.max(0, now - ball.spawnAt);
+      const progress = Math.min(1, elapsed / ball.dropDuration);
+      return {
+        ...ball,
+        y: ball.startY + bounceOut(progress) * (ball.targetY - ball.startY),
+      };
+    })
+    .sort((left, right) => left.targetY - right.targetY);
+
+  drawBalls.forEach((ball) => {
+    const sprite = panel.sprites[ball.categoryId];
+    ctx.drawImage(
+      sprite,
+      ball.targetX - sprite.width / 2,
+      ball.y - sprite.height / 2
+    );
+  });
 
   ctx.restore();
 
@@ -694,8 +567,8 @@ function updateStatuses(simulationNow) {
     )} / ${state.data.windowDays} days`;
     refs.scenarioStatus.textContent = "Move the slider to restart the drop";
   } else {
-    refs.currentStatus.textContent = "Live mode: the 30-day window now advances in real time";
-    refs.scenarioStatus.textContent = "Live mode: new balls now arrive at the counterfactual rate";
+    refs.currentStatus.textContent = `Live mode: the ${state.data.windowDays}-day window now advances in real time`;
+    refs.scenarioStatus.textContent = "Live mode: new balls arrive at the counterfactual rate";
   }
 
   refs.currentBallCount.textContent = `${formatInt(
@@ -708,17 +581,11 @@ function updateStatuses(simulationNow) {
 
 function render(now) {
   const simulationNow = getSimulationNow();
-  const dt = Math.min(0.03, (now - state.lastFrameAt) / 1000);
-  state.lastFrameAt = now;
-
-  syncPanel(state.currentPanel, simulationNow);
-  syncPanel(state.scenarioPanel, simulationNow);
-  stepPhysics(state.currentPanel, dt);
-  stepPhysics(state.scenarioPanel, dt);
-  drawVessel(state.currentPanel);
-  drawVessel(state.scenarioPanel);
+  syncPanel(state.currentPanel, simulationNow, now);
+  syncPanel(state.scenarioPanel, simulationNow, now);
+  drawVessel(state.currentPanel, now);
+  drawVessel(state.scenarioPanel, now);
   updateStatuses(simulationNow);
-
   state.animationFrame = requestAnimationFrame(render);
 }
 
