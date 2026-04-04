@@ -88,21 +88,31 @@ h1 {
   max-width: none;
   color: transparent;
   background:
-    linear-gradient(90deg, #f7fbff 0%, #dce7f5 38%, #9df0d3 72%, rgba(157, 240, 211, 0.3) 100%);
+    linear-gradient(
+      90deg,
+      #fff4f1 0%,
+      #ffb0a4 16%,
+      #ff675f 38%,
+      #da233e 64%,
+      #7b1123 86%,
+      rgba(52, 8, 15, 0.16) 100%
+    );
   -webkit-background-clip: text;
   background-clip: text;
-  text-shadow: 0 0 22px rgba(157, 240, 211, 0.08);
-  animation: headlineFade 8s ease-in-out infinite alternate;
+  text-shadow:
+    0 0 16px rgba(212, 38, 60, 0.18),
+    0 0 38px rgba(108, 15, 31, 0.2);
+  animation: headlineFade 6.5s ease-in-out infinite alternate;
 }
 
 @keyframes headlineFade {
   0% {
-    filter: brightness(0.96);
-    opacity: 0.9;
+    filter: brightness(0.96) saturate(0.96);
+    opacity: 0.92;
   }
 
   100% {
-    filter: brightness(1.08);
+    filter: brightness(1.08) saturate(1.12);
     opacity: 1;
   }
 }
