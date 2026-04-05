@@ -28,6 +28,7 @@ const AUTO_WINDOW_OPTIONS_DAYS = [
 
 const refs = {
   headline: document.querySelector("#headline"),
+  headlineGeo: document.querySelector("#headlineGeo"),
   vesselSubhead: document.querySelector("#vesselSubhead"),
   slider: document.querySelector("#automationShare"),
   shareValue: document.querySelector("#shareValue"),
@@ -843,7 +844,7 @@ function updateText() {
   const windowPhrase = formatWindowPhrase(state.windowDays);
   const shareText = formatterPct.format(state.share);
 
-  refs.headline.textContent = `Death and Destruction on ${roadLabel} Roads: Humans vs. Robots`;
+  refs.headlineGeo.textContent = roadLabel;
   refs.vesselSubhead.textContent = `Crashes over ${windowPhrase}`;
   refs.shareValue.textContent = shareText;
   refs.scenarioCopy.textContent = `${windowLabel} counterfactual`;
