@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Last 30 Days on Washington Roads</title>
+    <title>The Last 7 Days on U.S. Roads</title>
     <meta
       name="description"
-      content="A dark, animated Washington road-safety counterfactual showing how the last 30 days of crashes and deaths might look with more automated driving."
+      content="A dark animated automated-driving counterfactual for the United States or any individual state."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,14 +19,14 @@
   <body>
     <main class="shell">
       <header class="hero">
-        <h1>Death and Destruction on WA Roads: Humans vs. Robots</h1>
-        <p class="lede">
-          One ball is one estimated crash in the last 30 days. Left is today's toll.
-          Right is the same month with more automated.
+        <h1 id="headline">Death and Destruction on U.S. Roads: Humans vs. Robots</h1>
+        <p class="lede" id="lede">
+          One ball is one estimated crash in the last 7 days. Left is today's toll.
+          Right is the same period with more automated.
         </p>
       </header>
 
-      <p class="vessel-subhead">Crashes over last 30 days</p>
+      <p class="vessel-subhead" id="vesselSubhead">Crashes over last 7 days</p>
 
       <section class="vessels">
         <article class="panel card">
@@ -35,7 +35,7 @@
               <h2>Current human mayhem</h2>
             </div>
             <div class="panel-summary">
-              <strong id="currentTotal">8,309</strong>
+              <strong id="currentTotal">117,722</strong>
               <span>crashes</span>
             </div>
           </div>
@@ -43,8 +43,8 @@
             <canvas id="currentCanvas" aria-label="Current human mayhem vessel"></canvas>
           </div>
           <div class="panel-footer">
-            <span id="currentStatus">Replaying the last 30 days</span>
-            <span id="currentBallCount">0 / 8,309 balls</span>
+            <span id="currentStatus">Replaying the last 7 days</span>
+            <span id="currentBallCount">0 / 4,709 balls</span>
           </div>
         </article>
 
@@ -54,7 +54,7 @@
               <h2 id="scenarioTitle">If robots drove 50% of the time</h2>
             </div>
             <div class="panel-summary">
-              <strong id="scenarioTotal">4,604</strong>
+              <strong id="scenarioTotal">65,259</strong>
               <span>crashes</span>
             </div>
           </div>
@@ -62,8 +62,8 @@
             <canvas id="scenarioCanvas" aria-label="Robot-driving counterfactual vessel"></canvas>
           </div>
           <div class="panel-footer">
-            <span id="scenarioStatus">Replay restarts whenever the slider moves</span>
-            <span id="scenarioBallCount">0 / 4,604 balls</span>
+            <span id="scenarioStatus">Move any control to restart the drop</span>
+            <span id="scenarioBallCount">0 / 2,610 balls</span>
           </div>
         </article>
       </section>
@@ -75,7 +75,7 @@
           </label>
           <div class="slider-headline">
             <strong id="shareValue">50%</strong>
-            <span id="scenarioCopy">robot-driving replay</span>
+            <span id="scenarioCopy">7-day counterfactual</span>
           </div>
           <input
             id="automationShare"
@@ -86,16 +86,24 @@
             value="50"
           />
         </div>
-        <p class="scenario-note" id="scenarioNote">
-          At 50%, robots avert an estimated 27.6 deaths and 124.1 serious injuries in
-          30 days.
-        </p>
-      </section>
 
-      <p class="pedestrian-note" id="pedestrianNote">
-        Pedestrian-marked balls show 171 pedestrian-involved crashes in this 30-day
-        replay and 92 if robots drove 50% of the time.
-      </p>
+        <p class="scenario-note" id="scenarioNote">
+          At 50%, automation averts 52,463 crashes, 361 deaths, and 1,706 serious
+          injuries in the last 7 days.
+        </p>
+
+        <div class="selector-grid">
+          <label class="selector-field" for="windowDays">
+            <span>Period shown</span>
+            <select id="windowDays"></select>
+          </label>
+
+          <label class="selector-field" for="geographySelect">
+            <span>Geography</span>
+            <select id="geographySelect"></select>
+          </label>
+        </div>
+      </section>
 
       <section class="legend-row" aria-label="Severity legend">
         <div class="legend-item">
@@ -108,42 +116,38 @@
         </div>
         <div class="legend-item">
           <span class="legend-ball minor"></span>
-          <span>Suspected minor injury crashes</span>
+          <span>Minor injury crashes</span>
         </div>
         <div class="legend-item">
           <span class="legend-ball serious"></span>
-          <span>Suspected serious injury crashes</span>
+          <span>Serious injury crashes</span>
         </div>
         <div class="legend-item">
           <span class="legend-ball death">☠</span>
-          <span>Traffic deaths</span>
-        </div>
-        <div class="legend-item">
-          <span class="legend-ball pedestrian">P</span>
-          <span>Pedestrian-involved subset</span>
+          <span>Fatal crashes</span>
         </div>
       </section>
 
       <section class="headline-metrics">
         <article class="headline-card card">
-          <span class="metric-kicker">Estimated last 30 days</span>
-          <strong id="metricDeaths">59.9</strong>
+          <span class="metric-kicker" id="metricDeathsKicker">Estimated in last 7 days</span>
+          <strong id="metricDeaths">785</strong>
           <span class="metric-label">traffic deaths</span>
         </article>
         <article class="headline-card card">
-          <span class="metric-kicker">Estimated last 30 days</span>
-          <strong id="metricSeriousInjuries">269.7</strong>
+          <span class="metric-kicker" id="metricSeriousKicker">Estimated in last 7 days</span>
+          <strong id="metricSeriousInjuries">3,709</strong>
           <span class="metric-label">serious injuries</span>
         </article>
         <article class="headline-card card accent">
           <span class="metric-kicker">Avoided at current slider</span>
-          <strong id="metricAvoidedDeaths">27.6</strong>
-          <span class="metric-label">fewer deaths</span>
+          <strong id="metricAvoidedCrashes">52,463</strong>
+          <span class="metric-label">fewer crashes</span>
         </article>
         <article class="headline-card card accent">
           <span class="metric-kicker">Avoided at current slider</span>
-          <strong id="metricAvoidedSerious">124.1</strong>
-          <span class="metric-label">fewer serious injuries</span>
+          <strong id="metricAvoidedDeaths">361</strong>
+          <span class="metric-label">fewer deaths</span>
         </article>
       </section>
 
@@ -152,32 +156,29 @@
           <p class="eyebrow">Method</p>
           <h3>Simple, transparent arithmetic</h3>
           <p>
-            This animation compresses the last 30 days into 30 seconds, then advances
-            in real time. It now uses <strong>one ball per estimated event</strong> in
-            this 30-day window. Death balls are deliberately drawn much larger for
-            emphasis, so size is not area-proportional across categories.
-          </p>
-          <p>
-            For each category, the right vessel applies:
-            <code>baseline × (1 - automated share × safety effect)</code>
+            This animation compresses the selected time window into 30 seconds, then
+            advances in real time. When a geography or time span is too large to draw
+            one ball per crash, the ball count scales down and the copy tells you how
+            many crashes each ball stands for.
           </p>
           <ul class="note-list">
             <li>
-              No-injury crashes use an <strong>88%</strong> safety effect, mapped from
-              Waymo and Swiss Re's property-damage claim comparison.
+              Traffic deaths and serious injuries come directly from the FHWA
+              performance dashboard, using 2023 data and the latest prior year only if
+              a 2023 serious-injury value is missing.
             </li>
             <li>
-              Injury crashes and deaths use a <strong>92%</strong> safety effect, mapped
-              from Waymo and Swiss Re's bodily-injury claim comparison.
+              Lower-severity crash counts are estimated from inferred vehicle miles
+              traveled and the 2023 national NHTSA crash rates.
             </li>
             <li>
-              Unknown-severity crashes are excluded from the ball mix:
-              <strong id="unknownExcluded">2,971</strong> in 2024.
+              Serious-injury crashes and fatal-crash balls are estimated from injury
+              and death counts, so the cards show people while the vessel balls show
+              crashes.
             </li>
             <li>
-              Pedestrian-marked balls are a highlighted subset from WSDOT's
-              <strong>2024 Pedestrian Involved</strong> report. They are included in
-              the main totals, not added on top.
+              The right vessel applies an 88% reduction to no-injury crashes and a 92%
+              reduction to injury and fatal crashes.
             </li>
           </ul>
         </article>
@@ -187,13 +188,13 @@
           <h3>Original data and downloadable summary</h3>
           <ul class="link-list">
             <li>
-              <a href="https://remoteapps.wsdot.wa.gov/HighwaySafety/Collision/Data/Portal/Public/">
-                WSDOT Crash Data Portal
+              <a href="https://www.fhwa.dot.gov/tpm/reporting/state/tpm_dashboard_data.zip">
+                FHWA TPM dashboard data workbook
               </a>
             </li>
             <li>
-              <a href="https://wtsc.wa.gov/wp-content/uploads/dlm_uploads/2025/10/11_State-of-the-State_Oct2025.pdf">
-                WTSC Brief No. 11: State of the State, October 2025
+              <a href="https://cdan.dot.gov/TSFTables/National%20Statistics.xlsx">
+                NHTSA National Statistics workbook
               </a>
             </li>
             <li>
@@ -203,17 +204,17 @@
             </li>
             <li>
               <a href="https://waymo.com/safety/">
-                Waymo safety overview and Swiss Re claims comparison
+                Waymo safety overview and Swiss Re comparison
               </a>
             </li>
             <li>
-              <a href="data/wa-ball-summary.csv">Download the summary table used here</a>
+              <a href="data/us-state-ball-summary.csv">Download the summary table used here</a>
             </li>
           </ul>
           <p class="policy-note">
-            If automated fleets keep proving materially safer, the state should avoid
-            unnecessary barriers and consider incentives that let the safer option
-            scale faster, while leaving people free to drive themselves.
+            If safer automated fleets keep proving themselves, lawmakers should avoid
+            unnecessary barriers and consider incentives that accelerate adoption
+            without taking away anyone's freedom to drive.
           </p>
         </article>
       </section>

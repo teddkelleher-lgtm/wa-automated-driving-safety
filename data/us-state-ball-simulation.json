@@ -1,0 +1,1142 @@
+{
+  "baselineYear": 2023,
+  "daysInBaselineYear": 365,
+  "catchupSeconds": 30,
+  "futureHorizonDays": 45,
+  "defaultAutomationShare": 0.5,
+  "defaultWindowDays": 7,
+  "windowOptions": [
+    1,
+    2,
+    7,
+    14,
+    30,
+    60
+  ],
+  "defaultGeography": "us",
+  "maxDisplayBalls": 4800,
+  "summary": {
+    "propertyDamageReduction": 0.88,
+    "injuryAndDeathReduction": 0.92,
+    "annualTrafficDeathsUs": 40901,
+    "annualSeriousInjuriesUs": 193419,
+    "annualFatalCrashesUs": 37654,
+    "annualInjuryCrashesUs": 1697252,
+    "annualPropertyDamageOnlyCrashesUs": 4403453,
+    "nationalInjuryCrashRatePer100MVmt": 52.27594,
+    "nationalPdoCrashRatePer100MVmt": 135.627854,
+    "fatalitiesPerFatalCrash": 1.086233,
+    "seriousInjuriesPerSeriousInjuryCrash": 1.16419,
+    "possibleShareOfNonSeriousInjuryCrashes": 0.553582,
+    "minorShareOfNonSeriousInjuryCrashes": 0.446418
+  },
+  "categories": [
+    {
+      "id": "no_injury",
+      "label": "No injury crashes",
+      "unit": "crashes",
+      "reduction": 0.88,
+      "color": "#4a5b68"
+    },
+    {
+      "id": "possible_injury",
+      "label": "Possible injury crashes",
+      "unit": "crashes",
+      "reduction": 0.92,
+      "color": "#58a6ff"
+    },
+    {
+      "id": "minor_injury",
+      "label": "Minor injury crashes",
+      "unit": "crashes",
+      "reduction": 0.92,
+      "color": "#ffb84a"
+    },
+    {
+      "id": "serious_injury",
+      "label": "Serious injury crashes",
+      "unit": "crashes",
+      "reduction": 0.92,
+      "color": "#ff7b57"
+    },
+    {
+      "id": "fatal_crash",
+      "label": "Fatal crashes",
+      "unit": "crashes",
+      "reduction": 0.92,
+      "color": "#c81d3d",
+      "icon": "skull",
+      "sizeMultiplier": 10,
+      "ominous": true
+    }
+  ],
+  "geographyOrder": [
+    "us",
+    "al",
+    "ak",
+    "az",
+    "ar",
+    "ca",
+    "co",
+    "ct",
+    "de",
+    "dc",
+    "fl",
+    "ga",
+    "hi",
+    "id",
+    "il",
+    "in",
+    "ia",
+    "ks",
+    "ky",
+    "la",
+    "me",
+    "md",
+    "ma",
+    "mi",
+    "mn",
+    "ms",
+    "mo",
+    "mt",
+    "ne",
+    "nv",
+    "nh",
+    "nj",
+    "nm",
+    "ny",
+    "nc",
+    "nd",
+    "oh",
+    "ok",
+    "or",
+    "pa",
+    "ri",
+    "sc",
+    "sd",
+    "tn",
+    "tx",
+    "ut",
+    "vt",
+    "va",
+    "wa",
+    "wv",
+    "wi",
+    "wy"
+  ],
+  "geographies": {
+    "us": {
+      "code": "us",
+      "name": "United States",
+      "annualTrafficDeaths": 40901,
+      "annualSeriousInjuries": 193419,
+      "annualCounts": {
+        "no_injury": 4403450,
+        "possible_injury": 847596,
+        "minor_injury": 683518,
+        "serious_injury": 166136,
+        "fatal_crash": 37656
+      },
+      "inferredVmt": 3246717299179,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "al": {
+      "code": "al",
+      "name": "Alabama",
+      "annualTrafficDeaths": 974,
+      "annualSeriousInjuries": 4860,
+      "annualCounts": {
+        "no_injury": 97853,
+        "possible_injury": 18568,
+        "minor_injury": 14973,
+        "serious_injury": 4175,
+        "fatal_crash": 897
+      },
+      "inferredVmt": 72148148148,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "ak": {
+      "code": "ak",
+      "name": "Alaska",
+      "annualTrafficDeaths": 60,
+      "annualSeriousInjuries": 251,
+      "annualCounts": {
+        "no_injury": 7605,
+        "possible_injury": 1503,
+        "minor_injury": 1212,
+        "serious_injury": 216,
+        "fatal_crash": 55
+      },
+      "inferredVmt": 5607476636,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2022
+      }
+    },
+    "az": {
+      "code": "az",
+      "name": "Arizona",
+      "annualTrafficDeaths": 1304,
+      "annualSeriousInjuries": 3706,
+      "annualCounts": {
+        "no_injury": 102230,
+        "possible_injury": 20051,
+        "minor_injury": 16169,
+        "serious_injury": 3183,
+        "fatal_crash": 1200
+      },
+      "inferredVmt": 75375722543,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "ar": {
+      "code": "ar",
+      "name": "Arkansas",
+      "annualTrafficDeaths": 596,
+      "annualSeriousInjuries": 2791,
+      "annualCounts": {
+        "no_injury": 53180,
+        "possible_injury": 10020,
+        "minor_injury": 8081,
+        "serious_injury": 2397,
+        "fatal_crash": 549
+      },
+      "inferredVmt": 39210526316,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "ca": {
+      "code": "ca",
+      "name": "California",
+      "annualTrafficDeaths": 4061,
+      "annualSeriousInjuries": 16638,
+      "annualCounts": {
+        "no_injury": 430301,
+        "possible_injury": 83902,
+        "minor_injury": 67661,
+        "serious_injury": 14291,
+        "fatal_crash": 3739
+      },
+      "inferredVmt": 317265625000,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "co": {
+      "code": "co",
+      "name": "Colorado",
+      "annualTrafficDeaths": 720,
+      "annualSeriousInjuries": 4154,
+      "annualCounts": {
+        "no_injury": 73979,
+        "possible_injury": 13810,
+        "minor_injury": 11136,
+        "serious_injury": 3568,
+        "fatal_crash": 663
+      },
+      "inferredVmt": 54545454545,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "ct": {
+      "code": "ct",
+      "name": "Connecticut",
+      "annualTrafficDeaths": 308,
+      "annualSeriousInjuries": 1358,
+      "annualCounts": {
+        "no_injury": 41360,
+        "possible_injury": 8180,
+        "minor_injury": 6596,
+        "serious_injury": 1166,
+        "fatal_crash": 284
+      },
+      "inferredVmt": 30495049505,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "de": {
+      "code": "de",
+      "name": "Delaware",
+      "annualTrafficDeaths": 135,
+      "annualSeriousInjuries": 547,
+      "annualCounts": {
+        "no_injury": 13172,
+        "possible_injury": 2550,
+        "minor_injury": 2057,
+        "serious_injury": 470,
+        "fatal_crash": 124
+      },
+      "inferredVmt": 9712230216,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "dc": {
+      "code": "dc",
+      "name": "District Of Columbia",
+      "annualTrafficDeaths": 44,
+      "annualSeriousInjuries": 352,
+      "annualCounts": {
+        "no_injury": 4736,
+        "possible_injury": 844,
+        "minor_injury": 680,
+        "serious_injury": 302,
+        "fatal_crash": 41
+      },
+      "inferredVmt": 3492063492,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "fl": {
+      "code": "fl",
+      "name": "Florida",
+      "annualTrafficDeaths": 3396,
+      "annualSeriousInjuries": 16000,
+      "annualCounts": {
+        "no_injury": 324361,
+        "possible_injury": 61601,
+        "minor_injury": 49676,
+        "serious_injury": 13743,
+        "fatal_crash": 3126
+      },
+      "inferredVmt": 239154929577,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "ga": {
+      "code": "ga",
+      "name": "Georgia",
+      "annualTrafficDeaths": 1615,
+      "annualSeriousInjuries": 8179,
+      "annualCounts": {
+        "no_injury": 171124,
+        "possible_injury": 32624,
+        "minor_injury": 26309,
+        "serious_injury": 7025,
+        "fatal_crash": 1487
+      },
+      "inferredVmt": 126171875000,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "hi": {
+      "code": "hi",
+      "name": "Hawaii",
+      "annualTrafficDeaths": 93,
+      "annualSeriousInjuries": 512,
+      "annualCounts": {
+        "no_injury": 14172,
+        "possible_injury": 2781,
+        "minor_injury": 2242,
+        "serious_injury": 440,
+        "fatal_crash": 86
+      },
+      "inferredVmt": 10449438202,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "id": {
+      "code": "id",
+      "name": "Idaho",
+      "annualTrafficDeaths": 275,
+      "annualSeriousInjuries": 1228,
+      "annualCounts": {
+        "no_injury": 26833,
+        "possible_injury": 5141,
+        "minor_injury": 4146,
+        "serious_injury": 1055,
+        "fatal_crash": 253
+      },
+      "inferredVmt": 19784172662,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "il": {
+      "code": "il",
+      "name": "Illinois",
+      "annualTrafficDeaths": 1241,
+      "annualSeriousInjuries": 8847,
+      "annualCounts": {
+        "no_injury": 139103,
+        "possible_injury": 25474,
+        "minor_injury": 20542,
+        "serious_injury": 7599,
+        "fatal_crash": 1142
+      },
+      "inferredVmt": 102561983471,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "in": {
+      "code": "in",
+      "name": "Indiana",
+      "annualTrafficDeaths": 898,
+      "annualSeriousInjuries": 3468,
+      "annualCounts": {
+        "no_injury": 115994,
+        "possible_injury": 23100,
+        "minor_injury": 18629,
+        "serious_injury": 2979,
+        "fatal_crash": 827
+      },
+      "inferredVmt": 85523809524,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "ia": {
+      "code": "ia",
+      "name": "Iowa",
+      "annualTrafficDeaths": 377,
+      "annualSeriousInjuries": 1388,
+      "annualCounts": {
+        "no_injury": 45249,
+        "possible_injury": 8995,
+        "minor_injury": 7254,
+        "serious_injury": 1192,
+        "fatal_crash": 347
+      },
+      "inferredVmt": 33362831858,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "ks": {
+      "code": "ks",
+      "name": "Kansas",
+      "annualTrafficDeaths": 387,
+      "annualSeriousInjuries": 1920,
+      "annualCounts": {
+        "no_injury": 43023,
+        "possible_injury": 8267,
+        "minor_injury": 6667,
+        "serious_injury": 1649,
+        "fatal_crash": 356
+      },
+      "inferredVmt": 31721311475,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "ky": {
+      "code": "ky",
+      "name": "Kentucky",
+      "annualTrafficDeaths": 814,
+      "annualSeriousInjuries": 3074,
+      "annualCounts": {
+        "no_injury": 66507,
+        "possible_injury": 12729,
+        "minor_injury": 10265,
+        "serious_injury": 2640,
+        "fatal_crash": 749
+      },
+      "inferredVmt": 49036144578,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "la": {
+      "code": "la",
+      "name": "Louisiana",
+      "annualTrafficDeaths": 811,
+      "annualSeriousInjuries": 3624,
+      "annualCounts": {
+        "no_injury": 75338,
+        "possible_injury": 14352,
+        "minor_injury": 11573,
+        "serious_injury": 3113,
+        "fatal_crash": 747
+      },
+      "inferredVmt": 55547945205,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "me": {
+      "code": "me",
+      "name": "Maine",
+      "annualTrafficDeaths": 135,
+      "annualSeriousInjuries": 731,
+      "annualCounts": {
+        "no_injury": 20121,
+        "possible_injury": 3945,
+        "minor_injury": 3182,
+        "serious_injury": 628,
+        "fatal_crash": 124
+      },
+      "inferredVmt": 14835164835,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "md": {
+      "code": "md",
+      "name": "Maryland",
+      "annualTrafficDeaths": 621,
+      "annualSeriousInjuries": 3010,
+      "annualCounts": {
+        "no_injury": 77986,
+        "possible_injury": 15209,
+        "minor_injury": 12265,
+        "serious_injury": 2585,
+        "fatal_crash": 572
+      },
+      "inferredVmt": 57500000000,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "ma": {
+      "code": "ma",
+      "name": "Massachusetts",
+      "annualTrafficDeaths": 343,
+      "annualSeriousInjuries": 2849,
+      "annualCounts": {
+        "no_injury": 83072,
+        "possible_injury": 16371,
+        "minor_injury": 13201,
+        "serious_injury": 2447,
+        "fatal_crash": 316
+      },
+      "inferredVmt": 61250000000,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "mi": {
+      "code": "mi",
+      "name": "Michigan",
+      "annualTrafficDeaths": 1094,
+      "annualSeriousInjuries": 5816,
+      "annualCounts": {
+        "no_injury": 133673,
+        "possible_injury": 25756,
+        "minor_injury": 20770,
+        "serious_injury": 4996,
+        "fatal_crash": 1007
+      },
+      "inferredVmt": 98558558559,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "mn": {
+      "code": "mn",
+      "name": "Minnesota",
+      "annualTrafficDeaths": 409,
+      "annualSeriousInjuries": 2007,
+      "annualCounts": {
+        "no_injury": 79245,
+        "possible_injury": 15954,
+        "minor_injury": 12866,
+        "serious_injury": 1724,
+        "fatal_crash": 377
+      },
+      "inferredVmt": 58428571429,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "ms": {
+      "code": "ms",
+      "name": "Mississippi",
+      "annualTrafficDeaths": 732,
+      "annualSeriousInjuries": 3205,
+      "annualCounts": {
+        "no_injury": 55463,
+        "possible_injury": 10310,
+        "minor_injury": 8315,
+        "serious_injury": 2753,
+        "fatal_crash": 674
+      },
+      "inferredVmt": 40893854749,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "mo": {
+      "code": "mo",
+      "name": "Missouri",
+      "annualTrafficDeaths": 991,
+      "annualSeriousInjuries": 5231,
+      "annualCounts": {
+        "no_injury": 109274,
+        "possible_injury": 20829,
+        "minor_injury": 16796,
+        "serious_injury": 4493,
+        "fatal_crash": 912
+      },
+      "inferredVmt": 80569105691,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "mt": {
+      "code": "mt",
+      "name": "Montana",
+      "annualTrafficDeaths": 208,
+      "annualSeriousInjuries": 776,
+      "annualCounts": {
+        "no_injury": 18560,
+        "possible_injury": 3591,
+        "minor_injury": 2896,
+        "serious_injury": 667,
+        "fatal_crash": 191
+      },
+      "inferredVmt": 13684210526,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "ne": {
+      "code": "ne",
+      "name": "Nebraska",
+      "annualTrafficDeaths": 227,
+      "annualSeriousInjuries": 1260,
+      "annualCounts": {
+        "no_injury": 28773,
+        "possible_injury": 5540,
+        "minor_injury": 4468,
+        "serious_injury": 1082,
+        "fatal_crash": 209
+      },
+      "inferredVmt": 21214953271,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "nv": {
+      "code": "nv",
+      "name": "Nevada",
+      "annualTrafficDeaths": 389,
+      "annualSeriousInjuries": 1176,
+      "annualCounts": {
+        "no_injury": 37685,
+        "possible_injury": 7482,
+        "minor_injury": 6033,
+        "serious_injury": 1010,
+        "fatal_crash": 358
+      },
+      "inferredVmt": 27785714286,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "nh": {
+      "code": "nh",
+      "name": "New Hampshire",
+      "annualTrafficDeaths": 130,
+      "annualSeriousInjuries": 523,
+      "annualCounts": {
+        "no_injury": 18366,
+        "possible_injury": 3670,
+        "minor_injury": 2960,
+        "serious_injury": 449,
+        "fatal_crash": 120
+      },
+      "inferredVmt": 13541666667,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "nj": {
+      "code": "nj",
+      "name": "New Jersey",
+      "annualTrafficDeaths": 606,
+      "annualSeriousInjuries": 2942,
+      "annualCounts": {
+        "no_injury": 105372,
+        "possible_injury": 21084,
+        "minor_injury": 17003,
+        "serious_injury": 2527,
+        "fatal_crash": 558
+      },
+      "inferredVmt": 77692307692,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "nm": {
+      "code": "nm",
+      "name": "New Mexico",
+      "annualTrafficDeaths": 437,
+      "annualSeriousInjuries": 1167,
+      "annualCounts": {
+        "no_injury": 38238,
+        "possible_injury": 7604,
+        "minor_injury": 6132,
+        "serious_injury": 1002,
+        "fatal_crash": 402
+      },
+      "inferredVmt": 28193548387,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "ny": {
+      "code": "ny",
+      "name": "New York",
+      "annualTrafficDeaths": 1114,
+      "annualSeriousInjuries": 10508,
+      "annualCounts": {
+        "no_injury": 162462,
+        "possible_injury": 29668,
+        "minor_injury": 23925,
+        "serious_injury": 9026,
+        "fatal_crash": 1026
+      },
+      "inferredVmt": 119784946237,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "nc": {
+      "code": "nc",
+      "name": "North Carolina",
+      "annualTrafficDeaths": 1561,
+      "annualSeriousInjuries": 5500,
+      "annualCounts": {
+        "no_injury": 165402,
+        "possible_injury": 32677,
+        "minor_injury": 26351,
+        "serious_injury": 4724,
+        "fatal_crash": 1437
+      },
+      "inferredVmt": 121953125000,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "nd": {
+      "code": "nd",
+      "name": "North Dakota",
+      "annualTrafficDeaths": 106,
+      "annualSeriousInjuries": 464,
+      "annualCounts": {
+        "no_injury": 13436,
+        "possible_injury": 2646,
+        "minor_injury": 2134,
+        "serious_injury": 399,
+        "fatal_crash": 98
+      },
+      "inferredVmt": 9906542056,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "oh": {
+      "code": "oh",
+      "name": "Ohio",
+      "annualTrafficDeaths": 1242,
+      "annualSeriousInjuries": 7492,
+      "annualCounts": {
+        "no_injury": 153136,
+        "possible_injury": 29112,
+        "minor_injury": 23477,
+        "serious_injury": 6435,
+        "fatal_crash": 1143
+      },
+      "inferredVmt": 112909090909,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "ok": {
+      "code": "ok",
+      "name": "Oklahoma",
+      "annualTrafficDeaths": 718,
+      "annualSeriousInjuries": 2078,
+      "annualCounts": {
+        "no_injury": 62026,
+        "possible_injury": 12246,
+        "minor_injury": 9876,
+        "serious_injury": 1785,
+        "fatal_crash": 661
+      },
+      "inferredVmt": 45732484076,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "or": {
+      "code": "or",
+      "name": "Oregon",
+      "annualTrafficDeaths": 587,
+      "annualSeriousInjuries": 3461,
+      "annualCounts": {
+        "no_injury": 50071,
+        "possible_injury": 9038,
+        "minor_injury": 7288,
+        "serious_injury": 2973,
+        "fatal_crash": 540
+      },
+      "inferredVmt": 36918238994,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "pa": {
+      "code": "pa",
+      "name": "Pennsylvania",
+      "annualTrafficDeaths": 1211,
+      "annualSeriousInjuries": 4785,
+      "annualCounts": {
+        "no_injury": 135740,
+        "possible_injury": 26688,
+        "minor_injury": 21521,
+        "serious_injury": 4110,
+        "fatal_crash": 1115
+      },
+      "inferredVmt": 100082644628,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "ri": {
+      "code": "ri",
+      "name": "Rhode Island",
+      "annualTrafficDeaths": 71,
+      "annualSeriousInjuries": 243,
+      "annualCounts": {
+        "no_injury": 10244,
+        "possible_injury": 2070,
+        "minor_injury": 1670,
+        "serious_injury": 209,
+        "fatal_crash": 65
+      },
+      "inferredVmt": 7553191489,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "sc": {
+      "code": "sc",
+      "name": "South Carolina",
+      "annualTrafficDeaths": 1047,
+      "annualSeriousInjuries": 2467,
+      "annualCounts": {
+        "no_injury": 82560,
+        "possible_injury": 16442,
+        "minor_injury": 13260,
+        "serious_injury": 2119,
+        "fatal_crash": 964
+      },
+      "inferredVmt": 60872093023,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "sd": {
+      "code": "sd",
+      "name": "South Dakota",
+      "annualTrafficDeaths": 140,
+      "annualSeriousInjuries": 571,
+      "annualCounts": {
+        "no_injury": 14065,
+        "possible_injury": 2730,
+        "minor_injury": 2201,
+        "serious_injury": 490,
+        "fatal_crash": 129
+      },
+      "inferredVmt": 10370370370,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "tn": {
+      "code": "tn",
+      "name": "Tennessee",
+      "annualTrafficDeaths": 1323,
+      "annualSeriousInjuries": 6074,
+      "annualCounts": {
+        "no_injury": 112853,
+        "possible_injury": 21192,
+        "minor_injury": 17089,
+        "serious_injury": 5217,
+        "fatal_crash": 1218
+      },
+      "inferredVmt": 83207547170,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "tx": {
+      "code": "tx",
+      "name": "Texas",
+      "annualTrafficDeaths": 4291,
+      "annualSeriousInjuries": 18752,
+      "annualCounts": {
+        "no_injury": 406978,
+        "possible_injury": 77920,
+        "minor_injury": 62837,
+        "serious_injury": 16107,
+        "fatal_crash": 3950
+      },
+      "inferredVmt": 300069930070,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "ut": {
+      "code": "ut",
+      "name": "Utah",
+      "annualTrafficDeaths": 280,
+      "annualSeriousInjuries": 1724,
+      "annualCounts": {
+        "no_injury": 46884,
+        "possible_injury": 9184,
+        "minor_injury": 7406,
+        "serious_injury": 1481,
+        "fatal_crash": 258
+      },
+      "inferredVmt": 34567901235,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "vt": {
+      "code": "vt",
+      "name": "Vermont",
+      "annualTrafficDeaths": 69,
+      "annualSeriousInjuries": 299,
+      "annualCounts": {
+        "no_injury": 9748,
+        "possible_injury": 1938,
+        "minor_injury": 1562,
+        "serious_injury": 257,
+        "fatal_crash": 64
+      },
+      "inferredVmt": 7187500000,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "va": {
+      "code": "va",
+      "name": "Virginia",
+      "annualTrafficDeaths": 913,
+      "annualSeriousInjuries": 7488,
+      "annualCounts": {
+        "no_injury": 119066,
+        "possible_injury": 21844,
+        "minor_injury": 17616,
+        "serious_injury": 6432,
+        "fatal_crash": 841
+      },
+      "inferredVmt": 87788461538,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "wa": {
+      "code": "wa",
+      "name": "Washington",
+      "annualTrafficDeaths": 810,
+      "annualSeriousInjuries": 3413,
+      "annualCounts": {
+        "no_injury": 81377,
+        "possible_injury": 15741,
+        "minor_injury": 12693,
+        "serious_injury": 2932,
+        "fatal_crash": 746
+      },
+      "inferredVmt": 60000000000,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "wv": {
+      "code": "wv",
+      "name": "West Virginia",
+      "annualTrafficDeaths": 260,
+      "annualSeriousInjuries": 801,
+      "annualCounts": {
+        "no_injury": 21634,
+        "possible_injury": 4235,
+        "minor_injury": 3415,
+        "serious_injury": 688,
+        "fatal_crash": 239
+      },
+      "inferredVmt": 15950920245,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "wi": {
+      "code": "wi",
+      "name": "Wisconsin",
+      "annualTrafficDeaths": 583,
+      "annualSeriousInjuries": 3252,
+      "annualCounts": {
+        "no_injury": 90886,
+        "possible_injury": 17846,
+        "minor_injury": 14392,
+        "serious_injury": 2793,
+        "fatal_crash": 537
+      },
+      "inferredVmt": 67011494253,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    },
+    "wy": {
+      "code": "wy",
+      "name": "Wyoming",
+      "annualTrafficDeaths": 144,
+      "annualSeriousInjuries": 457,
+      "annualCounts": {
+        "no_injury": 12934,
+        "possible_injury": 2542,
+        "minor_injury": 2050,
+        "serious_injury": 393,
+        "fatal_crash": 133
+      },
+      "inferredVmt": 9536423841,
+      "sourceYears": {
+        "fatalities": 2023,
+        "fatalityRate": 2023,
+        "seriousInjuries": 2023
+      }
+    }
+  },
+  "sourceUrls": [
+    {
+      "label": "FHWA TPM dashboard data workbook",
+      "url": "https://www.fhwa.dot.gov/tpm/reporting/state/tpm_dashboard_data.zip"
+    },
+    {
+      "label": "NHTSA National Statistics workbook",
+      "url": "https://cdan.dot.gov/TSFTables/National%20Statistics.xlsx"
+    },
+    {
+      "label": "Waymo safety impact",
+      "url": "https://waymo.com/safety/impact/"
+    },
+    {
+      "label": "Waymo safety overview and Swiss Re comparison",
+      "url": "https://waymo.com/safety/"
+    }
+  ],
+  "methodology": [
+    "Traffic deaths and serious injuries come directly from the FHWA Transportation Performance Management dashboard by geography, using 2023 values and the latest prior year only where a 2023 serious-injury value is missing.",
+    "Vehicle miles traveled are inferred from each geography's fatalities and fatality rate. That inferred mileage is then used with the 2023 national NHTSA injury-crash and property-damage-only crash rates to estimate lower-severity crash totals.",
+    "Serious injury crashes are estimated from FHWA serious injuries using Washington's 2024 ratio of serious injuries to serious-injury crashes. The remaining injury crashes are split into possible-injury and minor-injury crashes using Washington's 2024 non-serious crash mix.",
+    "Fatal-crash balls are estimated from traffic deaths using the 2023 national ratio of fatalities to fatal crashes. The death and serious-injury cards still show people, not crashes.",
+    "The counterfactual applies an 88 percent reduction to no-injury crashes and a 92 percent reduction to injury crashes and fatal crashes, matching the simplified safety assumptions already used on this site."
+  ]
+}
