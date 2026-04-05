@@ -13,6 +13,18 @@ const formatterPct = new Intl.NumberFormat("en-US", {
 const AUTO_WINDOW_MIN_RADIUS_DESKTOP = 1.45;
 const AUTO_WINDOW_MIN_RADIUS_MOBILE = 0.92;
 const AUTO_WINDOW_AREA_UTILIZATION = 0.44;
+const AUTO_WINDOW_OPTIONS_DAYS = [
+  1 / 24,
+  3 / 24,
+  6 / 24,
+  12 / 24,
+  1,
+  2,
+  7,
+  14,
+  30,
+  60,
+];
 
 const refs = {
   headline: document.querySelector("#headline"),
@@ -102,11 +114,41 @@ function formatInt(value) {
 }
 
 function formatWindowLabel(days) {
+  if (days < 1) {
+    const hours = Math.round(days * 24);
+    return `${hours} ${hours === 1 ? "hour" : "hours"}`;
+  }
   return `${days} ${days === 1 ? "day" : "days"}`;
 }
 
 function formatWindowPhrase(days) {
+  if (days < 1) {
+    const hours = Math.round(days * 24);
+    return hours === 1 ? "the last hour" : `the last ${hours} hours`;
+  }
   return days === 1 ? "the last day" : `the last ${days} days`;
+}
+
+function getWindowProgressParts(days, replayDays) {
+  if (days < 1) {
+    const totalHours = Math.round(days * 24);
+    const replayHours = Math.max(
+      0,
+      Math.min(totalHours, Math.round(replayDays * 24))
+    );
+    return `${replayHours} / ${totalHours} ${totalHours === 1 ? "hour" : "hours"}`;
+  }
+
+  return `${Math.max(0, Math.min(days, Math.round(replayDays)))} / ${formatWindowLabel(days)}`;
+}
+
+function formatWindowTitle(days) {
+  if (days < 1) {
+    const hours = Math.round(days * 24);
+    return hours === 1 ? "The Last Hour" : `The Last ${hours} Hours`;
+  }
+
+  return days === 1 ? "The Last Day" : `The Last ${days} Days`;
 }
 
 function prettyName(name) {
@@ -224,16 +266,19 @@ function pickAutoWindowDays() {
     refs.scenarioCanvas.clientHeight || 560
   );
   const threshold = getAutoWindowMinRadius();
-  const options = [...state.data.windowOptions].sort((left, right) => right - left);
+  const options = [...AUTO_WINDOW_OPTIONS_DAYS].sort((left, right) => right - left);
 
   for (const days of options) {
     const summary = computeSummaryForWindow(days);
-    if (estimateReadableBaseRadius(summary, sharedWidth, sharedHeight) >= threshold) {
+    if (
+      summary.currentTotal <= state.data.maxDisplayBalls &&
+      estimateReadableBaseRadius(summary, sharedWidth, sharedHeight) >= threshold
+    ) {
       return days;
     }
   }
 
-  return Math.min(...state.data.windowOptions);
+  return Math.min(...AUTO_WINDOW_OPTIONS_DAYS);
 }
 
 function allocateBallCounts(items, accessor, scale) {
@@ -803,9 +848,7 @@ function updateText() {
     )} serious injuries in ${windowPhrase}.`;
 
   document.title =
-    state.windowDays === 1
-      ? `The Last Day on ${roadLabel} Roads`
-      : `The Last ${windowLabel} on ${roadLabel} Roads`;
+    `${formatWindowTitle(state.windowDays)} on ${roadLabel} Roads`;
   const metaDescription = document.querySelector('meta[name="description"]');
   if (metaDescription) {
     metaDescription.setAttribute(
@@ -843,7 +886,6 @@ function updateStatuses(simulationNow) {
   const replayDays =
     ((simulationNow + state.windowDays * DAY_MS) / (state.windowDays * DAY_MS)) *
     state.windowDays;
-  const replayDisplay = Math.max(0, Math.min(state.windowDays, Math.round(replayDays)));
   const windowLabel = formatWindowLabel(state.windowDays);
 
   const nextStatusMode = elapsed <= catchupMs ? "catchup" : "live";
@@ -851,8 +893,9 @@ function updateStatuses(simulationNow) {
   state.statusMode = nextStatusMode;
 
   if (nextStatusMode === "catchup") {
-    refs.currentStatus.textContent = `Catch-up replay: ${replayDisplay} / ${formatWindowLabel(
-      state.windowDays
+    refs.currentStatus.textContent = `Catch-up replay: ${getWindowProgressParts(
+      state.windowDays,
+      replayDays
     )}`;
     refs.scenarioStatus.textContent = "Move any control to restart the drop";
   } else {
