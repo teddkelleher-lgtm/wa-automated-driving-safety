@@ -246,6 +246,16 @@ input[type="range"] {
   gap: 14px;
 }
 
+.headline-metrics-intro {
+  margin: 18px 0 12px;
+  text-align: center;
+  color: #ffd5c2;
+  font-size: clamp(1.05rem, 2vw, 1.48rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-shadow: 0 0 18px rgba(255, 123, 87, 0.14);
+}
+
 .headline-card {
   padding: 18px 18px 16px;
   border-radius: var(--radius-md);
@@ -599,6 +609,11 @@ canvas {
 
   .metric-headline {
     font-size: 0.94rem;
+  }
+
+  .headline-metrics-intro {
+    margin-top: 16px;
+    font-size: 0.96rem;
   }
 
   .metric-context {

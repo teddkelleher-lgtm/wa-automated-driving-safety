@@ -36,6 +36,7 @@ const refs = {
   scenarioCopy: document.querySelector("#scenarioCopy"),
   scenarioNote: document.querySelector("#scenarioNote"),
   scenarioTitle: document.querySelector("#scenarioTitle"),
+  headlineMetricsIntro: document.querySelector("#headlineMetricsIntro"),
   metricAvoidedSeriousLabel: document.querySelector("#metricAvoidedSeriousLabel"),
   metricAvoidedMinorLabel: document.querySelector("#metricAvoidedMinorLabel"),
   metricAvoidedCrashesLabel: document.querySelector("#metricAvoidedCrashesLabel"),
@@ -883,6 +884,8 @@ function updateText() {
   refs.shareValue.textContent = shareText;
   refs.scenarioCopy.textContent = `${windowLabel} counterfactual`;
   refs.scenarioTitle.textContent = `If robots drove ${shareText} of the time`;
+  refs.headlineMetricsIntro.textContent =
+    `Robots driving ${shareText} of the time would have prevented:`;
   refs.metricAvoidedSeriousLabel.textContent = "Avoided Serious Injuries";
   refs.metricAvoidedMinorLabel.textContent = "Avoided Minor-Injury Crashes";
   refs.metricAvoidedCrashesLabel.textContent = "Avoided Total Crashes";
