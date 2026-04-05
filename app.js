@@ -10,6 +10,10 @@ const formatterPct = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 0,
 });
 
+const AUTO_WINDOW_MIN_RADIUS_DESKTOP = 1.45;
+const AUTO_WINDOW_MIN_RADIUS_MOBILE = 0.92;
+const AUTO_WINDOW_AREA_UTILIZATION = 0.44;
+
 const refs = {
   headline: document.querySelector("#headline"),
   lede: document.querySelector("#lede"),
@@ -34,7 +38,6 @@ const refs = {
   currentCanvas: document.querySelector("#currentCanvas"),
   scenarioCanvas: document.querySelector("#scenarioCanvas"),
   geographySelect: document.querySelector("#geographySelect"),
-  windowDays: document.querySelector("#windowDays"),
 };
 
 const state = {
@@ -97,6 +100,10 @@ function formatWindowLabel(days) {
   return `${days} ${days === 1 ? "day" : "days"}`;
 }
 
+function formatWindowPhrase(days) {
+  return days === 1 ? "the last day" : `the last ${days} days`;
+}
+
 function prettyName(name) {
   if (name === "District Of Columbia") {
     return "District of Columbia";
@@ -137,9 +144,9 @@ function getGeography() {
   return state.data.geographies[state.geographyCode];
 }
 
-function computeSummary() {
+function computeSummaryForWindow(windowDays) {
   const geography = getGeography();
-  const windowFactor = state.windowDays / state.data.daysInBaselineYear;
+  const windowFactor = windowDays / state.data.daysInBaselineYear;
 
   const categories = state.data.categories.map((category) => {
     const annualCount = geography.annualCounts[category.id] || 0;
@@ -158,13 +165,9 @@ function computeSummary() {
     (sum, category) => sum + category.scenarioWindow,
     0
   );
-  const displayBallScale = Math.max(
-    1,
-    Math.ceil(currentTotal / state.data.maxDisplayBalls)
-  );
-
   return {
     geography,
+    windowDays,
     categories,
     currentTotal,
     scenarioTotal,
@@ -181,8 +184,51 @@ function computeSummary() {
       windowFactor *
       state.share *
       state.data.summary.injuryAndDeathReduction,
-    displayBallScale,
   };
+}
+
+function getAutoWindowMinRadius() {
+  return window.innerWidth <= 720
+    ? AUTO_WINDOW_MIN_RADIUS_MOBILE
+    : AUTO_WINDOW_MIN_RADIUS_DESKTOP;
+}
+
+function estimateReadableBaseRadius(summary, width, height) {
+  const usableWidth = Math.max(1, width - 24);
+  const usableHeight = Math.max(1, height - 24);
+  const usableArea = usableWidth * usableHeight * AUTO_WINDOW_AREA_UTILIZATION;
+  const weightedCrashUnits = summary.categories.reduce((sum, category) => {
+    const multiplier = category.sizeMultiplier || 1;
+    return sum + category.baseWindow * multiplier * multiplier;
+  }, 0);
+
+  if (weightedCrashUnits <= 0) {
+    return Number.POSITIVE_INFINITY;
+  }
+
+  return Math.sqrt(usableArea / (Math.PI * weightedCrashUnits));
+}
+
+function pickAutoWindowDays() {
+  const sharedWidth = Math.min(
+    refs.currentCanvas.clientWidth || 640,
+    refs.scenarioCanvas.clientWidth || 640
+  );
+  const sharedHeight = Math.min(
+    refs.currentCanvas.clientHeight || 560,
+    refs.scenarioCanvas.clientHeight || 560
+  );
+  const threshold = getAutoWindowMinRadius();
+  const options = [...state.data.windowOptions].sort((left, right) => right - left);
+
+  for (const days of options) {
+    const summary = computeSummaryForWindow(days);
+    if (estimateReadableBaseRadius(summary, sharedWidth, sharedHeight) >= threshold) {
+      return days;
+    }
+  }
+
+  return Math.min(...state.data.windowOptions);
 }
 
 function allocateBallCounts(items, accessor, scale) {
@@ -548,12 +594,12 @@ function rebuildPanels() {
   const currentTimeline = buildTimeline(
     "current",
     state.summary.categories,
-    state.summary.displayBallScale
+    1
   );
   const scenarioTimeline = buildTimeline(
     "scenario",
     state.summary.categories,
-    state.summary.displayBallScale
+    1
   );
   const liveBuffer = Math.max(60, Math.round(currentTimeline.fullBallCount * 0.02));
   const currentLimit = Math.min(
@@ -722,21 +768,17 @@ function updateText() {
   const geographyName = prettyName(geography.name);
   const roadLabel = state.geographyCode === "us" ? "U.S." : geographyName;
   const windowLabel = formatWindowLabel(state.windowDays);
+  const windowPhrase = formatWindowPhrase(state.windowDays);
   const shareText = formatterPct.format(state.share);
-  const crashesPerBall = state.summary.displayBallScale;
-  const ballSentence =
-    crashesPerBall === 1
-      ? "One ball is one estimated crash"
-      : `One ball is ${formatInt(crashesPerBall)} estimated crashes`;
 
   refs.headline.textContent = `Death and Destruction on ${roadLabel} Roads: Humans vs. Robots`;
-  refs.lede.textContent = `${ballSentence} in the last ${windowLabel}. Left is today's toll. Right is the same period with more automated.`;
-  refs.vesselSubhead.textContent = `Crashes over last ${windowLabel}`;
+  refs.lede.textContent = `One ball is one estimated crash in ${windowPhrase}. Left is today's toll. Right is the same period with more automated.`;
+  refs.vesselSubhead.textContent = `Crashes over ${windowPhrase}`;
   refs.shareValue.textContent = shareText;
   refs.scenarioCopy.textContent = `${windowLabel} counterfactual`;
   refs.scenarioTitle.textContent = `If robots drove ${shareText} of the time`;
-  refs.metricDeathsKicker.textContent = `Estimated in last ${windowLabel}`;
-  refs.metricSeriousKicker.textContent = `Estimated in last ${windowLabel}`;
+  refs.metricDeathsKicker.textContent = `Estimated in ${windowPhrase}`;
+  refs.metricSeriousKicker.textContent = `Estimated in ${windowPhrase}`;
   refs.metricDeaths.textContent = formatInt(state.summary.windowDeaths);
   refs.metricSeriousInjuries.textContent = formatInt(state.summary.windowSeriousInjuries);
   refs.metricAvoidedCrashes.textContent = formatInt(state.summary.avoidedCrashes);
@@ -748,14 +790,17 @@ function updateText() {
       state.summary.avoidedCrashes
     )} crashes, ${formatInt(state.summary.avoidedDeaths)} deaths, and ${formatInt(
       state.summary.avoidedSerious
-    )} serious injuries in the last ${windowLabel}.`;
+    )} serious injuries in ${windowPhrase}.`;
 
-  document.title = `The Last ${windowLabel} on ${roadLabel} Roads`;
+  document.title =
+    state.windowDays === 1
+      ? `The Last Day on ${roadLabel} Roads`
+      : `The Last ${windowLabel} on ${roadLabel} Roads`;
   const metaDescription = document.querySelector('meta[name="description"]');
   if (metaDescription) {
     metaDescription.setAttribute(
       "content",
-      `A dark animated automated-driving counterfactual for ${geographyName} over the last ${windowLabel}.`
+      `A dark animated automated-driving counterfactual for ${geographyName} over ${windowPhrase}.`
     );
   }
 }
@@ -763,7 +808,8 @@ function updateText() {
 function restartSimulation() {
   state.restartAt = performance.now();
   state.statusMode = null;
-  state.summary = computeSummary();
+  state.windowDays = pickAutoWindowDays();
+  state.summary = computeSummaryForWindow(state.windowDays);
   updateText();
   syncPanelChromeHeights();
   rebuildPanels();
@@ -795,7 +841,9 @@ function updateStatuses(simulationNow) {
   state.statusMode = nextStatusMode;
 
   if (nextStatusMode === "catchup") {
-    refs.currentStatus.textContent = `Catch-up replay: ${replayDisplay} / ${state.windowDays} days`;
+    refs.currentStatus.textContent = `Catch-up replay: ${replayDisplay} / ${formatWindowLabel(
+      state.windowDays
+    )}`;
     refs.scenarioStatus.textContent = "Move any control to restart the drop";
   } else {
     refs.currentStatus.textContent = `Live mode: the ${windowLabel} window now advances in real time`;
@@ -831,25 +879,11 @@ function updateUrl() {
   } else {
     url.searchParams.set("geo", state.geographyCode);
   }
-
-  if (state.windowDays === state.data.defaultWindowDays) {
-    url.searchParams.delete("days");
-  } else {
-    url.searchParams.set("days", String(state.windowDays));
-  }
-
+  url.searchParams.delete("days");
   history.replaceState({}, "", url);
 }
 
 function populateControls() {
-  refs.windowDays.innerHTML = "";
-  state.data.windowOptions.forEach((days) => {
-    const option = document.createElement("option");
-    option.value = String(days);
-    option.textContent = formatWindowLabel(days);
-    refs.windowDays.append(option);
-  });
-
   refs.geographySelect.innerHTML = "";
   state.data.geographyOrder.forEach((code) => {
     const geography = state.data.geographies[code];
@@ -867,30 +901,17 @@ function applyUrlState() {
       url.searchParams.get("geography") ||
       url.searchParams.get("state") ||
       state.data.defaultGeography).toLowerCase();
-  const requestedDays = Number(
-    url.searchParams.get("days") || state.data.defaultWindowDays
-  );
 
   state.geographyCode = state.data.geographies[requestedGeo]
     ? requestedGeo
     : state.data.defaultGeography;
-  state.windowDays = state.data.windowOptions.includes(requestedDays)
-    ? requestedDays
-    : state.data.defaultWindowDays;
 
   refs.geographySelect.value = state.geographyCode;
-  refs.windowDays.value = String(state.windowDays);
 }
 
 function wireEvents() {
   refs.slider.addEventListener("input", (event) => {
     state.share = Number(event.target.value) / 100;
-    restartSimulation();
-  });
-
-  refs.windowDays.addEventListener("change", (event) => {
-    state.windowDays = Number(event.target.value);
-    updateUrl();
     restartSimulation();
   });
 

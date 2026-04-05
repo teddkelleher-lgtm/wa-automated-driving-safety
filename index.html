@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Last 7 Days on U.S. Roads</title>
+    <title>Death and Destruction on U.S. Roads</title>
     <meta
       name="description"
       content="A dark animated automated-driving counterfactual for the United States or any individual state."
@@ -21,12 +21,12 @@
       <header class="hero">
         <h1 id="headline">Death and Destruction on U.S. Roads: Humans vs. Robots</h1>
         <p class="lede" id="lede">
-          One ball is one estimated crash in the last 7 days. Left is today's toll.
-          Right is the same period with more automated.
+          One ball is one estimated crash in the most recent period that fits on this
+          screen. Left is today's toll. Right is the same period with more automated.
         </p>
       </header>
 
-      <p class="vessel-subhead" id="vesselSubhead">Crashes over last 7 days</p>
+      <p class="vessel-subhead" id="vesselSubhead">Crashes over the most recent period that fits</p>
 
       <section class="vessels">
         <article class="panel card">
@@ -43,7 +43,7 @@
             <canvas id="currentCanvas" aria-label="Current human mayhem vessel"></canvas>
           </div>
           <div class="panel-footer">
-            <span id="currentStatus">Replaying the last 7 days</span>
+            <span id="currentStatus">Replaying the recent period</span>
             <span id="currentBallCount">0 / 4,709 balls</span>
           </div>
         </article>
@@ -75,7 +75,7 @@
           </label>
           <div class="slider-headline">
             <strong id="shareValue">50%</strong>
-            <span id="scenarioCopy">7-day counterfactual</span>
+            <span id="scenarioCopy">auto-fit counterfactual</span>
           </div>
           <input
             id="automationShare"
@@ -88,16 +88,11 @@
         </div>
 
         <p class="scenario-note" id="scenarioNote">
-          At 50%, automation averts 52,463 crashes, 361 deaths, and 1,706 serious
-          injuries in the last 7 days.
+          At 50%, automation averts crashes, deaths, and serious injuries over the
+          auto-fit window.
         </p>
 
         <div class="selector-grid">
-          <label class="selector-field" for="windowDays">
-            <span>Period shown</span>
-            <select id="windowDays"></select>
-          </label>
-
           <label class="selector-field" for="geographySelect">
             <span>Geography</span>
             <select id="geographySelect"></select>
@@ -130,12 +125,12 @@
 
       <section class="headline-metrics">
         <article class="headline-card card">
-          <span class="metric-kicker" id="metricDeathsKicker">Estimated in last 7 days</span>
+          <span class="metric-kicker" id="metricDeathsKicker">Estimated in recent days</span>
           <strong id="metricDeaths">785</strong>
           <span class="metric-label">traffic deaths</span>
         </article>
         <article class="headline-card card">
-          <span class="metric-kicker" id="metricSeriousKicker">Estimated in last 7 days</span>
+          <span class="metric-kicker" id="metricSeriousKicker">Estimated in recent days</span>
           <strong id="metricSeriousInjuries">3,709</strong>
           <span class="metric-label">serious injuries</span>
         </article>
@@ -156,10 +151,10 @@
           <p class="eyebrow">Method</p>
           <h3>Simple, transparent arithmetic</h3>
           <p>
-            This animation compresses the selected time window into 30 seconds, then
-            advances in real time. When a geography or time span is too large to draw
-            one ball per crash, the ball count scales down and the copy tells you how
-            many crashes each ball stands for.
+            This animation compresses the chosen window into 30 seconds, then advances
+            in real time. The site automatically picks the longest window from 1, 2,
+            7, 14, 30, and 60 days that still lets the current geography render with
+            one ball per crash at a readable size on the current screen.
           </p>
           <ul class="note-list">
             <li>
