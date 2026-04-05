@@ -1,0 +1,417 @@
+geography_code,geography_name,metric_group,metric_id,metric_label,annual_value,source_type,source_detail,source_year,formula_basis
+al,Alabama,category,no_injury,No injury crashes,97853,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+al,Alabama,category,possible_injury,Possible injury crashes,18568,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+al,Alabama,category,minor_injury,Minor injury crashes,14973,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+al,Alabama,category,serious_injury,Serious injury crashes,4175,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+al,Alabama,display_category,traffic_death,Traffic deaths,974,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+al,Alabama,metric,annualTrafficDeaths,Traffic deaths,974,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+al,Alabama,metric,annualSeriousInjuries,Serious injuries,4860,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+al,Alabama,metric,inferredVmt,Inferred VMT,72148148148,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+ak,Alaska,category,no_injury,No injury crashes,7605,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+ak,Alaska,category,possible_injury,Possible injury crashes,1503,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+ak,Alaska,category,minor_injury,Minor injury crashes,1212,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+ak,Alaska,category,serious_injury,Serious injury crashes,216,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2022,annual_serious_injuries / 1.164189667374
+ak,Alaska,display_category,traffic_death,Traffic deaths,60,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+ak,Alaska,metric,annualTrafficDeaths,Traffic deaths,60,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+ak,Alaska,metric,annualSeriousInjuries,Serious injuries,251,direct,FHWA TPM dashboard Number of Serious Injuries,2022,direct
+ak,Alaska,metric,inferredVmt,Inferred VMT,5607476636,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+az,Arizona,category,no_injury,No injury crashes,102230,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+az,Arizona,category,possible_injury,Possible injury crashes,20051,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+az,Arizona,category,minor_injury,Minor injury crashes,16169,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+az,Arizona,category,serious_injury,Serious injury crashes,3183,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+az,Arizona,display_category,traffic_death,Traffic deaths,1304,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+az,Arizona,metric,annualTrafficDeaths,Traffic deaths,1304,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+az,Arizona,metric,annualSeriousInjuries,Serious injuries,3706,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+az,Arizona,metric,inferredVmt,Inferred VMT,75375722543,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+ar,Arkansas,category,no_injury,No injury crashes,53180,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+ar,Arkansas,category,possible_injury,Possible injury crashes,10020,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+ar,Arkansas,category,minor_injury,Minor injury crashes,8081,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+ar,Arkansas,category,serious_injury,Serious injury crashes,2397,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+ar,Arkansas,display_category,traffic_death,Traffic deaths,596,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+ar,Arkansas,metric,annualTrafficDeaths,Traffic deaths,596,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+ar,Arkansas,metric,annualSeriousInjuries,Serious injuries,2791,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+ar,Arkansas,metric,inferredVmt,Inferred VMT,39210526316,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+ca,California,category,no_injury,No injury crashes,430301,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+ca,California,category,possible_injury,Possible injury crashes,83902,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+ca,California,category,minor_injury,Minor injury crashes,67661,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+ca,California,category,serious_injury,Serious injury crashes,14291,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+ca,California,display_category,traffic_death,Traffic deaths,4061,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+ca,California,metric,annualTrafficDeaths,Traffic deaths,4061,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+ca,California,metric,annualSeriousInjuries,Serious injuries,16638,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+ca,California,metric,inferredVmt,Inferred VMT,317265625000,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+co,Colorado,category,no_injury,No injury crashes,73979,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+co,Colorado,category,possible_injury,Possible injury crashes,13810,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+co,Colorado,category,minor_injury,Minor injury crashes,11136,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+co,Colorado,category,serious_injury,Serious injury crashes,3568,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+co,Colorado,display_category,traffic_death,Traffic deaths,720,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+co,Colorado,metric,annualTrafficDeaths,Traffic deaths,720,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+co,Colorado,metric,annualSeriousInjuries,Serious injuries,4154,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+co,Colorado,metric,inferredVmt,Inferred VMT,54545454545,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+ct,Connecticut,category,no_injury,No injury crashes,41360,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+ct,Connecticut,category,possible_injury,Possible injury crashes,8180,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+ct,Connecticut,category,minor_injury,Minor injury crashes,6596,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+ct,Connecticut,category,serious_injury,Serious injury crashes,1166,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+ct,Connecticut,display_category,traffic_death,Traffic deaths,308,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+ct,Connecticut,metric,annualTrafficDeaths,Traffic deaths,308,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+ct,Connecticut,metric,annualSeriousInjuries,Serious injuries,1358,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+ct,Connecticut,metric,inferredVmt,Inferred VMT,30495049505,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+de,Delaware,category,no_injury,No injury crashes,13172,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+de,Delaware,category,possible_injury,Possible injury crashes,2550,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+de,Delaware,category,minor_injury,Minor injury crashes,2057,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+de,Delaware,category,serious_injury,Serious injury crashes,470,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+de,Delaware,display_category,traffic_death,Traffic deaths,135,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+de,Delaware,metric,annualTrafficDeaths,Traffic deaths,135,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+de,Delaware,metric,annualSeriousInjuries,Serious injuries,547,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+de,Delaware,metric,inferredVmt,Inferred VMT,9712230216,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+dc,District Of Columbia,category,no_injury,No injury crashes,4736,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+dc,District Of Columbia,category,possible_injury,Possible injury crashes,844,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+dc,District Of Columbia,category,minor_injury,Minor injury crashes,680,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+dc,District Of Columbia,category,serious_injury,Serious injury crashes,302,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+dc,District Of Columbia,display_category,traffic_death,Traffic deaths,44,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+dc,District Of Columbia,metric,annualTrafficDeaths,Traffic deaths,44,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+dc,District Of Columbia,metric,annualSeriousInjuries,Serious injuries,352,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+dc,District Of Columbia,metric,inferredVmt,Inferred VMT,3492063492,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+fl,Florida,category,no_injury,No injury crashes,324361,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+fl,Florida,category,possible_injury,Possible injury crashes,61601,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+fl,Florida,category,minor_injury,Minor injury crashes,49676,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+fl,Florida,category,serious_injury,Serious injury crashes,13743,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+fl,Florida,display_category,traffic_death,Traffic deaths,3396,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+fl,Florida,metric,annualTrafficDeaths,Traffic deaths,3396,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+fl,Florida,metric,annualSeriousInjuries,Serious injuries,16000,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+fl,Florida,metric,inferredVmt,Inferred VMT,239154929577,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+ga,Georgia,category,no_injury,No injury crashes,171124,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+ga,Georgia,category,possible_injury,Possible injury crashes,32624,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+ga,Georgia,category,minor_injury,Minor injury crashes,26309,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+ga,Georgia,category,serious_injury,Serious injury crashes,7025,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+ga,Georgia,display_category,traffic_death,Traffic deaths,1615,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+ga,Georgia,metric,annualTrafficDeaths,Traffic deaths,1615,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+ga,Georgia,metric,annualSeriousInjuries,Serious injuries,8179,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+ga,Georgia,metric,inferredVmt,Inferred VMT,126171875000,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+hi,Hawaii,category,no_injury,No injury crashes,14172,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+hi,Hawaii,category,possible_injury,Possible injury crashes,2781,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+hi,Hawaii,category,minor_injury,Minor injury crashes,2242,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+hi,Hawaii,category,serious_injury,Serious injury crashes,440,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+hi,Hawaii,display_category,traffic_death,Traffic deaths,93,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+hi,Hawaii,metric,annualTrafficDeaths,Traffic deaths,93,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+hi,Hawaii,metric,annualSeriousInjuries,Serious injuries,512,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+hi,Hawaii,metric,inferredVmt,Inferred VMT,10449438202,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+id,Idaho,category,no_injury,No injury crashes,26833,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+id,Idaho,category,possible_injury,Possible injury crashes,5141,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+id,Idaho,category,minor_injury,Minor injury crashes,4146,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+id,Idaho,category,serious_injury,Serious injury crashes,1055,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+id,Idaho,display_category,traffic_death,Traffic deaths,275,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+id,Idaho,metric,annualTrafficDeaths,Traffic deaths,275,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+id,Idaho,metric,annualSeriousInjuries,Serious injuries,1228,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+id,Idaho,metric,inferredVmt,Inferred VMT,19784172662,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+il,Illinois,category,no_injury,No injury crashes,139103,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+il,Illinois,category,possible_injury,Possible injury crashes,25474,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+il,Illinois,category,minor_injury,Minor injury crashes,20542,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+il,Illinois,category,serious_injury,Serious injury crashes,7599,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+il,Illinois,display_category,traffic_death,Traffic deaths,1241,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+il,Illinois,metric,annualTrafficDeaths,Traffic deaths,1241,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+il,Illinois,metric,annualSeriousInjuries,Serious injuries,8847,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+il,Illinois,metric,inferredVmt,Inferred VMT,102561983471,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+in,Indiana,category,no_injury,No injury crashes,115994,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+in,Indiana,category,possible_injury,Possible injury crashes,23100,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+in,Indiana,category,minor_injury,Minor injury crashes,18629,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+in,Indiana,category,serious_injury,Serious injury crashes,2979,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+in,Indiana,display_category,traffic_death,Traffic deaths,898,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+in,Indiana,metric,annualTrafficDeaths,Traffic deaths,898,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+in,Indiana,metric,annualSeriousInjuries,Serious injuries,3468,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+in,Indiana,metric,inferredVmt,Inferred VMT,85523809524,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+ia,Iowa,category,no_injury,No injury crashes,45249,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+ia,Iowa,category,possible_injury,Possible injury crashes,8995,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+ia,Iowa,category,minor_injury,Minor injury crashes,7254,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+ia,Iowa,category,serious_injury,Serious injury crashes,1192,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+ia,Iowa,display_category,traffic_death,Traffic deaths,377,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+ia,Iowa,metric,annualTrafficDeaths,Traffic deaths,377,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+ia,Iowa,metric,annualSeriousInjuries,Serious injuries,1388,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+ia,Iowa,metric,inferredVmt,Inferred VMT,33362831858,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+ks,Kansas,category,no_injury,No injury crashes,43023,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+ks,Kansas,category,possible_injury,Possible injury crashes,8267,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+ks,Kansas,category,minor_injury,Minor injury crashes,6667,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+ks,Kansas,category,serious_injury,Serious injury crashes,1649,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+ks,Kansas,display_category,traffic_death,Traffic deaths,387,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+ks,Kansas,metric,annualTrafficDeaths,Traffic deaths,387,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+ks,Kansas,metric,annualSeriousInjuries,Serious injuries,1920,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+ks,Kansas,metric,inferredVmt,Inferred VMT,31721311475,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+ky,Kentucky,category,no_injury,No injury crashes,66507,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+ky,Kentucky,category,possible_injury,Possible injury crashes,12729,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+ky,Kentucky,category,minor_injury,Minor injury crashes,10265,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+ky,Kentucky,category,serious_injury,Serious injury crashes,2640,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+ky,Kentucky,display_category,traffic_death,Traffic deaths,814,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+ky,Kentucky,metric,annualTrafficDeaths,Traffic deaths,814,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+ky,Kentucky,metric,annualSeriousInjuries,Serious injuries,3074,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+ky,Kentucky,metric,inferredVmt,Inferred VMT,49036144578,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+la,Louisiana,category,no_injury,No injury crashes,75338,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+la,Louisiana,category,possible_injury,Possible injury crashes,14352,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+la,Louisiana,category,minor_injury,Minor injury crashes,11573,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+la,Louisiana,category,serious_injury,Serious injury crashes,3113,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+la,Louisiana,display_category,traffic_death,Traffic deaths,811,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+la,Louisiana,metric,annualTrafficDeaths,Traffic deaths,811,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+la,Louisiana,metric,annualSeriousInjuries,Serious injuries,3624,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+la,Louisiana,metric,inferredVmt,Inferred VMT,55547945205,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+me,Maine,category,no_injury,No injury crashes,20121,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+me,Maine,category,possible_injury,Possible injury crashes,3945,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+me,Maine,category,minor_injury,Minor injury crashes,3182,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+me,Maine,category,serious_injury,Serious injury crashes,628,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+me,Maine,display_category,traffic_death,Traffic deaths,135,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+me,Maine,metric,annualTrafficDeaths,Traffic deaths,135,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+me,Maine,metric,annualSeriousInjuries,Serious injuries,731,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+me,Maine,metric,inferredVmt,Inferred VMT,14835164835,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+md,Maryland,category,no_injury,No injury crashes,77986,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+md,Maryland,category,possible_injury,Possible injury crashes,15209,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+md,Maryland,category,minor_injury,Minor injury crashes,12265,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+md,Maryland,category,serious_injury,Serious injury crashes,2585,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+md,Maryland,display_category,traffic_death,Traffic deaths,621,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+md,Maryland,metric,annualTrafficDeaths,Traffic deaths,621,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+md,Maryland,metric,annualSeriousInjuries,Serious injuries,3010,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+md,Maryland,metric,inferredVmt,Inferred VMT,57500000000,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+ma,Massachusetts,category,no_injury,No injury crashes,83072,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+ma,Massachusetts,category,possible_injury,Possible injury crashes,16371,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+ma,Massachusetts,category,minor_injury,Minor injury crashes,13201,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+ma,Massachusetts,category,serious_injury,Serious injury crashes,2447,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+ma,Massachusetts,display_category,traffic_death,Traffic deaths,343,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+ma,Massachusetts,metric,annualTrafficDeaths,Traffic deaths,343,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+ma,Massachusetts,metric,annualSeriousInjuries,Serious injuries,2849,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+ma,Massachusetts,metric,inferredVmt,Inferred VMT,61250000000,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+mi,Michigan,category,no_injury,No injury crashes,133673,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+mi,Michigan,category,possible_injury,Possible injury crashes,25756,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+mi,Michigan,category,minor_injury,Minor injury crashes,20770,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+mi,Michigan,category,serious_injury,Serious injury crashes,4996,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+mi,Michigan,display_category,traffic_death,Traffic deaths,1094,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+mi,Michigan,metric,annualTrafficDeaths,Traffic deaths,1094,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+mi,Michigan,metric,annualSeriousInjuries,Serious injuries,5816,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+mi,Michigan,metric,inferredVmt,Inferred VMT,98558558559,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+mn,Minnesota,category,no_injury,No injury crashes,79245,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+mn,Minnesota,category,possible_injury,Possible injury crashes,15954,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+mn,Minnesota,category,minor_injury,Minor injury crashes,12866,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+mn,Minnesota,category,serious_injury,Serious injury crashes,1724,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+mn,Minnesota,display_category,traffic_death,Traffic deaths,409,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+mn,Minnesota,metric,annualTrafficDeaths,Traffic deaths,409,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+mn,Minnesota,metric,annualSeriousInjuries,Serious injuries,2007,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+mn,Minnesota,metric,inferredVmt,Inferred VMT,58428571429,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+ms,Mississippi,category,no_injury,No injury crashes,55463,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+ms,Mississippi,category,possible_injury,Possible injury crashes,10310,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+ms,Mississippi,category,minor_injury,Minor injury crashes,8315,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+ms,Mississippi,category,serious_injury,Serious injury crashes,2753,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+ms,Mississippi,display_category,traffic_death,Traffic deaths,732,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+ms,Mississippi,metric,annualTrafficDeaths,Traffic deaths,732,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+ms,Mississippi,metric,annualSeriousInjuries,Serious injuries,3205,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+ms,Mississippi,metric,inferredVmt,Inferred VMT,40893854749,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+mo,Missouri,category,no_injury,No injury crashes,109274,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+mo,Missouri,category,possible_injury,Possible injury crashes,20829,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+mo,Missouri,category,minor_injury,Minor injury crashes,16796,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+mo,Missouri,category,serious_injury,Serious injury crashes,4493,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+mo,Missouri,display_category,traffic_death,Traffic deaths,991,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+mo,Missouri,metric,annualTrafficDeaths,Traffic deaths,991,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+mo,Missouri,metric,annualSeriousInjuries,Serious injuries,5231,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+mo,Missouri,metric,inferredVmt,Inferred VMT,80569105691,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+mt,Montana,category,no_injury,No injury crashes,18560,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+mt,Montana,category,possible_injury,Possible injury crashes,3591,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+mt,Montana,category,minor_injury,Minor injury crashes,2896,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+mt,Montana,category,serious_injury,Serious injury crashes,667,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+mt,Montana,display_category,traffic_death,Traffic deaths,208,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+mt,Montana,metric,annualTrafficDeaths,Traffic deaths,208,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+mt,Montana,metric,annualSeriousInjuries,Serious injuries,776,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+mt,Montana,metric,inferredVmt,Inferred VMT,13684210526,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+ne,Nebraska,category,no_injury,No injury crashes,28773,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+ne,Nebraska,category,possible_injury,Possible injury crashes,5540,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+ne,Nebraska,category,minor_injury,Minor injury crashes,4468,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+ne,Nebraska,category,serious_injury,Serious injury crashes,1082,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+ne,Nebraska,display_category,traffic_death,Traffic deaths,227,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+ne,Nebraska,metric,annualTrafficDeaths,Traffic deaths,227,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+ne,Nebraska,metric,annualSeriousInjuries,Serious injuries,1260,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+ne,Nebraska,metric,inferredVmt,Inferred VMT,21214953271,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+nv,Nevada,category,no_injury,No injury crashes,37685,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+nv,Nevada,category,possible_injury,Possible injury crashes,7482,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+nv,Nevada,category,minor_injury,Minor injury crashes,6033,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+nv,Nevada,category,serious_injury,Serious injury crashes,1010,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+nv,Nevada,display_category,traffic_death,Traffic deaths,389,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+nv,Nevada,metric,annualTrafficDeaths,Traffic deaths,389,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+nv,Nevada,metric,annualSeriousInjuries,Serious injuries,1176,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+nv,Nevada,metric,inferredVmt,Inferred VMT,27785714286,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+nh,New Hampshire,category,no_injury,No injury crashes,18366,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+nh,New Hampshire,category,possible_injury,Possible injury crashes,3670,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+nh,New Hampshire,category,minor_injury,Minor injury crashes,2960,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+nh,New Hampshire,category,serious_injury,Serious injury crashes,449,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+nh,New Hampshire,display_category,traffic_death,Traffic deaths,130,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+nh,New Hampshire,metric,annualTrafficDeaths,Traffic deaths,130,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+nh,New Hampshire,metric,annualSeriousInjuries,Serious injuries,523,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+nh,New Hampshire,metric,inferredVmt,Inferred VMT,13541666667,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+nj,New Jersey,category,no_injury,No injury crashes,105372,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+nj,New Jersey,category,possible_injury,Possible injury crashes,21084,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+nj,New Jersey,category,minor_injury,Minor injury crashes,17003,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+nj,New Jersey,category,serious_injury,Serious injury crashes,2527,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+nj,New Jersey,display_category,traffic_death,Traffic deaths,606,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+nj,New Jersey,metric,annualTrafficDeaths,Traffic deaths,606,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+nj,New Jersey,metric,annualSeriousInjuries,Serious injuries,2942,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+nj,New Jersey,metric,inferredVmt,Inferred VMT,77692307692,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+nm,New Mexico,category,no_injury,No injury crashes,38238,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+nm,New Mexico,category,possible_injury,Possible injury crashes,7604,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+nm,New Mexico,category,minor_injury,Minor injury crashes,6132,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+nm,New Mexico,category,serious_injury,Serious injury crashes,1002,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+nm,New Mexico,display_category,traffic_death,Traffic deaths,437,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+nm,New Mexico,metric,annualTrafficDeaths,Traffic deaths,437,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+nm,New Mexico,metric,annualSeriousInjuries,Serious injuries,1167,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+nm,New Mexico,metric,inferredVmt,Inferred VMT,28193548387,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+ny,New York,category,no_injury,No injury crashes,162462,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+ny,New York,category,possible_injury,Possible injury crashes,29668,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+ny,New York,category,minor_injury,Minor injury crashes,23925,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+ny,New York,category,serious_injury,Serious injury crashes,9026,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+ny,New York,display_category,traffic_death,Traffic deaths,1114,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+ny,New York,metric,annualTrafficDeaths,Traffic deaths,1114,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+ny,New York,metric,annualSeriousInjuries,Serious injuries,10508,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+ny,New York,metric,inferredVmt,Inferred VMT,119784946237,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+nc,North Carolina,category,no_injury,No injury crashes,165402,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+nc,North Carolina,category,possible_injury,Possible injury crashes,32677,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+nc,North Carolina,category,minor_injury,Minor injury crashes,26351,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+nc,North Carolina,category,serious_injury,Serious injury crashes,4724,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+nc,North Carolina,display_category,traffic_death,Traffic deaths,1561,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+nc,North Carolina,metric,annualTrafficDeaths,Traffic deaths,1561,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+nc,North Carolina,metric,annualSeriousInjuries,Serious injuries,5500,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+nc,North Carolina,metric,inferredVmt,Inferred VMT,121953125000,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+nd,North Dakota,category,no_injury,No injury crashes,13436,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+nd,North Dakota,category,possible_injury,Possible injury crashes,2646,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+nd,North Dakota,category,minor_injury,Minor injury crashes,2134,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+nd,North Dakota,category,serious_injury,Serious injury crashes,399,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+nd,North Dakota,display_category,traffic_death,Traffic deaths,106,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+nd,North Dakota,metric,annualTrafficDeaths,Traffic deaths,106,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+nd,North Dakota,metric,annualSeriousInjuries,Serious injuries,464,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+nd,North Dakota,metric,inferredVmt,Inferred VMT,9906542056,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+oh,Ohio,category,no_injury,No injury crashes,153136,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+oh,Ohio,category,possible_injury,Possible injury crashes,29112,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+oh,Ohio,category,minor_injury,Minor injury crashes,23477,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+oh,Ohio,category,serious_injury,Serious injury crashes,6435,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+oh,Ohio,display_category,traffic_death,Traffic deaths,1242,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+oh,Ohio,metric,annualTrafficDeaths,Traffic deaths,1242,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+oh,Ohio,metric,annualSeriousInjuries,Serious injuries,7492,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+oh,Ohio,metric,inferredVmt,Inferred VMT,112909090909,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+ok,Oklahoma,category,no_injury,No injury crashes,62026,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+ok,Oklahoma,category,possible_injury,Possible injury crashes,12246,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+ok,Oklahoma,category,minor_injury,Minor injury crashes,9876,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+ok,Oklahoma,category,serious_injury,Serious injury crashes,1785,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+ok,Oklahoma,display_category,traffic_death,Traffic deaths,718,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+ok,Oklahoma,metric,annualTrafficDeaths,Traffic deaths,718,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+ok,Oklahoma,metric,annualSeriousInjuries,Serious injuries,2078,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+ok,Oklahoma,metric,inferredVmt,Inferred VMT,45732484076,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+or,Oregon,category,no_injury,No injury crashes,50071,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+or,Oregon,category,possible_injury,Possible injury crashes,9038,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+or,Oregon,category,minor_injury,Minor injury crashes,7288,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+or,Oregon,category,serious_injury,Serious injury crashes,2973,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+or,Oregon,display_category,traffic_death,Traffic deaths,587,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+or,Oregon,metric,annualTrafficDeaths,Traffic deaths,587,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+or,Oregon,metric,annualSeriousInjuries,Serious injuries,3461,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+or,Oregon,metric,inferredVmt,Inferred VMT,36918238994,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+pa,Pennsylvania,category,no_injury,No injury crashes,135740,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+pa,Pennsylvania,category,possible_injury,Possible injury crashes,26688,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+pa,Pennsylvania,category,minor_injury,Minor injury crashes,21521,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+pa,Pennsylvania,category,serious_injury,Serious injury crashes,4110,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+pa,Pennsylvania,display_category,traffic_death,Traffic deaths,1211,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+pa,Pennsylvania,metric,annualTrafficDeaths,Traffic deaths,1211,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+pa,Pennsylvania,metric,annualSeriousInjuries,Serious injuries,4785,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+pa,Pennsylvania,metric,inferredVmt,Inferred VMT,100082644628,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+ri,Rhode Island,category,no_injury,No injury crashes,10244,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+ri,Rhode Island,category,possible_injury,Possible injury crashes,2070,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+ri,Rhode Island,category,minor_injury,Minor injury crashes,1670,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+ri,Rhode Island,category,serious_injury,Serious injury crashes,209,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+ri,Rhode Island,display_category,traffic_death,Traffic deaths,71,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+ri,Rhode Island,metric,annualTrafficDeaths,Traffic deaths,71,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+ri,Rhode Island,metric,annualSeriousInjuries,Serious injuries,243,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+ri,Rhode Island,metric,inferredVmt,Inferred VMT,7553191489,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+sc,South Carolina,category,no_injury,No injury crashes,82560,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+sc,South Carolina,category,possible_injury,Possible injury crashes,16442,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+sc,South Carolina,category,minor_injury,Minor injury crashes,13260,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+sc,South Carolina,category,serious_injury,Serious injury crashes,2119,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+sc,South Carolina,display_category,traffic_death,Traffic deaths,1047,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+sc,South Carolina,metric,annualTrafficDeaths,Traffic deaths,1047,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+sc,South Carolina,metric,annualSeriousInjuries,Serious injuries,2467,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+sc,South Carolina,metric,inferredVmt,Inferred VMT,60872093023,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+sd,South Dakota,category,no_injury,No injury crashes,14065,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+sd,South Dakota,category,possible_injury,Possible injury crashes,2730,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+sd,South Dakota,category,minor_injury,Minor injury crashes,2201,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+sd,South Dakota,category,serious_injury,Serious injury crashes,490,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+sd,South Dakota,display_category,traffic_death,Traffic deaths,140,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+sd,South Dakota,metric,annualTrafficDeaths,Traffic deaths,140,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+sd,South Dakota,metric,annualSeriousInjuries,Serious injuries,571,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+sd,South Dakota,metric,inferredVmt,Inferred VMT,10370370370,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+tn,Tennessee,category,no_injury,No injury crashes,112853,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+tn,Tennessee,category,possible_injury,Possible injury crashes,21192,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+tn,Tennessee,category,minor_injury,Minor injury crashes,17089,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+tn,Tennessee,category,serious_injury,Serious injury crashes,5217,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+tn,Tennessee,display_category,traffic_death,Traffic deaths,1323,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+tn,Tennessee,metric,annualTrafficDeaths,Traffic deaths,1323,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+tn,Tennessee,metric,annualSeriousInjuries,Serious injuries,6074,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+tn,Tennessee,metric,inferredVmt,Inferred VMT,83207547170,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+tx,Texas,category,no_injury,No injury crashes,406978,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+tx,Texas,category,possible_injury,Possible injury crashes,77920,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+tx,Texas,category,minor_injury,Minor injury crashes,62837,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+tx,Texas,category,serious_injury,Serious injury crashes,16107,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+tx,Texas,display_category,traffic_death,Traffic deaths,4291,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+tx,Texas,metric,annualTrafficDeaths,Traffic deaths,4291,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+tx,Texas,metric,annualSeriousInjuries,Serious injuries,18752,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+tx,Texas,metric,inferredVmt,Inferred VMT,300069930070,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+ut,Utah,category,no_injury,No injury crashes,46884,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+ut,Utah,category,possible_injury,Possible injury crashes,9184,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+ut,Utah,category,minor_injury,Minor injury crashes,7406,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+ut,Utah,category,serious_injury,Serious injury crashes,1481,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+ut,Utah,display_category,traffic_death,Traffic deaths,280,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+ut,Utah,metric,annualTrafficDeaths,Traffic deaths,280,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+ut,Utah,metric,annualSeriousInjuries,Serious injuries,1724,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+ut,Utah,metric,inferredVmt,Inferred VMT,34567901235,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+vt,Vermont,category,no_injury,No injury crashes,9748,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+vt,Vermont,category,possible_injury,Possible injury crashes,1938,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+vt,Vermont,category,minor_injury,Minor injury crashes,1562,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+vt,Vermont,category,serious_injury,Serious injury crashes,257,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+vt,Vermont,display_category,traffic_death,Traffic deaths,69,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+vt,Vermont,metric,annualTrafficDeaths,Traffic deaths,69,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+vt,Vermont,metric,annualSeriousInjuries,Serious injuries,299,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+vt,Vermont,metric,inferredVmt,Inferred VMT,7187500000,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+va,Virginia,category,no_injury,No injury crashes,119066,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+va,Virginia,category,possible_injury,Possible injury crashes,21844,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+va,Virginia,category,minor_injury,Minor injury crashes,17616,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+va,Virginia,category,serious_injury,Serious injury crashes,6432,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+va,Virginia,display_category,traffic_death,Traffic deaths,913,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+va,Virginia,metric,annualTrafficDeaths,Traffic deaths,913,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+va,Virginia,metric,annualSeriousInjuries,Serious injuries,7488,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+va,Virginia,metric,inferredVmt,Inferred VMT,87788461538,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+wa,Washington,category,no_injury,No injury crashes,81377,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+wa,Washington,category,possible_injury,Possible injury crashes,15741,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+wa,Washington,category,minor_injury,Minor injury crashes,12693,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+wa,Washington,category,serious_injury,Serious injury crashes,2932,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+wa,Washington,display_category,traffic_death,Traffic deaths,810,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+wa,Washington,metric,annualTrafficDeaths,Traffic deaths,810,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+wa,Washington,metric,annualSeriousInjuries,Serious injuries,3413,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+wa,Washington,metric,inferredVmt,Inferred VMT,60000000000,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+wv,West Virginia,category,no_injury,No injury crashes,21634,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+wv,West Virginia,category,possible_injury,Possible injury crashes,4235,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+wv,West Virginia,category,minor_injury,Minor injury crashes,3415,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+wv,West Virginia,category,serious_injury,Serious injury crashes,688,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+wv,West Virginia,display_category,traffic_death,Traffic deaths,260,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+wv,West Virginia,metric,annualTrafficDeaths,Traffic deaths,260,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+wv,West Virginia,metric,annualSeriousInjuries,Serious injuries,801,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+wv,West Virginia,metric,inferredVmt,Inferred VMT,15950920245,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+wi,Wisconsin,category,no_injury,No injury crashes,90886,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+wi,Wisconsin,category,possible_injury,Possible injury crashes,17846,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+wi,Wisconsin,category,minor_injury,Minor injury crashes,14392,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+wi,Wisconsin,category,serious_injury,Serious injury crashes,2793,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+wi,Wisconsin,display_category,traffic_death,Traffic deaths,583,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+wi,Wisconsin,metric,annualTrafficDeaths,Traffic deaths,583,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+wi,Wisconsin,metric,annualSeriousInjuries,Serious injuries,3252,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+wi,Wisconsin,metric,inferredVmt,Inferred VMT,67011494253,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+wy,Wyoming,category,no_injury,No injury crashes,12934,estimated,Inferred from FHWA fatalities and fatality rate plus national NHTSA property-damage-only crash rate,2023,inferred_vmt * national_pdo_crash_rate_per_100m_vmt / 100000000
+wy,Wyoming,category,possible_injury,Possible injury crashes,2542,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.5535815322
+wy,Wyoming,category,minor_injury,Minor injury crashes,2050,estimated,Split from estimated state injury crashes using Washington non-serious injury crash proportions,2023,round(estimated_injury_crashes - estimated_serious_injury_crashes) * 0.4464184678
+wy,Wyoming,category,serious_injury,Serious injury crashes,393,estimated,Estimated from FHWA serious injuries using Washington serious-injuries-per-serious-injury-crash ratio,2023,annual_serious_injuries / 1.164189667374
+wy,Wyoming,display_category,traffic_death,Traffic deaths,144,direct,FHWA TPM dashboard Number of Fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+wy,Wyoming,metric,annualTrafficDeaths,Traffic deaths,144,direct,FHWA TPM dashboard Number of Fatalities,2023,direct
+wy,Wyoming,metric,annualSeriousInjuries,Serious injuries,457,direct,FHWA TPM dashboard Number of Serious Injuries,2023,direct
+wy,Wyoming,metric,inferredVmt,Inferred VMT,9536423841,estimated,Derived from FHWA fatalities and fatality rate,2023,annual_traffic_deaths * 100000000 / fatality_rate
+us,United States,category,no_injury,No injury crashes,4403450,aggregated,Sum of state-level values used by this site,2023,sum(states)
+us,United States,category,possible_injury,Possible injury crashes,847596,aggregated,Sum of state-level values used by this site,2023,sum(states)
+us,United States,category,minor_injury,Minor injury crashes,683518,aggregated,Sum of state-level values used by this site,2023,sum(states)
+us,United States,category,serious_injury,Serious injury crashes,166136,aggregated,Sum of state-level values used by this site,2023,sum(states)
+us,United States,display_category,traffic_death,Traffic deaths,40901,aggregated,Sum of FHWA state fatalities; displayed on site in place of fatal crashes to avoid overlap,2023,direct
+us,United States,metric,annualTrafficDeaths,Traffic deaths,40901,aggregated,Sum of FHWA state fatalities,2023,sum(states)
+us,United States,metric,annualSeriousInjuries,Serious injuries,193419,aggregated,Sum of FHWA state serious injuries,2023,sum(states)
+us,United States,metric,inferredVmt,Inferred VMT,3246717299179,aggregated,Sum of inferred state VMT,2023,sum(states)
