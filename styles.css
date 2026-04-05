@@ -246,8 +246,8 @@ input[type="range"] {
 .metric-headline {
   display: block;
   color: #eef3fb;
-  font-size: 0.98rem;
-  font-weight: 600;
+  font-size: 1.16rem;
+  font-weight: 700;
   letter-spacing: -0.02em;
 }
 
@@ -263,6 +263,59 @@ input[type="range"] {
   font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.16em;
+}
+
+.crash-table-card {
+  margin-top: 14px;
+  padding: 12px 16px 14px;
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+}
+
+.crash-table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  color: var(--muted-strong);
+}
+
+.crash-table th,
+.crash-table td {
+  padding: 10px 10px;
+  text-align: right;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.crash-table th:first-child,
+.crash-table td:first-child {
+  text-align: left;
+}
+
+.crash-table thead th {
+  color: #eef3fb;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.crash-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  color: #edf2fb;
+}
+
+.crash-type-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  flex: 0 0 auto;
+}
+
+.crash-table tbody tr:last-child td {
+  border-bottom: 0;
 }
 
 .legend-row {
@@ -462,6 +515,7 @@ canvas {
 
   .controls,
   .headline-card,
+  .crash-table-card,
   .panel,
   .note-card {
     padding: 12px;
@@ -517,11 +571,20 @@ canvas {
   }
 
   .metric-headline {
-    font-size: 0.8rem;
+    font-size: 0.94rem;
   }
 
   .metric-context {
     font-size: 0.64rem;
+  }
+
+  .crash-table {
+    font-size: 0.72rem;
+  }
+
+  .crash-table th,
+  .crash-table td {
+    padding: 8px 6px;
   }
 
   .slider-headline strong {

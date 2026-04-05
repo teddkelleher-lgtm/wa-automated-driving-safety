@@ -34,16 +34,16 @@ const refs = {
   scenarioCopy: document.querySelector("#scenarioCopy"),
   scenarioNote: document.querySelector("#scenarioNote"),
   scenarioTitle: document.querySelector("#scenarioTitle"),
-  metricDeathsLabel: document.querySelector("#metricDeathsLabel"),
-  metricSeriousLabel: document.querySelector("#metricSeriousLabel"),
+  metricAvoidedSeriousLabel: document.querySelector("#metricAvoidedSeriousLabel"),
+  metricAvoidedMinorLabel: document.querySelector("#metricAvoidedMinorLabel"),
   metricAvoidedCrashesLabel: document.querySelector("#metricAvoidedCrashesLabel"),
   metricAvoidedDeathsLabel: document.querySelector("#metricAvoidedDeathsLabel"),
-  metricDeathsContext: document.querySelector("#metricDeathsContext"),
-  metricSeriousContext: document.querySelector("#metricSeriousContext"),
+  metricAvoidedSeriousContext: document.querySelector("#metricAvoidedSeriousContext"),
+  metricAvoidedMinorContext: document.querySelector("#metricAvoidedMinorContext"),
   metricAvoidedCrashesContext: document.querySelector("#metricAvoidedCrashesContext"),
   metricAvoidedDeathsContext: document.querySelector("#metricAvoidedDeathsContext"),
-  metricDeaths: document.querySelector("#metricDeaths"),
-  metricSeriousInjuries: document.querySelector("#metricSeriousInjuries"),
+  metricAvoidedSerious: document.querySelector("#metricAvoidedSerious"),
+  metricAvoidedMinor: document.querySelector("#metricAvoidedMinor"),
   metricAvoidedCrashes: document.querySelector("#metricAvoidedCrashes"),
   metricAvoidedDeaths: document.querySelector("#metricAvoidedDeaths"),
   currentTotal: document.querySelector("#currentTotal"),
@@ -55,6 +55,9 @@ const refs = {
   currentCanvas: document.querySelector("#currentCanvas"),
   scenarioCanvas: document.querySelector("#scenarioCanvas"),
   geographySelect: document.querySelector("#geographySelect"),
+  tableCurrentHeading: document.querySelector("#tableCurrentHeading"),
+  tableScenarioHeading: document.querySelector("#tableScenarioHeading"),
+  crashTableBody: document.querySelector("#crashTableBody"),
 };
 
 const state = {
@@ -151,6 +154,22 @@ function formatWindowTitle(days) {
   return days === 1 ? "The Last Day" : `The Last ${days} Days`;
 }
 
+function hexToRgba(hex, alpha) {
+  const normalized = hex.replace("#", "");
+  const full =
+    normalized.length === 3
+      ? normalized
+          .split("")
+          .map((char) => char + char)
+          .join("")
+      : normalized;
+  const value = Number.parseInt(full, 16);
+  const red = (value >> 16) & 255;
+  const green = (value >> 8) & 255;
+  const blue = value & 255;
+  return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+}
+
 function prettyName(name) {
   if (name === "District Of Columbia") {
     return "District of Columbia";
@@ -231,6 +250,9 @@ function computeSummaryForWindow(windowDays) {
       windowFactor *
       state.share *
       state.data.summary.injuryAndDeathReduction,
+    avoidedMinor:
+      categories.find((category) => category.id === "minor_injury").baseWindow -
+      categories.find((category) => category.id === "minor_injury").scenarioWindow,
   };
 }
 
@@ -826,26 +848,46 @@ function updateText() {
   refs.shareValue.textContent = shareText;
   refs.scenarioCopy.textContent = `${windowLabel} counterfactual`;
   refs.scenarioTitle.textContent = `If robots drove ${shareText} of the time`;
-  refs.metricDeathsLabel.textContent = "Traffic Deaths";
-  refs.metricSeriousLabel.textContent = "Serious Injuries";
+  refs.metricAvoidedSeriousLabel.textContent = "Avoided Serious Injuries";
+  refs.metricAvoidedMinorLabel.textContent = "Avoided Minor Injuries";
   refs.metricAvoidedCrashesLabel.textContent = "Avoided Crashes";
   refs.metricAvoidedDeathsLabel.textContent = "Avoided Deaths";
-  refs.metricDeathsContext.textContent = `Estimated in ${windowPhrase}`;
-  refs.metricSeriousContext.textContent = `Estimated in ${windowPhrase}`;
-  refs.metricAvoidedCrashesContext.textContent = `At ${shareText} robot share`;
-  refs.metricAvoidedDeathsContext.textContent = `At ${shareText} robot share`;
-  refs.metricDeaths.textContent = formatInt(state.summary.windowDeaths);
-  refs.metricSeriousInjuries.textContent = formatInt(state.summary.windowSeriousInjuries);
+  refs.metricAvoidedSeriousContext.textContent = `Estimated in ${windowPhrase}`;
+  refs.metricAvoidedMinorContext.textContent = `Estimated in ${windowPhrase}`;
+  refs.metricAvoidedCrashesContext.textContent = `Estimated in ${windowPhrase}`;
+  refs.metricAvoidedDeathsContext.textContent = `Estimated in ${windowPhrase}`;
+  refs.metricAvoidedSerious.textContent = formatInt(state.summary.avoidedSerious);
+  refs.metricAvoidedMinor.textContent = formatInt(state.summary.avoidedMinor);
   refs.metricAvoidedCrashes.textContent = formatInt(state.summary.avoidedCrashes);
   refs.metricAvoidedDeaths.textContent = formatInt(state.summary.avoidedDeaths);
   refs.currentTotal.textContent = formatInt(state.summary.currentTotal);
   refs.scenarioTotal.textContent = formatInt(state.summary.scenarioTotal);
+  refs.tableCurrentHeading.textContent = "Current Human Mayhem";
+  refs.tableScenarioHeading.textContent = `If Robots Drove ${shareText} of the Time`;
   refs.scenarioNote.textContent =
     `At ${shareText}, automated driving averts ${formatInt(
-      state.summary.avoidedCrashes
-    )} crashes, ${formatInt(state.summary.avoidedDeaths)} deaths, and ${formatInt(
-      state.summary.avoidedSerious
-    )} serious injuries in ${windowPhrase}.`;
+      state.summary.avoidedDeaths
+    )} deaths, ${formatInt(state.summary.avoidedSerious)} serious injuries, ${formatInt(
+      state.summary.avoidedMinor
+    )} minor injuries, and ${formatInt(state.summary.avoidedCrashes)} crashes in ${windowPhrase}.`;
+
+  refs.crashTableBody.innerHTML = state.summary.categories
+    .map((category) => {
+      const tint = hexToRgba(category.color, 0.12);
+      return `
+        <tr style="background: linear-gradient(90deg, ${tint}, rgba(255,255,255,0) 78%);">
+          <td>
+            <span class="crash-type">
+              <span class="crash-type-swatch" style="background:${category.color};"></span>
+              ${category.label}
+            </span>
+          </td>
+          <td>${formatInt(category.baseWindow)}</td>
+          <td>${formatInt(category.scenarioWindow)}</td>
+        </tr>
+      `;
+    })
+    .join("");
 
   document.title =
     `${formatWindowTitle(state.windowDays)} on ${roadLabel} Roads`;

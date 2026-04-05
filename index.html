@@ -64,6 +64,52 @@
         </article>
       </section>
 
+      <section class="legend-row" aria-label="Severity legend">
+        <div class="legend-item">
+          <span class="legend-ball low"></span>
+          <span>No injury crashes</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-ball possible"></span>
+          <span>Possible injury crashes</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-ball minor"></span>
+          <span>Minor injury crashes</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-ball serious"></span>
+          <span>Serious injury crashes</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-ball death">☠</span>
+          <span>Fatal crashes</span>
+        </div>
+      </section>
+
+      <section class="headline-metrics">
+        <article class="headline-card card">
+          <span class="metric-headline" id="metricAvoidedDeathsLabel">Avoided Deaths</span>
+          <strong id="metricAvoidedDeaths">361</strong>
+          <span class="metric-context" id="metricAvoidedDeathsContext">Estimated recently</span>
+        </article>
+        <article class="headline-card card">
+          <span class="metric-headline" id="metricAvoidedSeriousLabel">Avoided Serious Injuries</span>
+          <strong id="metricAvoidedSerious">1,706</strong>
+          <span class="metric-context" id="metricAvoidedSeriousContext">Estimated recently</span>
+        </article>
+        <article class="headline-card card accent">
+          <span class="metric-headline" id="metricAvoidedMinorLabel">Avoided Minor Injuries</span>
+          <strong id="metricAvoidedMinor">0</strong>
+          <span class="metric-context" id="metricAvoidedMinorContext">Estimated recently</span>
+        </article>
+        <article class="headline-card card accent">
+          <span class="metric-headline" id="metricAvoidedCrashesLabel">Avoided Crashes</span>
+          <strong id="metricAvoidedCrashes">52,463</strong>
+          <span class="metric-context" id="metricAvoidedCrashesContext">Estimated recently</span>
+        </article>
+      </section>
+
       <section class="controls card">
         <div class="controls-copy">
           <label class="slider-label" for="automationShare">
@@ -96,50 +142,23 @@
         </div>
       </section>
 
-      <section class="legend-row" aria-label="Severity legend">
-        <div class="legend-item">
-          <span class="legend-ball low"></span>
-          <span>No injury crashes</span>
-        </div>
-        <div class="legend-item">
-          <span class="legend-ball possible"></span>
-          <span>Possible injury crashes</span>
-        </div>
-        <div class="legend-item">
-          <span class="legend-ball minor"></span>
-          <span>Minor injury crashes</span>
-        </div>
-        <div class="legend-item">
-          <span class="legend-ball serious"></span>
-          <span>Serious injury crashes</span>
-        </div>
-        <div class="legend-item">
-          <span class="legend-ball death">☠</span>
-          <span>Fatal crashes</span>
-        </div>
-      </section>
-
-      <section class="headline-metrics">
-        <article class="headline-card card">
-          <span class="metric-headline" id="metricDeathsLabel">Traffic Deaths</span>
-          <strong id="metricDeaths">785</strong>
-          <span class="metric-context" id="metricDeathsContext">Estimated recently</span>
-        </article>
-        <article class="headline-card card">
-          <span class="metric-headline" id="metricSeriousLabel">Serious Injuries</span>
-          <strong id="metricSeriousInjuries">3,709</strong>
-          <span class="metric-context" id="metricSeriousContext">Estimated recently</span>
-        </article>
-        <article class="headline-card card accent">
-          <span class="metric-headline" id="metricAvoidedCrashesLabel">Avoided Crashes</span>
-          <strong id="metricAvoidedCrashes">52,463</strong>
-          <span class="metric-context" id="metricAvoidedCrashesContext">At current slider</span>
-        </article>
-        <article class="headline-card card accent">
-          <span class="metric-headline" id="metricAvoidedDeathsLabel">Avoided Deaths</span>
-          <strong id="metricAvoidedDeaths">361</strong>
-          <span class="metric-context" id="metricAvoidedDeathsContext">At current slider</span>
-        </article>
+      <section class="crash-table-card card">
+        <table class="crash-table">
+          <thead>
+            <tr>
+              <th>Crash Type</th>
+              <th id="tableCurrentHeading">Current Human Mayhem</th>
+              <th id="tableScenarioHeading">If Robots Drove 50% of the Time</th>
+            </tr>
+          </thead>
+          <tbody id="crashTableBody">
+            <tr>
+              <td>Loading</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+          </tbody>
+        </table>
       </section>
 
       <section class="notes-grid">
