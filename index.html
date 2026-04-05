@@ -33,7 +33,7 @@
         </h1>
       </header>
 
-      <p class="vessel-subhead" id="vesselSubhead">Crashes over the most recent period that fits</p>
+      <p class="vessel-subhead" id="vesselSubhead">Crashes and deaths over the most recent period that fits</p>
 
       <section class="vessels">
         <article class="panel card">
@@ -43,7 +43,7 @@
             </div>
             <div class="panel-summary">
               <strong id="currentTotal">117,722</strong>
-              <span>crashes</span>
+              <span>shown</span>
             </div>
           </div>
           <div class="panel-canvas-wrap">
@@ -62,7 +62,7 @@
             </div>
             <div class="panel-summary">
               <strong id="scenarioTotal">65,259</strong>
-              <span>crashes</span>
+              <span>shown</span>
             </div>
           </div>
           <div class="panel-canvas-wrap">
@@ -94,7 +94,7 @@
         </div>
         <div class="legend-item">
           <span class="legend-ball death">☠</span>
-          <span>Fatal crashes</span>
+          <span>Traffic deaths</span>
         </div>
       </section>
 
@@ -110,12 +110,12 @@
           <span class="metric-context" id="metricAvoidedSeriousContext">Estimated recently</span>
         </article>
         <article class="headline-card card accent">
-          <span class="metric-headline" id="metricAvoidedMinorLabel">Avoided Minor Injuries</span>
+          <span class="metric-headline" id="metricAvoidedMinorLabel">Avoided Minor-Injury Crashes</span>
           <strong id="metricAvoidedMinor">0</strong>
           <span class="metric-context" id="metricAvoidedMinorContext">Estimated recently</span>
         </article>
         <article class="headline-card card accent">
-          <span class="metric-headline" id="metricAvoidedCrashesLabel">Avoided Crashes</span>
+          <span class="metric-headline" id="metricAvoidedCrashesLabel">Avoided Total Crashes</span>
           <strong id="metricAvoidedCrashes">52,463</strong>
           <span class="metric-context" id="metricAvoidedCrashesContext">Estimated recently</span>
         </article>
@@ -142,7 +142,7 @@
 
         <p class="scenario-note" id="scenarioNote">
           At 50%, automation averts crashes, deaths, and serious injuries over the
-          auto-fit window.
+          auto-fit window, with death balls replacing overlapping fatal-crash balls.
         </p>
 
         <div class="selector-grid">
@@ -157,7 +157,7 @@
         <table class="crash-table">
           <thead>
             <tr>
-              <th>Crash Type</th>
+              <th>Type Shown</th>
               <th id="tableCurrentHeading">Current Human Mayhem</th>
               <th id="tableScenarioHeading">If Robots Drove 50% of the Time</th>
             </tr>
@@ -187,13 +187,14 @@
               traveled and the 2023 national NHTSA crash rates.
             </li>
             <li>
-              Serious-injury crashes and fatal-crash balls are estimated from injury
-              and death counts, so the cards show people while the vessel balls show
-              crashes.
+              Serious-injury crashes are estimated from injury counts, while the red
+              balls show individual traffic deaths. Fatal crashes are removed from the
+              vessel so deaths are not double-counted as both a crash ball and a death
+              ball.
             </li>
             <li>
               The right vessel applies an 88% reduction to no-injury crashes and a 92%
-              reduction to injury and fatal crashes.
+              reduction to injury crashes and deaths.
             </li>
           </ul>
         </article>
@@ -226,6 +227,10 @@
               <a href="data/us-state-ball-summary.csv">Download the summary table used here</a>
             </li>
           </ul>
+          <p class="source-note">
+            The downloadable CSV keeps the raw source categories and formulas. On the
+            live page, fatal crashes are replaced by individual deaths to avoid overlap.
+          </p>
           <p class="policy-note">
             If safer automated fleets keep proving themselves, lawmakers should avoid
             unnecessary barriers and consider incentives that accelerate adoption

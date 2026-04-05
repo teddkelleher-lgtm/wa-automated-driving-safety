@@ -25,6 +25,7 @@ const AUTO_WINDOW_OPTIONS_DAYS = [
   30,
   60,
 ];
+const DISPLAY_DEATH_CATEGORY_ID = "traffic_death";
 
 const refs = {
   headline: document.querySelector("#headline"),
@@ -211,11 +212,15 @@ function getGeography() {
   return state.data.geographies[state.geographyCode];
 }
 
+function getDisplayDeathCategory() {
+  return state.categoryById[DISPLAY_DEATH_CATEGORY_ID];
+}
+
 function computeSummaryForWindow(windowDays) {
   const geography = getGeography();
   const windowFactor = windowDays / state.data.daysInBaselineYear;
 
-  const categories = state.data.categories.map((category) => {
+  const crashCategories = state.data.categories.map((category) => {
     const annualCount = geography.annualCounts[category.id] || 0;
     const baseWindow = annualCount * windowFactor;
     const scenarioWindow = baseWindow * (1 - state.share * category.reduction);
@@ -227,18 +232,47 @@ function computeSummaryForWindow(windowDays) {
     };
   });
 
-  const currentTotal = categories.reduce((sum, category) => sum + category.baseWindow, 0);
-  const scenarioTotal = categories.reduce(
+  const deathCategory = getDisplayDeathCategory();
+  const deathBaseWindow = geography.annualTrafficDeaths * windowFactor;
+  const deathScenarioWindow =
+    deathBaseWindow * (1 - state.share * state.data.summary.injuryAndDeathReduction);
+  const displayCategories = [
+    ...crashCategories.filter((category) => category.id !== "fatal_crash"),
+    {
+      ...deathCategory,
+      annualCount: geography.annualTrafficDeaths,
+      baseWindow: deathBaseWindow,
+      scenarioWindow: deathScenarioWindow,
+    },
+  ];
+
+  const currentCrashTotal = crashCategories.reduce(
+    (sum, category) => sum + category.baseWindow,
+    0
+  );
+  const scenarioCrashTotal = crashCategories.reduce(
     (sum, category) => sum + category.scenarioWindow,
     0
   );
+  const currentTotal = displayCategories.reduce(
+    (sum, category) => sum + category.baseWindow,
+    0
+  );
+  const scenarioTotal = displayCategories.reduce(
+    (sum, category) => sum + category.scenarioWindow,
+    0
+  );
+
   return {
     geography,
     windowDays,
-    categories,
+    crashCategories,
+    displayCategories,
     currentTotal,
     scenarioTotal,
-    avoidedCrashes: currentTotal - scenarioTotal,
+    currentCrashTotal,
+    scenarioCrashTotal,
+    avoidedCrashes: currentCrashTotal - scenarioCrashTotal,
     windowDeaths: geography.annualTrafficDeaths * windowFactor,
     windowSeriousInjuries: geography.annualSeriousInjuries * windowFactor,
     avoidedDeaths:
@@ -252,8 +286,8 @@ function computeSummaryForWindow(windowDays) {
       state.share *
       state.data.summary.injuryAndDeathReduction,
     avoidedMinor:
-      categories.find((category) => category.id === "minor_injury").baseWindow -
-      categories.find((category) => category.id === "minor_injury").scenarioWindow,
+      crashCategories.find((category) => category.id === "minor_injury").baseWindow -
+      crashCategories.find((category) => category.id === "minor_injury").scenarioWindow,
   };
 }
 
@@ -267,7 +301,7 @@ function estimateReadableBaseRadius(summary, width, height) {
   const usableWidth = Math.max(1, width - 24);
   const usableHeight = Math.max(1, height - 24);
   const usableArea = usableWidth * usableHeight * AUTO_WINDOW_AREA_UTILIZATION;
-  const weightedCrashUnits = summary.categories.reduce((sum, category) => {
+  const weightedCrashUnits = summary.displayCategories.reduce((sum, category) => {
     const multiplier = category.sizeMultiplier || 1;
     return sum + category.baseWindow * multiplier * multiplier;
   }, 0);
@@ -441,7 +475,7 @@ function getSpawnColumnIndex(columnCount, token) {
   const rng = mulberry32(hashString(`spawn-${token.id}`));
   const center = Math.floor(columnCount / 2);
   const spread = Math.max(4, Math.round(columnCount * 0.14));
-  const bias = token.categoryId === "fatal_crash" ? 0.08 : 1;
+  const bias = token.categoryId === DISPLAY_DEATH_CATEGORY_ID ? 0.08 : 1;
   const offset = Math.round((rng() * 2 - 1) * spread * bias);
   return Math.max(0, Math.min(columnCount - 1, center + offset));
 }
@@ -580,7 +614,7 @@ function buildPanel(kind, baseRadius, positions) {
 
   const sprites = {};
   const categoryVisuals = {};
-  state.data.categories.forEach((category) => {
+  state.summary.displayCategories.forEach((category) => {
     const radius = baseRadius * (category.sizeMultiplier || 1);
     categoryVisuals[category.id] = { radius };
     sprites[category.id] = createBallSprite(radius, category.color, {
@@ -666,12 +700,12 @@ function buildTimeline(kind, categories, scale) {
 function rebuildPanels() {
   const currentTimeline = buildTimeline(
     "current",
-    state.summary.categories,
+    state.summary.displayCategories,
     1
   );
   const scenarioTimeline = buildTimeline(
     "scenario",
-    state.summary.categories,
+    state.summary.displayCategories,
     1
   );
   const liveBuffer = Math.max(60, Math.round(currentTimeline.fullBallCount * 0.02));
@@ -845,13 +879,13 @@ function updateText() {
   const shareText = formatterPct.format(state.share);
 
   refs.headlineGeo.textContent = roadLabel;
-  refs.vesselSubhead.textContent = `Crashes over ${windowPhrase}`;
+  refs.vesselSubhead.textContent = `Crashes and deaths over ${windowPhrase}`;
   refs.shareValue.textContent = shareText;
   refs.scenarioCopy.textContent = `${windowLabel} counterfactual`;
   refs.scenarioTitle.textContent = `If robots drove ${shareText} of the time`;
   refs.metricAvoidedSeriousLabel.textContent = "Avoided Serious Injuries";
-  refs.metricAvoidedMinorLabel.textContent = "Avoided Minor Injuries";
-  refs.metricAvoidedCrashesLabel.textContent = "Avoided Crashes";
+  refs.metricAvoidedMinorLabel.textContent = "Avoided Minor-Injury Crashes";
+  refs.metricAvoidedCrashesLabel.textContent = "Avoided Total Crashes";
   refs.metricAvoidedDeathsLabel.textContent = "Avoided Deaths";
   refs.metricAvoidedSeriousContext.textContent = `Estimated in ${windowPhrase}`;
   refs.metricAvoidedMinorContext.textContent = `Estimated in ${windowPhrase}`;
@@ -870,9 +904,11 @@ function updateText() {
       state.summary.avoidedDeaths
     )} deaths, ${formatInt(state.summary.avoidedSerious)} serious injuries, ${formatInt(
       state.summary.avoidedMinor
-    )} minor injuries, and ${formatInt(state.summary.avoidedCrashes)} crashes in ${windowPhrase}.`;
+    )} minor-injury crashes, and ${formatInt(
+      state.summary.avoidedCrashes
+    )} total crashes in ${windowPhrase}. Red balls show deaths, and fatal crashes are removed from the pile to avoid overlap.`;
 
-  refs.crashTableBody.innerHTML = state.summary.categories
+  refs.crashTableBody.innerHTML = state.summary.displayCategories
     .map((category) => {
       const tint = hexToRgba(category.color, 0.12);
       return `
@@ -1027,8 +1063,20 @@ function wireEvents() {
 
 async function init() {
   state.data = await loadData();
+  const fatalCrashCategory = state.data.categories.find(
+    (category) => category.id === "fatal_crash"
+  );
+  const displayDeathCategory = {
+    ...fatalCrashCategory,
+    id: DISPLAY_DEATH_CATEGORY_ID,
+    label: "Traffic deaths",
+    unit: "deaths",
+  };
   state.categoryById = Object.fromEntries(
-    state.data.categories.map((category) => [category.id, category])
+    [...state.data.categories, displayDeathCategory].map((category) => [
+      category.id,
+      category,
+    ])
   );
   state.share = state.data.defaultAutomationShare;
   refs.slider.value = String(Math.round(state.share * 100));
