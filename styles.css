@@ -91,10 +91,11 @@ h1 {
   background:
     linear-gradient(
       90deg,
-      #d0b4ff 0%,
-      #8857ff 8%,
-      #ff8f86 20%,
-      #ff514e 34%,
+      #fff4f0 0%,
+      #f4eaff 8%,
+      #d0b4ff 16%,
+      #ffb7a4 28%,
+      #ff6d5a 42%,
       #d51533 58%,
       #7b1123 84%,
       rgba(52, 8, 15, 0.16) 100%
@@ -104,8 +105,9 @@ h1 {
   -webkit-text-stroke: 1.15px rgba(84, 31, 8, 0.92);
   paint-order: stroke fill;
   text-shadow:
-    0 0 1px rgba(42, 11, 2, 0.98),
-    0 0 10px rgba(133, 46, 10, 0.18),
+    0 0 1px rgba(255, 246, 242, 0.98),
+    0 0 8px rgba(255, 236, 228, 0.22),
+    0 0 14px rgba(133, 46, 10, 0.2),
     0 0 18px rgba(212, 38, 60, 0.16),
     0 0 42px rgba(108, 15, 31, 0.24);
   animation: headlineFade 6.5s ease-in-out infinite alternate;
