@@ -16,15 +16,20 @@ const AUTO_WINDOW_AREA_UTILIZATION = 0.44;
 
 const refs = {
   headline: document.querySelector("#headline"),
-  lede: document.querySelector("#lede"),
   vesselSubhead: document.querySelector("#vesselSubhead"),
   slider: document.querySelector("#automationShare"),
   shareValue: document.querySelector("#shareValue"),
   scenarioCopy: document.querySelector("#scenarioCopy"),
   scenarioNote: document.querySelector("#scenarioNote"),
   scenarioTitle: document.querySelector("#scenarioTitle"),
-  metricDeathsKicker: document.querySelector("#metricDeathsKicker"),
-  metricSeriousKicker: document.querySelector("#metricSeriousKicker"),
+  metricDeathsLabel: document.querySelector("#metricDeathsLabel"),
+  metricSeriousLabel: document.querySelector("#metricSeriousLabel"),
+  metricAvoidedCrashesLabel: document.querySelector("#metricAvoidedCrashesLabel"),
+  metricAvoidedDeathsLabel: document.querySelector("#metricAvoidedDeathsLabel"),
+  metricDeathsContext: document.querySelector("#metricDeathsContext"),
+  metricSeriousContext: document.querySelector("#metricSeriousContext"),
+  metricAvoidedCrashesContext: document.querySelector("#metricAvoidedCrashesContext"),
+  metricAvoidedDeathsContext: document.querySelector("#metricAvoidedDeathsContext"),
   metricDeaths: document.querySelector("#metricDeaths"),
   metricSeriousInjuries: document.querySelector("#metricSeriousInjuries"),
   metricAvoidedCrashes: document.querySelector("#metricAvoidedCrashes"),
@@ -772,13 +777,18 @@ function updateText() {
   const shareText = formatterPct.format(state.share);
 
   refs.headline.textContent = `Death and Destruction on ${roadLabel} Roads: Humans vs. Robots`;
-  refs.lede.textContent = `One ball is one estimated crash in ${windowPhrase}. Left is today's toll. Right is the same period with more automated.`;
   refs.vesselSubhead.textContent = `Crashes over ${windowPhrase}`;
   refs.shareValue.textContent = shareText;
   refs.scenarioCopy.textContent = `${windowLabel} counterfactual`;
   refs.scenarioTitle.textContent = `If robots drove ${shareText} of the time`;
-  refs.metricDeathsKicker.textContent = `Estimated in ${windowPhrase}`;
-  refs.metricSeriousKicker.textContent = `Estimated in ${windowPhrase}`;
+  refs.metricDeathsLabel.textContent = "Traffic Deaths";
+  refs.metricSeriousLabel.textContent = "Serious Injuries";
+  refs.metricAvoidedCrashesLabel.textContent = "Avoided Crashes";
+  refs.metricAvoidedDeathsLabel.textContent = "Avoided Deaths";
+  refs.metricDeathsContext.textContent = `Estimated in ${windowPhrase}`;
+  refs.metricSeriousContext.textContent = `Estimated in ${windowPhrase}`;
+  refs.metricAvoidedCrashesContext.textContent = `At ${shareText} robot share`;
+  refs.metricAvoidedDeathsContext.textContent = `At ${shareText} robot share`;
   refs.metricDeaths.textContent = formatInt(state.summary.windowDeaths);
   refs.metricSeriousInjuries.textContent = formatInt(state.summary.windowSeriousInjuries);
   refs.metricAvoidedCrashes.textContent = formatInt(state.summary.avoidedCrashes);
