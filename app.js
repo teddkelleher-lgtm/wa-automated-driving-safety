@@ -893,7 +893,7 @@ function updateText() {
   refs.scenarioCopy.textContent = `${windowLabel} counterfactual`;
   refs.scenarioTitle.textContent = `If robots drove ${shareText} of the time`;
   refs.headlineMetricsIntro.textContent =
-    `Robots driving ${shareText} of the time would have prevented:`;
+    `Robots driving ${shareText} of the trips over ${windowPhrase} would have prevented:`;
   refs.metricAvoidedSeriousLabel.textContent = "Avoided Serious Injuries";
   refs.metricAvoidedMinorLabel.textContent = "Avoided Minor-Injury Crashes";
   refs.metricAvoidedCrashesLabel.textContent = "Avoided Total Crashes";
