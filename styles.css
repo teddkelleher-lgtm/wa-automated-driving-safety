@@ -302,7 +302,7 @@ input[type="range"] {
   min-width: 0;
   border-collapse: collapse;
   table-layout: fixed;
-  font-size: 0.82rem;
+  font-size: 0.88rem;
   color: var(--muted-strong);
 }
 
@@ -337,12 +337,21 @@ input[type="range"] {
 
 .crash-table thead th {
   color: #eef3fb;
-  font-size: 0.74rem;
+  font-size: 0.76rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   white-space: normal;
   line-height: 1.18;
   text-wrap: balance;
+}
+
+.crash-table tbody td {
+  background: var(--row-fill, transparent);
+  border-bottom-color: var(--row-border, rgba(255, 255, 255, 0.06));
+}
+
+.crash-table tbody td:first-child {
+  box-shadow: inset 3px 0 0 var(--row-border, transparent);
 }
 
 .crash-type {
@@ -639,7 +648,7 @@ canvas {
   }
 
   .crash-table {
-    font-size: 0.58rem;
+    font-size: 0.62rem;
   }
 
   .crash-table th,
@@ -648,7 +657,7 @@ canvas {
   }
 
   .crash-table thead th {
-    font-size: 0.5rem;
+    font-size: 0.53rem;
     letter-spacing: 0.04em;
   }
 

@@ -921,13 +921,14 @@ function updateText() {
 
   refs.crashTableBody.innerHTML = state.summary.displayCategories
     .map((category) => {
-      const tint = hexToRgba(category.color, 0.12);
+      const tint = hexToRgba(category.color, 0.18);
+      const borderTint = hexToRgba(category.color, 0.34);
       const percentChange = formatPercentChange(
         category.baseWindow,
         category.scenarioWindow
       );
       return `
-        <tr style="background: linear-gradient(90deg, ${tint}, rgba(255,255,255,0) 78%);">
+        <tr style="--row-fill:${tint}; --row-border:${borderTint};">
           <td>
             <span class="crash-type">
               <span class="crash-type-swatch" style="background:${category.color};"></span>
