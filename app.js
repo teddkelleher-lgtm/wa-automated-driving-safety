@@ -119,6 +119,14 @@ function formatInt(value) {
   return formatterInt.format(Math.round(value));
 }
 
+function formatPercentChange(currentValue, scenarioValue) {
+  if (currentValue <= 0) {
+    return "0%";
+  }
+
+  return formatterPct.format((scenarioValue - currentValue) / currentValue);
+}
+
 function formatWindowLabel(days) {
   if (days < 1) {
     const hours = Math.round(days * 24);
@@ -914,6 +922,10 @@ function updateText() {
   refs.crashTableBody.innerHTML = state.summary.displayCategories
     .map((category) => {
       const tint = hexToRgba(category.color, 0.12);
+      const percentChange = formatPercentChange(
+        category.baseWindow,
+        category.scenarioWindow
+      );
       return `
         <tr style="background: linear-gradient(90deg, ${tint}, rgba(255,255,255,0) 78%);">
           <td>
@@ -924,6 +936,7 @@ function updateText() {
           </td>
           <td>${formatInt(category.baseWindow)}</td>
           <td>${formatInt(category.scenarioWindow)}</td>
+          <td>${percentChange}</td>
         </tr>
       `;
     })

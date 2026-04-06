@@ -313,8 +313,13 @@ input[type="range"] {
 
 .crash-table th:first-child,
 .crash-table td:first-child {
-  width: 42%;
+  width: 34%;
   text-align: left;
+}
+
+.crash-table th:last-child,
+.crash-table td:last-child {
+  text-align: center;
 }
 
 .crash-table thead th {
@@ -636,7 +641,7 @@ canvas {
 
   .crash-table th:first-child,
   .crash-table td:first-child {
-    width: 38%;
+    width: 34%;
   }
 
   .crash-type {
